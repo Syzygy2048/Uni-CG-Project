@@ -72,11 +72,13 @@
   <ItemGroup>
     <ClCompile Include="loadShader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SceneGraph\MeshNode.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="loadShader.h" />
+    <ClInclude Include="SceneGraph\MeshNode.h" />
     <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="SceneGraph\SceneGraphEnum.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />

@@ -5,6 +5,7 @@
 #include "shader.hpp"
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
+#include "InputHandler.h"
 
 #define TIMESTEP 1/60
 
@@ -40,6 +41,8 @@ int main() {
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
 	glClearColor(0.4f, 0.0f, 0.4f, 0.0f);
+
+	InputHandler* input = new InputHandler();
 
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
