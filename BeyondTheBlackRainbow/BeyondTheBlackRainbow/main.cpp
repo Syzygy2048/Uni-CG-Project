@@ -2,13 +2,11 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 #include <GLFW\glfw3.h>
-//#include "GLSLProgram.h" 
 #include "shader.hpp"
-#include "glm-0.9.4.0\glm\glm.hpp"
-#include "glm-0.9.4.0\glm\gtc\matrix_transform.hpp"
-//#include "texture.hpp"
+#include <glm\glm.hpp>
+#include <glm\gtc\matrix_transform.hpp>
 
-
+#define TIMESTEP 1/60
 
 int main() {
 
@@ -23,7 +21,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 	GLFWwindow* window;
-	window = glfwCreateWindow(1280, 720, "somewhere over the rainbow", NULL, NULL);
+	window = glfwCreateWindow(1280, 720, "Taste the Rainbow", NULL, NULL);
 
 	if (window == NULL) {
 		fprintf(stderr, "Failed");
@@ -53,8 +51,14 @@ int main() {
 	// Only at initialisation time.
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
 	
+
+	//
+	/*
+	
+	
+	*/
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+	glm::mat4 Projection = glm::perspective(90.0f, 16.0f / 9.0f, 0.1f, 100.0f);
 	// Camera matrix
 	// Camera is at (4,3,3), in World Space
 	// and looks at the origin
@@ -208,10 +212,34 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 
+
+	//gameloop
+	double timeOld = 0;
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0) {
 		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		double timeNew = glfwGetTime();
+		double timeDelta = timeNew - timeOld;
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		// Use our shader
 		glUseProgram(programID); 
 
