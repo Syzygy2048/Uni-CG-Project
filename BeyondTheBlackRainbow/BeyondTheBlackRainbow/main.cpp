@@ -62,15 +62,15 @@ int main() {
 	
 	*/
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	glm::mat4 Projection = glm::perspective(90.0f, 16.0f / 9.0f, 0.1f, 100.0f);
+	//glm::mat4 Projection = glm::perspective(90.0f, 16.0f / 9.0f, 0.1f, 100.0f);
 	// Camera matrix
 	// Camera is at (4,3,3), in World Space
 	// and looks at the origin
 	// Head is up (set to 0,-1,0 to look upside-down)
-	glm::mat4 View = glm::lookAt(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	//glm::mat4 View = glm::lookAt(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	// Model matrix : an identity matrix (model will be at the origin)
-	glm::mat4 Model = glm::mat4(1.0f);
-	glm::mat4 MVP = Projection*View*Model;
+	//glm::mat4 Model = glm::mat4(1.0f);
+	//glm::mat4 MVP = Projection*View*Model;
 
 		/*GLSLProgram colorProgram;
 		colorProgram.complieShaders("vertexShadr.txt", "fragmentShader.txt");
@@ -226,26 +226,31 @@ int main() {
 		double timeNew = glfwGetTime();
 		double timeDelta = timeNew - timeOld;
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		// Use our shader
-		glUseProgram(programID); 
+		glUseProgram(programID);
+		
+		//input.update(window);
+		input->update(window);
+		glm::mat4 Projection = input->getProjectionMatrix();
+		glm::mat4 View = input->getViewMatrix();
+		glm::mat4 Model = glm::mat4(1.0f);
+		glm::mat4 MVP = Projection*View*Model;		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 		// Send our transformation to the currently bound shader,
 		// in the "MVP" uniform
