@@ -1,47 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <GL/glew.h>
+#include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 
 #include "InputHandler.h"
 #include "shader.hpp"
+#include "Render\Renderer.h"
+#include "GLDebug.h"
+
 
 #define TIMESTEP 1/60
 
 int main() {
 
-	if (!glfwInit()) {
-		fprintf(stderr, "Failed to initialize GLFW\n");
+	Renderer* renderer = new Renderer();
+	if (renderer->init() == -1){
 		return -1;
 	}
+	
+	GLDebug::registerDebugCallbacks();
 
-	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // We want OpenGL 3.3
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
-
-	GLFWwindow* window;
-	window = glfwCreateWindow(1280, 720, "Taste the Rainbow", NULL, NULL);
-
-	if (window == NULL) {
-		fprintf(stderr, "Failed");
-		glfwTerminate();
-		return -1;
-	}
-
-	glfwMakeContextCurrent(window);
-	glewExperimental = true;
-
-	if (glewInit() != GLEW_OK) {
-		fprintf(stderr, "Failed");
-		return -1;
-	}
-
-	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-
-	glClearColor(0.4f, 0.0f, 0.4f, 0.0f);
 
 	InputHandler* input = new InputHandler();
 
@@ -219,7 +199,7 @@ int main() {
 
 	//gameloop
 	double timeOld = 0;
-	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0) {
+	while (glfwGetKey(renderer->getWindow(), GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(renderer->getWindow()) == 0) {
 		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -274,7 +254,7 @@ int main() {
 		glDisableVertexAttribArray(1);
 		/**/
 			//colorProgram.unuse();
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();
 	}
 

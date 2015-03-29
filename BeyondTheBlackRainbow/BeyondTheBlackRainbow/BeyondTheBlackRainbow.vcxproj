@@ -70,20 +70,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GLDebug.cpp" />
     <ClCompile Include="InputHandler.cpp" />
-    <ClCompile Include="loadShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SceneGraph\MeshNode.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
+    <ClCompile Include="shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GLDebug.h" />
     <ClInclude Include="InputHandler.h" />
-    <ClInclude Include="loadShader.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SceneGraph\MeshNode.h" />
     <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="SceneGraph\SceneGraphEnum.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />
+    <ClInclude Include="shader.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleFragmentShader.fragmentshader" />
+    <None Include="SimpleVertexShader.vertexshader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
