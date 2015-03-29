@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 #include <GLFW\glfw3.h>
-#include "shader.hpp"
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
+
 #include "InputHandler.h"
+#include "shader.hpp"
 
 #define TIMESTEP 1/60
 

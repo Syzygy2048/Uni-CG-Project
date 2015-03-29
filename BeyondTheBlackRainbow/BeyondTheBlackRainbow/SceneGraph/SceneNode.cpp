@@ -2,8 +2,9 @@
 
 #include <rpc.h>
 
-SceneNode::SceneNode(UUID uuid, NodeType type) : nodeType(type), objectId(uuid)
+SceneNode::SceneNode(UUID* uuid, NodeType type) : objectId(uuid), nodeType(type)
 {
+
 }
 
 

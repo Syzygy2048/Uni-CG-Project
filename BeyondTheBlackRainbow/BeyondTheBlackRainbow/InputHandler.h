@@ -8,6 +8,6 @@ public:
 	~InputHandler();
 	void update(GLFWwindow* window);
 private:
-	int W, A, S, D;
+	int w, a, s, d;
 };
 

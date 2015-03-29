@@ -70,6 +70,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="loadShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SceneGraph\MeshNode.cpp" />
@@ -77,6 +78,7 @@
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="loadShader.h" />
     <ClInclude Include="SceneGraph\MeshNode.h" />
     <ClInclude Include="Render\Renderer.h" />
