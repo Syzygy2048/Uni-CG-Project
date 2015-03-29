@@ -210,7 +210,7 @@ int main() {
 		glUseProgram(programID);
 		
 		//input.update(window);
-		input->update(window);
+		input->update(renderer->getWindow());
 		glm::mat4 Projection = input->getProjectionMatrix();
 		glm::mat4 View = input->getViewMatrix();
 		glm::mat4 Model = glm::mat4(1.0f);

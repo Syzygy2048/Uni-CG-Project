@@ -24,7 +24,7 @@ void InputHandler::update(GLFWwindow* window)
 	glfwGetCursorPos(window, &xpos, &ypos);
 	glfwSetCursorPos(window, 1280 / 2, 720 / 2);
 
-	horizontalAngle += mouseSpeed * float(1280 / 2 - xpos);
+	horizontalAngle += mouseSpeed * float(1280 / 2 - (1280-xpos));		//1280 - xpos to flip the x axis
 	verticalAngle += mouseSpeed * float(720 / 2 - ypos);
 
 	glm::vec3 direction(
