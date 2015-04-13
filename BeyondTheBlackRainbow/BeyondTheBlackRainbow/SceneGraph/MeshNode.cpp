@@ -1,9 +1,9 @@
 #include "MeshNode.h"
 
 
-MeshNode::MeshNode(UUID* uuid, SceneNode* parent) : SceneNode(uuid, NodeType::MeshNode)
+MeshNode::MeshNode(UUID uuid, aiMesh* triangleMesh) : SceneNode(uuid, NodeType::MESH_NODE)
 {
-	this->parent = parent;
+	
 }
 
 

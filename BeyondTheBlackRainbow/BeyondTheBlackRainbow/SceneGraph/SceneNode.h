@@ -9,9 +9,10 @@
 class SceneNode
 {
 public:
-	SceneNode(UUID* id, NodeType nodeType);
+	SceneNode(UUID id, NodeType nodeType);
 	~SceneNode();
 
+	void setParent(SceneNode* parent);
 	//virtual void update(double timeStep);
 	//virtual void draw();
 	virtual glm::mat4 propagateMatrix() = 0;
@@ -23,7 +24,7 @@ protected:
 private:
 	//std::vector<SceneNode*> childList;	
 
-	const UUID* objectId;
+	const UUID objectId;
 	const NodeType nodeType;
 };
 

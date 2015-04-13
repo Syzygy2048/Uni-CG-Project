@@ -12,6 +12,9 @@ public:
 	int init();
 	void initCamera();
 
+	void genBuffer(GLuint* bufferID);
+	void bindBuffer(GLuint* bufferID);
+
 	GLFWwindow* getWindow();
 
 private:

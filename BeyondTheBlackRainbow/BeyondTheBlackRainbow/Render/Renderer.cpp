@@ -22,11 +22,8 @@ int Renderer::init(){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
-	//#if _DEBUG
-		// Create a debug OpenGL context or tell your OpenGL library (GLFW, SDL) to do so.
-		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-	//#endif
-
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+	
 	window = glfwCreateWindow(1280, 720, "Taste the Rainbow", NULL, NULL);
 
 	if (window == NULL) {
@@ -57,4 +54,20 @@ GLFWwindow* Renderer::getWindow(){
 	if (window == nullptr)
 		init();
 	return window;
+}
+
+
+
+
+
+
+//possibly add buffer type when needed, or create specific functions for  buffer types. this might be wrong though as we technically went the renderer calls to be independant of OGL specific things like GLuint.
+void Renderer::genBuffer(GLuint* bufferID){
+	glBindBuffer(GL_ARRAY_BUFFER, *bufferID);		//this could be wrong, afaik, this should be a memory adress (= &variable) but is a simple variable - not even pointer
+}
+
+
+//possibly change to bindVertexBuffer, bindTextureBuffer etc as needed
+void Renderer::bindBuffer(GLuint* bufferID){
+
 }

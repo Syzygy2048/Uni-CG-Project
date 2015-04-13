@@ -2,7 +2,7 @@
 
 #include <rpc.h>
 
-SceneNode::SceneNode(UUID* uuid, NodeType type) : objectId(uuid), nodeType(type)
+SceneNode::SceneNode(UUID uuid, NodeType type) : objectId(uuid), nodeType(type)
 {
 
 }
@@ -47,3 +47,7 @@ bool SceneNode::detachChild(SceneNode* deleteChild){
 	return false;
 }
 */
+
+void SceneNode::setParent(SceneNode* parent){
+	this->parent = parent;
+}

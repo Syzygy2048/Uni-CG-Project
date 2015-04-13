@@ -1,6 +1,9 @@
+#pragma once
+
 static enum NodeType{
-	RootNode,
-	TransformNode,
-	MeshNode,
-	LightNode,
+	ROOT_NODE,
+	TRANSFORM_NODE,
+	MESH_NODE,
+	LIGHT_NODE,
+	CAMERA_NODE,
 };
