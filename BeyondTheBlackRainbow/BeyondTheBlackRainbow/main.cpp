@@ -4,7 +4,6 @@
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
-#include <IL\il.h>
 
 #include "InputHandler.h"
 #include "shader.hpp"
@@ -31,11 +30,10 @@ int main() {
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
-	Texture* texture = new Texture("../Textures/uvtemplate.bmp");
-	ilBindImage(texture->getImageID());
-	GLuint programID = LoadShaders("TextureShader.vertexshader", "TextureShader.fragmentshader");
-	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
-	texture->setHandle(TextureID);
+	
+	GLuint programID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
+
+	Texture* texture = new Texture("rainbowDash.png");
 	// Get a handle for our "MVP" uniform.
 	// Only at initialisation time.
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
@@ -220,34 +218,17 @@ int main() {
 		glm::mat4 MVP = Projection*View*Model;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		// Send our transformation to the currently bound shader,
 		// in the "MVP" uniform
 		// For each model you render, since the MVP will be different (at least the M part)
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
-
 		texture->bind(0);
-		glUniform1i(TextureID, 0);
-		// Bind our texture in Texture Unit 0
-		/*glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, Texture);
-		// Set our "myTextureSampler" sampler to user Texture Unit 0
-		glUniform1i(TextureID, 0);*/
+		GLuint tex_location = glGetUniformLocation(programID, "first_texture");
+		glUniform1i(tex_location, 0);
+
+		
+		
 		/**/
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);

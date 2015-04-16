@@ -2,23 +2,21 @@
 
 #include <string>
 #include <GL\glew.h>
-#include <IL\il.h>
+
 
 
 class Texture
 {
 public:
 
-	Texture(const std::string path);
+	Texture(const char* path);
 	~Texture();
 
 	void bind(int unit);
-	int getImageID();
-	void setHandle(GLuint textureID);
 
 private:
 
-	GLuint handle;
-	ILuint imageID;
+	GLubyte* texture;
+	GLuint textureID;
 };
 
