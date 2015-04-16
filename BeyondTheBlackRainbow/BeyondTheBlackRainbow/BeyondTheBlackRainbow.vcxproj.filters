@@ -42,6 +42,9 @@
     <ClCompile Include="Importers\MeshImporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Importers\MeshLoadInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Render\Renderer.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Util\UuidHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\FileChecker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

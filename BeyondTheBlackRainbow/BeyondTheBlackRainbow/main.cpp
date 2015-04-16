@@ -10,6 +10,7 @@
 #include "Render\Renderer.h"
 #include "GLDebug.h"
 
+#include "Importers\MeshImporter.h"
 
 #define TIMESTEP 1/60
 
@@ -22,8 +23,20 @@ int main() {
 	
 	GLDebug::registerDebugCallbacks();
 
-
 	InputHandler* input = new InputHandler();
+
+	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
+	
+
+
+
+
+
+
+
+
+
+
 
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);

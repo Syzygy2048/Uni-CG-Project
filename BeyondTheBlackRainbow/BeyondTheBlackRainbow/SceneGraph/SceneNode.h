@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <vector>
 #include <glm\glm.hpp>
+#include <rpc.h>
 
 #include "SceneGraphEnum.h"
 

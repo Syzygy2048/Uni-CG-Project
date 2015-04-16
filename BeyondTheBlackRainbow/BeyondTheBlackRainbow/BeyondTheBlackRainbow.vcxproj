@@ -71,6 +71,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GLDebug.cpp" />
+    <ClCompile Include="Importers\MeshLoadInfo.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Importers\MeshImporter.cpp" />
@@ -89,6 +90,7 @@
     <ClInclude Include="SceneGraph\SceneGraphEnum.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />
     <ClInclude Include="shader.hpp" />
+    <ClInclude Include="Util\FileChecker.h" />
     <ClInclude Include="Util\UuidHelper.h" />
   </ItemGroup>
   <ItemGroup>

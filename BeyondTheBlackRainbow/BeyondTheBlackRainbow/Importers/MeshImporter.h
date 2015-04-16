@@ -14,7 +14,7 @@ public:
 	
 	static MeshImporter* getInstance();
 	
-	MeshNode* getMesh(MeshLoadInfo::LoadInfo* loadInfo);
+	MeshNode* getMesh(const MeshLoadInfo::LoadInfo* loadInfo);
 
 	~MeshImporter();
 
@@ -24,7 +24,7 @@ private:
 	MeshImporter(MeshImporter const&);
 	void operator=(MeshImporter const&);
 
-	void loadMesh(MeshLoadInfo::LoadInfo* loadInfo);
+	void loadMesh(const MeshLoadInfo::LoadInfo* loadInfo);
 
 	std::unordered_map<const std::string*, const aiScene*> assets;
 
