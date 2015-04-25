@@ -12,6 +12,6 @@ void main(){
 
 	// Output color = color specified in the vertex shader, 
 	// interpolated between all 3 surrounding vertices
-	color = texture(first_texture, fragmentColor).rgb;
+	color = vec4(texture(first_texture, fragmentColor).rgb, 1.0);
 
 }
