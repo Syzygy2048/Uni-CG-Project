@@ -7,12 +7,19 @@ Renderer::Renderer()
 }
 
 
+Renderer* Renderer::getInstance(){
+	static Renderer instance;
+	return &instance;
+}
+
 Renderer::~Renderer()
 {
 }
 
-int Renderer::init(){
-	if (!glfwInit()) {
+int Renderer::init()
+{
+	if (!glfwInit()) 
+	{
 		std::cerr << "Failed to initialize GLFW" << std::endl;
 		return -1;
 	}
@@ -26,7 +33,8 @@ int Renderer::init(){
 	
 	window = glfwCreateWindow(1280, 720, "Taste the Rainbow", NULL, NULL);
 
-	if (window == NULL) {
+	if (window == NULL)
+	{
 		std::cerr << "Failed to open window" << std::endl;
 		glfwTerminate();
 		return -1;
@@ -35,7 +43,8 @@ int Renderer::init(){
 	glfwMakeContextCurrent(window);
 	glewExperimental = true;
 
-	if (glewInit() != GLEW_OK) {
+	if (glewInit() != GLEW_OK) 
+	{
 		std::cerr << "Failed to initialize GLEW" << std::endl;
 		return -1;
 	}
@@ -44,13 +53,18 @@ int Renderer::init(){
 
 	glClearColor(0.4f, 0.0f, 0.4f, 0.0f);
 
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
 }
 
-void Renderer::initCamera(){
+void Renderer::initCamera()
+{
 
 }
 
-GLFWwindow* Renderer::getWindow(){
+GLFWwindow* Renderer::getWindow()
+{
 	if (window == nullptr)
 		init();
 	return window;
@@ -59,15 +73,55 @@ GLFWwindow* Renderer::getWindow(){
 
 
 
+void Renderer::enableVertexAttribArray(int id)
+{
+	glEnableVertexAttribArray(id);
+}
+void Renderer::disableVertexAttribArray(int id)
+{
+	glDisableVertexAttribArray(id);
+}
 
+void Renderer::setVertexAttribPointer(int id, int size, GLenum type, GLboolean normalized, int stride, const GLvoid* pointer)
+{
+	//bindBuffer(bufferType, bufferID);
+	enableVertexAttribArray(id);
+	glVertexAttribPointer(id, size, type, normalized, stride, pointer);
+}
 
 //possibly add buffer type when needed, or create specific functions for  buffer types. this might be wrong though as we technically went the renderer calls to be independant of OGL specific things like GLuint.
-void Renderer::genBuffer(GLuint* bufferID){
-	glBindBuffer(GL_ARRAY_BUFFER, *bufferID);		//this could be wrong, afaik, this should be a memory adress (= &variable) but is a simple variable - not even pointer
+void Renderer::generateBufferObject(GLuint* bufferID)
+{
+	glGenBuffers(1, bufferID);
 }
 
 
-//possibly change to bindVertexBuffer, bindTextureBuffer etc as needed
-void Renderer::bindBuffer(GLuint* bufferID){
+void Renderer::bindBuffer(GLenum bufferType, GLuint bufferID)
+{
+	glBindBuffer(bufferType, bufferID);
+}
 
+void Renderer::fillBuffer(GLuint bufferID, GLenum bufferType, int bufferSize, GLvoid* bufferData, GLenum bufferUsage)
+{
+	bindBuffer(bufferType, bufferID);
+	glBufferData(bufferType, bufferSize, bufferData, bufferUsage);
+}
+
+void Renderer::generateVertexArray(GLuint* vertexArrayID)
+{
+	glGenVertexArrays(1, vertexArrayID);
+}
+
+void Renderer::bindVertexArray(GLuint vertexArrayId)
+{
+	glBindVertexArray(vertexArrayId);
+}
+
+
+void Renderer::draw(MeshNode* node)
+{
+
+	bindVertexArray(node->getVao());
+	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);
+	bindVertexArray(0);
 }
