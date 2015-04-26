@@ -2,7 +2,7 @@
 
 #include <rpc.h>
 
-UUID generateUuid(){
+static UUID generateUuid(){
 	UUID uuid;
 	UuidCreate(&uuid);
 	return uuid;

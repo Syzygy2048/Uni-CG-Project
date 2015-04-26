@@ -14,16 +14,16 @@ public:
 	~SceneNode();
 
 	void setParent(SceneNode* parent);
-	//virtual void update(double timeStep);
+	virtual void update(double timeStep);
 	//virtual void draw();
-	virtual glm::mat4 propagateMatrix() = 0;
-	/*void attachChild(SceneNode* child);
-	bool detachChild(SceneNode* child);*/
+	virtual glm::mat4 propagateMatrix();
+	void attachChild(SceneNode* child);
+	bool detachChild(SceneNode* child);
 
 protected:
 	SceneNode* parent;
 private:
-	//std::vector<SceneNode*> childList;	
+	std::vector<SceneNode*> childList;	
 
 	const UUID objectId;
 	const NodeType nodeType;
