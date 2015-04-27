@@ -3,6 +3,8 @@
 #include <assimp\scene.h>
 #include <GL\glew.h>
 #include "SceneNode.h"
+#include "..\Texture.h"
+#include "..\InputHandler.h"
 
 
 class MeshNode :
@@ -17,12 +19,17 @@ public:
 	void prepareForRendering();
 	void unprepareForRendering();
 
-	void draw();
+	void draw(InputHandler* input);
 
 	GLuint getVao();
 	int getDrawSize();
 
+	GLuint getUV();
+
 	virtual glm::mat4 propagateMatrix();
+
+	GLuint getShaderID();
+	Texture* getTexture(const char* path);
 private:
 	aiMesh* triangleMesh;
 
@@ -38,5 +45,11 @@ private:
 	int textureAttribPointer;
 
 	glm::mat4 modelMatrix;
+
+
+	
+	GLuint shaderID;
+	Texture* texture;
+	bool textureInit;
 };
 

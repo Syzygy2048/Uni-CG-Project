@@ -50,12 +50,12 @@ int main() {
 	//end of part that should be in a scene loader
 	
 	//should be part of model loading
-	GLuint programID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
+	//GLuint programID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
 
 	// Get a handle for our "MVP" uniform.
 	// Only at initialisation time.
 	//should be in a shader class
-	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+	//GLuint MatrixID = glGetUniformLocation(programID, "MVP");
 
 	//this is just to test the scenegraph and give the second mesh a different mvp
 	glm::mat4 testMatrix = glm::mat4(
@@ -75,18 +75,17 @@ int main() {
 
 		//start of part that should be part of individual rendering
 		// Use our shader
-		glUseProgram(programID);
 		
 		//input.update(window);
 		input->update(renderer->getWindow());
-		glm::mat4 Projection = input->getProjectionMatrix();
+		/*glm::mat4 Projection = input->getProjectionMatrix();
 		glm::mat4 View = input->getViewMatrix();
 		glm::mat4 Model = glm::mat4(1.0f);
-		glm::mat4 MVP = Projection*View*Model;
+		glm::mat4 MVP = Projection*View*Model;*/
 		//scenegraph test
-		glm::mat4 m2vp = Projection*View*testMatrix;
+		//glm::mat4 m2vp = Projection*View*testMatrix;
 		
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+		//glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 		//end of part that should be part of individual rendering
 
 		time = glfwGetTime();
@@ -98,9 +97,9 @@ int main() {
 		}
 		oldTime = time;
 		for (MeshNode* node : drawArray){
-			node->draw();
+			node->draw(input);
 			//just to test scenegraph, remove
-			glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &m2vp[0][0]);
+			//glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &m2vp[0][0]);
 		}
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();

@@ -1,10 +1,16 @@
 #include "MeshNode.h"
 #include "../Render/Renderer.h"
+#include "..\shader.hpp"
+#include <iostream>
+
+
 
 
 MeshNode::MeshNode(UUID uuid, aiMesh* triangleMesh) : SceneNode(uuid, NodeType::MESH_NODE)
 {
 	this->triangleMesh = triangleMesh;
+	shaderID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
+	textureInit = false;
 }
 
 
@@ -86,9 +92,10 @@ void MeshNode::prepareForRendering()
 	delete indexArray;
 }
 
-void MeshNode::draw()
+void MeshNode::draw(InputHandler* input)
 {
-	Renderer::getInstance()->draw(this);
+	
+	Renderer::getInstance()->draw(this, input);
 
 
 	//Renderer::UseShader();
@@ -100,12 +107,32 @@ void MeshNode::draw()
 
 }
 
+GLuint MeshNode::getShaderID()
+{
+	return shaderID;
+}
+
 GLuint MeshNode::getVao()
 {
 	return vao;
 }
 
+GLuint MeshNode::getUV()
+{
+	return uvBuffer;
+}
+
 int MeshNode::getDrawSize()
 {
 	return triangleMesh->mNumFaces * 3;
+}
+
+Texture* MeshNode::getTexture(const char* path)
+{
+	if (textureInit == false) {
+		std::cout << "im here" << std::endl;
+		texture = new Texture(path);
+		textureInit = true;
+	}
+	return  new Texture(path);
 }

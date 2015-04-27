@@ -117,11 +117,35 @@ void Renderer::bindVertexArray(GLuint vertexArrayId)
 	glBindVertexArray(vertexArrayId);
 }
 
-
-void Renderer::draw(MeshNode* node)
+void Renderer::draw(MeshNode* node, InputHandler* input)
 {
+
+	GLuint shaderID = node->getShaderID();
+	this->useShader(shaderID);
+	glm::mat4 MVP = this->getMVP(input);
+	GLuint MatrixID = glGetUniformLocation(shaderID, "MVP");
+	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+	Texture* texture = node->getTexture("duck.png");
+	texture->bind(0);
+	GLuint tex_location = glGetUniformLocation(shaderID, "first_texture");
+	glUniform1i(tex_location, 0);
 
 	bindVertexArray(node->getVao());
 	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);
 	bindVertexArray(0);
+
+	texture->~Texture();
+}
+
+void Renderer::useShader(GLuint shaderID)
+{
+	glUseProgram(shaderID);
+}
+
+glm::mat4 Renderer::getMVP(InputHandler* input)
+{
+	glm::mat4 Projection = input->getProjectionMatrix();
+	glm::mat4 View = input->getViewMatrix();
+	glm::mat4 Model = glm::mat4(1.0f);
+	return Projection*View*Model;
 }

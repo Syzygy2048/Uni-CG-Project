@@ -8,6 +8,7 @@ Texture::Texture(const char* path)
 	FREE_IMAGE_FORMAT formato = FreeImage_GetFileType(path, 0);
 	std::cout << path << std::endl;
 	FIBITMAP* image = FreeImage_Load(formato, path);
+	
 
 	if (!image) {
 		std::cout << "errorT_T" << std::endl;
