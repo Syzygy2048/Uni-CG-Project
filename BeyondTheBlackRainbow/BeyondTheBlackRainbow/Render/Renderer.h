@@ -6,7 +6,7 @@
 #include "../SceneGraph/MeshNode.h"
 #include "../InputHandler.h"
 #include "../Texture.h"
-#include "../Camera.h"
+#include "../SceneGraph/Camera.h"
 
 class Renderer
 {
@@ -15,7 +15,7 @@ public:
 	~Renderer();
 
 	int init();
-	//void initCamera();
+	void initCamera(UUID uuid);
 
 	void generateBufferObject(GLuint* bufferID);
 	

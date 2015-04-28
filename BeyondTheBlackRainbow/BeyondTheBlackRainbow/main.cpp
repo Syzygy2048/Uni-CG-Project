@@ -12,7 +12,7 @@
 #include "Util\UuidHelper.h"
 #include "Importers\MeshImporter.h"
 #include "SceneGraph\TransformNode.h"
-#include "Camera.h"
+#include "SceneGraph\Camera.h"
 
 int main() {
 
@@ -24,7 +24,7 @@ int main() {
 	GLDebug::registerDebugCallbacks();
 	
 	InputHandler* input = new InputHandler();
-
+	renderer->initCamera(generateUuid());
 
 
 	//start of part that should be in a scene loader

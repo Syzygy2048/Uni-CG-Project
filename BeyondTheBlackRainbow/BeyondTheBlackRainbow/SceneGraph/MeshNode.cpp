@@ -133,9 +133,7 @@ Texture* MeshNode::getTexture(const char* path, GLuint shaderID)
 		texture = new Texture(path);
 		textureInit = true;
 	}
-	texture->bind(0);
-	GLuint tex_location = glGetUniformLocation(shaderID, "first_texture");
-	glUniform1i(tex_location, 0);
+	
 
 	return  texture;
 }

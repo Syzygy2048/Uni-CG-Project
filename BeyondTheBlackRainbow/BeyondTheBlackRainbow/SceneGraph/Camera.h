@@ -3,12 +3,16 @@
 
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
+#include "..\SceneGraph\SceneNode.h"
 
-class Camera
+class Camera : 
+	public SceneNode
 {
 public:
-	Camera();
+	Camera(UUID uuid);
 	~Camera();
+
+	glm::mat4 propagateMatrix();
 
 	void updateDirection(float hAngle, float vAngle);
 	void move(float time, float speed, int dir);

@@ -2,7 +2,7 @@
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
-#include <..\Camera.h>
+#include <..\SceneGraph\Camera.h>
 
 class InputHandler
 {
@@ -12,7 +12,7 @@ private:
 	float horizontalAngle = 3.14f;
 	float verticalAngle = 0.0f;
 	float speed = 3.0f;
-	float mouseSpeed = 0.005f;
+	float mouseSpeed = 0.0025f;
 
 public:
 	InputHandler();

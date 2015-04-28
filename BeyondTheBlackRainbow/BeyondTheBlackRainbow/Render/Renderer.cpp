@@ -49,25 +49,22 @@ int Renderer::init()
 		return -1;
 	}
 
-	if (camera == nullptr) {
-		camera = new Camera();
-	}
 
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-	glClearColor(0.4f, 0.0f, 0.4f, 0.0f);
+	glClearColor(0.8f, 0.9f, 1.0f, 0.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
 }
 
-/*void Renderer::initCamera()
+void Renderer::initCamera(UUID uuid)
 {
 	if (camera == nullptr) {
-		camera = new Camera();
+		camera = new Camera(uuid);
 	}
-}*/
+}
 
 GLFWwindow* Renderer::getWindow()
 {
@@ -132,6 +129,9 @@ void Renderer::draw(MeshNode* node)
 	GLuint MatrixID = glGetUniformLocation(shaderID, "MVP");
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 	Texture* texture = node->getTexture("duck.png", shaderID);
+	texture->bind(0);
+	GLuint tex_location = glGetUniformLocation(shaderID, "first_texture");
+	glUniform1i(tex_location, 0);
 	bindVertexArray(node->getVao());
 	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);
 	bindVertexArray(0);

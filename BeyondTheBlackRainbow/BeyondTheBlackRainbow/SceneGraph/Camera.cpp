@@ -1,7 +1,8 @@
 #include "Camera.h"
+#include <iostream>
 
 
-Camera::Camera()
+Camera::Camera(UUID uuid) : SceneNode(uuid, NodeType::CAMERA_NODE)
 {	
 	position = glm::vec3(0, 0, 5);
 	glm::vec3 up = glm::vec3(0, 1, 0);
@@ -46,4 +47,9 @@ glm::mat4 Camera::getViewMatrix() {
 		up
 		);
 	return viewMatrix;
+}
+
+glm::mat4 Camera::propagateMatrix()
+{
+	return parent->propagateMatrix();
 }

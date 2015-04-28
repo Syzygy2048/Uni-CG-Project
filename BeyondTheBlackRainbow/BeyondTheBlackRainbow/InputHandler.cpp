@@ -21,7 +21,14 @@ void InputHandler::update(GLFWwindow* window, Camera* camera)
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	horizontalAngle += mouseSpeed * float(1280 / 2 - (1280-xpos));		//1280 - xpos to flip the x axis
+
 	verticalAngle += mouseSpeed * float(720 / 2 - ypos);
+	if (verticalAngle > 1.5f) {
+		verticalAngle = 1.5f;
+	}
+	else if (verticalAngle < -1.5f) {
+		verticalAngle = -1.5f;
+	}
 
 	camera->updateDirection(horizontalAngle, verticalAngle);
 
