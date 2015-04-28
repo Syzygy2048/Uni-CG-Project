@@ -19,7 +19,7 @@ public:
 	void prepareForRendering();
 	void unprepareForRendering();
 
-	void draw(InputHandler* input);
+	void draw();
 
 	GLuint getVao();
 	int getDrawSize();
@@ -29,7 +29,7 @@ public:
 	virtual glm::mat4 propagateMatrix();
 
 	GLuint getShaderID();
-	Texture* getTexture(const char* path);
+	Texture* getTexture(const char* path, GLuint shaerID);
 private:
 	aiMesh* triangleMesh;
 

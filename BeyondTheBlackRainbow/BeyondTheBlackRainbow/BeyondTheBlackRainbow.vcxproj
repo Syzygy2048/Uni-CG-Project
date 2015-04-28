@@ -72,6 +72,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GLDebug.cpp" />
     <ClCompile Include="Importers\MeshLoadInfo.cpp" />
     <ClCompile Include="InputHandler.cpp" />
@@ -85,6 +86,7 @@
     <ClCompile Include="SceneGraph\TransformNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="GLDebug.h" />
     <ClInclude Include="Importers\MeshLoadInfo.h" />
     <ClInclude Include="InputHandler.h" />

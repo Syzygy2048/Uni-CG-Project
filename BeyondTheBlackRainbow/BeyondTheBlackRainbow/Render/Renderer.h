@@ -6,6 +6,7 @@
 #include "../SceneGraph/MeshNode.h"
 #include "../InputHandler.h"
 #include "../Texture.h"
+#include "../Camera.h"
 
 class Renderer
 {
@@ -14,7 +15,7 @@ public:
 	~Renderer();
 
 	int init();
-	void initCamera();
+	//void initCamera();
 
 	void generateBufferObject(GLuint* bufferID);
 	
@@ -28,10 +29,10 @@ public:
 	void disableVertexAttribArray(int id);
 	void setVertexAttribPointer(int id, int size, GLenum type, GLboolean normalized, int stride, const GLvoid* pointer);
 
-	void draw(MeshNode* node, InputHandler* input);
+	void draw(MeshNode* node);
 
 	GLFWwindow* getWindow();
-
+	void input(InputHandler* input);
 	
 
 private:
@@ -42,8 +43,9 @@ private:
 
 
 	GLFWwindow* window;
+	Camera* camera;
 	
 	void useShader(GLuint shaderID);
-	glm::mat4 getMVP(InputHandler* input);
+	glm::mat4 getMVP();
 };
 

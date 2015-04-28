@@ -12,6 +12,7 @@
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="SceneGraph\TransformNode.cpp" />
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLDebug.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="Util\UuidHelper.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="SceneGraph\TransformNode.h" />
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleFragmentShader.fragmentshader" />

@@ -49,6 +49,10 @@ int Renderer::init()
 		return -1;
 	}
 
+	if (camera == nullptr) {
+		camera = new Camera();
+	}
+
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
 	glClearColor(0.4f, 0.0f, 0.4f, 0.0f);
@@ -58,10 +62,12 @@ int Renderer::init()
 
 }
 
-void Renderer::initCamera()
+/*void Renderer::initCamera()
 {
-
-}
+	if (camera == nullptr) {
+		camera = new Camera();
+	}
+}*/
 
 GLFWwindow* Renderer::getWindow()
 {
@@ -117,24 +123,20 @@ void Renderer::bindVertexArray(GLuint vertexArrayId)
 	glBindVertexArray(vertexArrayId);
 }
 
-void Renderer::draw(MeshNode* node, InputHandler* input)
+void Renderer::draw(MeshNode* node)
 {
 
 	GLuint shaderID = node->getShaderID();
 	this->useShader(shaderID);
-	glm::mat4 MVP = this->getMVP(input);
+	glm::mat4 MVP = this->getMVP();
 	GLuint MatrixID = glGetUniformLocation(shaderID, "MVP");
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-	Texture* texture = node->getTexture("duck.png");
-	texture->bind(0);
-	GLuint tex_location = glGetUniformLocation(shaderID, "first_texture");
-	glUniform1i(tex_location, 0);
-
+	Texture* texture = node->getTexture("duck.png", shaderID);
 	bindVertexArray(node->getVao());
 	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);
 	bindVertexArray(0);
 
-	texture->~Texture();
+	//texture->~Texture();
 }
 
 void Renderer::useShader(GLuint shaderID)
@@ -142,10 +144,15 @@ void Renderer::useShader(GLuint shaderID)
 	glUseProgram(shaderID);
 }
 
-glm::mat4 Renderer::getMVP(InputHandler* input)
+glm::mat4 Renderer::getMVP()
 {
-	glm::mat4 Projection = input->getProjectionMatrix();
-	glm::mat4 View = input->getViewMatrix();
+	glm::mat4 Projection = glm::perspective(90.0f, 16.0f / 9.0f, 0.1f, 100.0f);
+	glm::mat4 View = camera->getViewMatrix();
 	glm::mat4 Model = glm::mat4(1.0f);
 	return Projection*View*Model;
+}
+
+void Renderer::input(InputHandler* input)
+{
+	input->update(window, camera);
 }

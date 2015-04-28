@@ -92,10 +92,10 @@ void MeshNode::prepareForRendering()
 	delete indexArray;
 }
 
-void MeshNode::draw(InputHandler* input)
+void MeshNode::draw()
 {
 	
-	Renderer::getInstance()->draw(this, input);
+	Renderer::getInstance()->draw(this);
 
 
 	//Renderer::UseShader();
@@ -127,12 +127,15 @@ int MeshNode::getDrawSize()
 	return triangleMesh->mNumFaces * 3;
 }
 
-Texture* MeshNode::getTexture(const char* path)
+Texture* MeshNode::getTexture(const char* path, GLuint shaderID)
 {
 	if (textureInit == false) {
-		std::cout << "im here" << std::endl;
 		texture = new Texture(path);
 		textureInit = true;
 	}
-	return  new Texture(path);
+	texture->bind(0);
+	GLuint tex_location = glGetUniformLocation(shaderID, "first_texture");
+	glUniform1i(tex_location, 0);
+
+	return  texture;
 }

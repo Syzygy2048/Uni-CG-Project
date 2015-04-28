@@ -12,6 +12,7 @@
 #include "Util\UuidHelper.h"
 #include "Importers\MeshImporter.h"
 #include "SceneGraph\TransformNode.h"
+#include "Camera.h"
 
 int main() {
 
@@ -21,7 +22,7 @@ int main() {
 	}
 	
 	GLDebug::registerDebugCallbacks();
-
+	
 	InputHandler* input = new InputHandler();
 
 
@@ -77,7 +78,7 @@ int main() {
 		// Use our shader
 		
 		//input.update(window);
-		input->update(renderer->getWindow());
+		renderer->input(input);
 		/*glm::mat4 Projection = input->getProjectionMatrix();
 		glm::mat4 View = input->getViewMatrix();
 		glm::mat4 Model = glm::mat4(1.0f);
@@ -97,7 +98,7 @@ int main() {
 		}
 		oldTime = time;
 		for (MeshNode* node : drawArray){
-			node->draw(input);
+			node->draw();
 			//just to test scenegraph, remove
 			//glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &m2vp[0][0]);
 		}
