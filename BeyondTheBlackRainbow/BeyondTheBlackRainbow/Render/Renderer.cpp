@@ -122,10 +122,9 @@ void Renderer::bindVertexArray(GLuint vertexArrayId)
 
 void Renderer::draw(MeshNode* node)
 {
-
 	GLuint shaderID = node->getShaderID();
 	this->useShader(shaderID);
-	glm::mat4 MVP = this->getMVP();
+	glm::mat4 MVP = this->getMVP() * node->propagateMatrix();
 	GLuint MatrixID = glGetUniformLocation(shaderID, "MVP");
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 	Texture* texture = node->getTexture("duck.png", shaderID);
@@ -148,7 +147,7 @@ glm::mat4 Renderer::getMVP()
 {
 	glm::mat4 Projection = glm::perspective(90.0f, 16.0f / 9.0f, 0.1f, 100.0f);
 	glm::mat4 View = camera->getViewMatrix();
-	glm::mat4 Model = glm::mat4(1.0f);
+	glm::mat4 Model = glm::mat4(1.0f); //bringt nichts
 	return Projection*View*Model;
 }
 

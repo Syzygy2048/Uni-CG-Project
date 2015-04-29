@@ -2,16 +2,18 @@
 
 #include <assimp\scene.h>
 #include <GL\glew.h>
+
 #include "SceneNode.h"
-#include "..\Texture.h"
-#include "..\InputHandler.h"
+#include "../Texture.h"
+#include "../InputHandler.h"
+#include "../Importers/MeshLoadInfo.h"
 
 
 class MeshNode :
 	public SceneNode
 {
 public:
-	MeshNode(UUID uuid, aiMesh* triangleMesh);
+	MeshNode(UUID uuid, aiMesh* triangleMesh, MeshLoadInfo* meshLoadInfo);
 	~MeshNode();
 
 	//TODO: should probably be moved into Renderer class (renderer->initMeshNodeForRendering(this))
@@ -45,11 +47,11 @@ private:
 	int textureAttribPointer;
 
 	glm::mat4 modelMatrix;
-
-
 	
 	GLuint shaderID;
 	Texture* texture;
 	bool textureInit;
+
+	MeshLoadInfo* loadInfo;
 };
 

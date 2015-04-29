@@ -40,10 +40,10 @@ int main() {
 	SceneNode* sceneGraph = new SceneNode(generateUuid(), NodeType::ROOT_NODE);
 	
 	SceneNode* transformNode = new TransformNode(generateUuid(), glm::mat4(
-		1, 0, 0, 3,
-		0, 1, 0, 3,
-		0, 0, 1, -3,
-		0, 0, 0, 1));
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		3, 3, -3, 1));
 	transformNode->attachChild(tableMesh);
 	sceneGraph->attachChild(duckMesh);
 	sceneGraph->attachChild(transformNode);
@@ -57,13 +57,6 @@ int main() {
 	// Only at initialisation time.
 	//should be in a shader class
 	//GLuint MatrixID = glGetUniformLocation(programID, "MVP");
-
-	//this is just to test the scenegraph and give the second mesh a different mvp
-	glm::mat4 testMatrix = glm::mat4(
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		1.5, 1.5, 1.5, 1);	//constructor is kind of weird in that its flipped accross the scale axis (so projection and position is flipped)
 	
 	double time = glfwGetTime();
 	double oldTime = glfwGetTime();
@@ -99,8 +92,6 @@ int main() {
 		oldTime = time;
 		for (MeshNode* node : drawArray){
 			node->draw();
-			//just to test scenegraph, remove
-			//glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &m2vp[0][0]);
 		}
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();
