@@ -5,8 +5,8 @@
 #include <string>
 #include <map>
 
-#include "../Shader/Shader.h"
 #include "../shader/ShaderProgram.h"
+#include "MeshLoadInfo.h"
 
 class ShaderImporter
 {
@@ -14,9 +14,8 @@ public:
 
 	//GLuint loadShaderArray(std::vector<std::string> shaderPaths);
 	
-	Shader* loadShader(std::string, Shader::ShaderType type);
-	ShaderProgram* getShaderProgram(std::string shaderProgramIdentifier);
-
+	GLuint loadShader(std::string shaderPath);
+	ShaderProgram* loadShaderProgram(MeshLoadInfo::ShaderLoadInfo* shader);
 	static ShaderImporter* getInstance();
 	~ShaderImporter();
 
@@ -25,8 +24,7 @@ private:
 	ShaderImporter(ShaderImporter const&);
 	void operator=(ShaderImporter const&);
 	
-	std::map<std::string, Shader*> shaders;
-	std::map<std::string, ShaderProgram*> shaderPrograms;
+	std::map<MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*> shaderPrograms;
 
 	
 };

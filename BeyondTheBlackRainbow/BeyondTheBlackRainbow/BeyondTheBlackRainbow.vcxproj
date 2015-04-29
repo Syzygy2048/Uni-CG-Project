@@ -72,6 +72,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Shader\LightingShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\Camera.cpp" />
     <ClCompile Include="GLDebug.cpp" />
     <ClCompile Include="Importers\MeshLoadInfo.cpp" />
@@ -84,8 +85,10 @@
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="SceneGraph\TransformNode.cpp" />
+    <ClCompile Include="Shader\TextureShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Shader\LightingShaderProgram.h" />
     <ClInclude Include="SceneGraph\Camera.h" />
     <ClInclude Include="GLDebug.h" />
     <ClInclude Include="Importers\MeshLoadInfo.h" />
@@ -97,6 +100,7 @@
     <ClInclude Include="SceneGraph\SceneNode.h" />
     <ClInclude Include="shader.hpp" />
     <ClInclude Include="SceneGraph\TransformNode.h" />
+    <ClInclude Include="Shader\TextureShaderProgram.h" />
     <ClInclude Include="Util\FileChecker.h" />
     <ClInclude Include="Util\UuidHelper.h" />
     <ClInclude Include="Texture.h" />

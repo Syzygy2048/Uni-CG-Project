@@ -4,77 +4,14 @@
 #include <iostream>
 #include <string>
 
+#include "..\Shader\LightingShaderProgram.h"
+#include "..\Shader\TextureShaderProgram.h"
+
 
 
 ShaderImporter::ShaderImporter()
 {
-	std::string path;
-	path = "Shaders//Vertex//simple_vertex_shader.glsl";
-	loadShader(path, Shader::ShaderType::VERTEX);
-	path = "Shaders//Fragment//simple_fragment_shader.glsl";
-	loadShader(path, Shader::ShaderType::FRAGMENT);
-
-	ShaderProgram* shaderProgram = new ShaderProgram();
-	shaderProgram->setVertexShader(shaders.find("Shaders//Vertex//simple_vertex_shader.glsl")->second);
-	shaderProgram->setFragmentShader(shaders.find("Shaders//Fragment//simple_fragment_shader.glsl")->second);
-	shaderProgram->buildProgram();
-	shaderPrograms.insert(std::pair<std::string, ShaderProgram*>("defaultShader", shaderProgram));
-
-
-
-	path = "Shaders//Vertex//texture_vertex_shader.glsl";
-	loadShader(path, Shader::ShaderType::VERTEX);
-	path = "Shaders//Fragment//texture_fragment_shader.glsl";
-	loadShader(path, Shader::ShaderType::FRAGMENT);
-
-	shaderProgram = new ShaderProgram();
-	shaderProgram->setVertexShader(shaders.find("Shaders//Vertex//texture_vertex_shader.glsl")->second);
-	shaderProgram->setFragmentShader(shaders.find("Shaders//Fragment//texture_fragment_shader.glsl")->second);
-	shaderProgram->buildProgram();
-	shaderPrograms.insert(std::pair<std::string, ShaderProgram*>("textureShader", shaderProgram));
-
-
-	path = "Shaders//Vertex//lighting_vertex_shader.glsl";
-	loadShader(path, Shader::ShaderType::VERTEX);
-	path = "Shaders//Fragment//lighting_fragment_shader.glsl";
-	loadShader(path, Shader::ShaderType::FRAGMENT);
-
-	shaderProgram = new ShaderProgram();
-	shaderProgram->setVertexShader(shaders.find("Shaders//Vertex//lighting_vertex_shader.glsl")->second);
-	shaderProgram->setFragmentShader(shaders.find("Shaders//Fragment//lighting_fragment_shader.glsl")->second);
-	shaderProgram->buildProgram();
-	shaderPrograms.insert(std::pair<std::string, ShaderProgram*>("lightingShader", shaderProgram));
-
-
-
-	path = "Shaders//Vertex//shadow_vertex.glsl";
-	loadShader(path, Shader::ShaderType::VERTEX);
-	path = "Shaders//Fragment//shadow_fragment.glsl";
-	loadShader(path, Shader::ShaderType::FRAGMENT);
-
-	shaderProgram = new ShaderProgram();
-	shaderProgram->setVertexShader(shaders.find("Shaders//Vertex//shadow_vertex.glsl")->second);
-	shaderProgram->setFragmentShader(shaders.find("Shaders//Fragment//shadow_fragment.glsl")->second);
-	shaderProgram->buildProgram();
-	shaderPrograms.insert(std::pair<std::string, ShaderProgram*>("shadowShader", shaderProgram));
-
-
-	path = "Shaders//Vertex//animation.vert";
-	loadShader(path, Shader::ShaderType::VERTEX);
-	path = "Shaders//Fragment//animation.frag";
-	loadShader(path, Shader::ShaderType::FRAGMENT);
-
-	shaderProgram = new ShaderProgram();
-	shaderProgram->setVertexShader(shaders.find("Shaders//Vertex//animation.vert")->second);
-	shaderProgram->setFragmentShader(shaders.find("Shaders//Fragment//animation.frag")->second);
-	shaderProgram->buildProgram();
-	shaderPrograms.insert(std::pair<std::string, ShaderProgram*>("animationShader", shaderProgram));
-}
-
-
-ShaderProgram* ShaderImporter::getShaderProgram(std::string shaderProgramIdentifier)
-{
-	return shaderPrograms.find(shaderProgramIdentifier)->second;
+		
 }
 
 ShaderImporter* ShaderImporter::getInstance()
@@ -83,28 +20,21 @@ ShaderImporter* ShaderImporter::getInstance()
 	return &INSTANCE;
 }
 
-Shader* ShaderImporter::loadShader(std::string path, Shader::ShaderType type)
+GLuint ShaderImporter::loadShader(std::string shaderPath)
 {
-	if (shaders.find(path) != shaders.end()) 
-		return shaders.find(path)->second;
-	Shader* shader = new Shader(type, path);
-	GLuint shaderId;
 	
-	switch (type){
-	case Shader::ShaderType::VERTEX: 
-		shaderId = glCreateShader(GL_VERTEX_SHADER);
-		break;
-	case Shader::ShaderType::FRAGMENT:
-		shaderId = glCreateShader(GL_FRAGMENT_SHADER); 
-		break;
-	case Shader::ShaderType::GEOMETRY:
-		shaderId = glCreateShader(GL_GEOMETRY_SHADER);
-		break;
-	default: std::cerr << "shader type doesn't exist" << std::endl;
-	}
+	GLuint shaderID;
+	
+	
+		if (shaderPath.find("Vertex") != std::string::npos)
+			shaderID = glCreateShader(GL_VERTEX_SHADER);
+		else if (shaderPath.find("Fragment") != std::string::npos)
+			shaderID = glCreateShader(GL_FRAGMENT_SHADER);
+		else if (shaderPath.find("Geometry") != std::string::npos)
+			shaderID = glCreateShader(GL_GEOMETRY_SHADER);
 	
 	std::string shaderCode;
-	std::ifstream codeStream(path, std::ios::in);
+	std::ifstream codeStream(shaderPath, std::ios::in);
 	if (codeStream.is_open())
 	{
 		std::string line = "";
@@ -113,25 +43,47 @@ Shader* ShaderImporter::loadShader(std::string path, Shader::ShaderType type)
 		codeStream.close();
 	}
 
-	std::cerr << "compiling shader: " << path << std::endl;
+	std::cerr << "compiling shader: " << shaderPath << std::endl;
 	char const * sourcePointer = shaderCode.c_str();
-	glShaderSource(shaderId, 1, &sourcePointer, NULL);
-	glCompileShader(shaderId);
+	glShaderSource(shaderID, 1, &sourcePointer, NULL);
+	glCompileShader(shaderID);
 
 	GLint result = GL_FALSE;
 	int logLength;
 
 	// Check Shader
-	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &result);
-	glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &logLength);
+	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &logLength);
 	std::vector<char> shaderErrorMessage(logLength);
-	glGetShaderInfoLog(shaderId, logLength, NULL, shaderErrorMessage.data());
-	fprintf(stdout, "%s\n", &shaderErrorMessage[0]);
+	glGetShaderInfoLog(shaderID, logLength, NULL, shaderErrorMessage.data());
+	fprintf(stdout, "%s\n", &shaderErrorMessage[0]);	
 
-	shader->setShaderId(shaderId);
-	shaders.insert(std::pair<std::string, Shader*>(path, shader));
+	return shaderID;
+}
 
-	return shader;
+ShaderProgram* ShaderImporter::loadShaderProgram(MeshLoadInfo::ShaderLoadInfo* shader)
+{
+	if (shaderPrograms.find(shader) != shaderPrograms.end()) {
+		return shaderPrograms.find(shader)->second;
+	}
+	GLuint vertexShaderID = loadShader(shader->vertexShaderPath);
+	GLuint fragmentShaderID = loadShader(shader->fragmentShaderPath);
+	GLuint shaderProgramID = glCreateProgram();
+	glAttachShader(shaderProgramID, vertexShaderID);
+	glAttachShader(shaderProgramID, fragmentShaderID);
+	glLinkProgram(shaderProgramID);
+	ShaderProgram* result = nullptr;
+	if (shader == MeshLoadInfo::LIGHTING_SHADER)
+	{
+		result = new LightingShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::TEXTURE_SHADER)
+	{
+		result = new TextureShaderProgram(shaderProgramID);
+	}
+	result->loadUniformLocations();
+	shaderPrograms.insert(std::pair<MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
+	return result;
 }
 
 /*GLuint ShaderImporter::loadShaderArray(std::vector<std::string> shaderPaths)

@@ -145,7 +145,7 @@ void Renderer::useShader(GLuint shaderID)
 
 glm::mat4 Renderer::getMVP()
 {
-	glm::mat4 Projection = glm::perspective(90.0f, 16.0f / 9.0f, 0.1f, 100.0f);
+	glm::mat4 Projection = glm::perspective(75.0f, 16.0f / 9.0f, 0.1f, 100.0f);
 	glm::mat4 View = camera->getViewMatrix();
 	glm::mat4 Model = glm::mat4(1.0f); //bringt nichts
 	return Projection*View*Model;

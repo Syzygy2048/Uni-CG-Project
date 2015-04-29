@@ -1,30 +1,22 @@
 #pragma once
 
 #include <GL\glew.h>
+#include "..\SceneGraph\MeshNode.h"
 
-#include "Shader.h"
 
 class ShaderProgram
 {
 public:
 	
-	void setVertexShader(Shader* shader);
-	void setFragmentShader(Shader* shader);
-	void setGeometryShader(Shader* shader);
+	ShaderProgram(GLuint shaderProgramID);
 
 	GLuint getShaderId();
-	void buildProgram();
 
 	ShaderProgram();
 	~ShaderProgram();
 
-
-
-protected: 
-	Shader* vertexShader;
-	Shader* fragmentShader;
-	Shader* geometryShader;
-	
+	virtual void loadUniformLocations() = 0;
+	virtual void fillUniformLocation(MeshNode* node) = 0;
 
 private:
 	GLuint programId;
