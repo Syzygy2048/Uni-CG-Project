@@ -28,6 +28,8 @@ public:
 
 	virtual glm::mat4 propagateMatrix();
 
+	glm::mat4 getMVP();
+
 	GLuint getShaderID();
 	Texture* getTexture(const char* path, GLuint shaerID);
 private:

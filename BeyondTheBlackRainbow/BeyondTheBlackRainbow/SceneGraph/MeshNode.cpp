@@ -137,3 +137,8 @@ Texture* MeshNode::getTexture(const char* path, GLuint shaderID)
 
 	return  texture;
 }
+
+glm::mat4 getMVP()
+{
+
+}

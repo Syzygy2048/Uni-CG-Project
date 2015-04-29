@@ -20,7 +20,7 @@ void InputHandler::update(GLFWwindow* window, Camera* camera)
 	glfwSetCursorPos(window, 1280 / 2, 720 / 2); 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	horizontalAngle += mouseSpeed * float(1280 / 2 - (1280-xpos));		//1280 - xpos to flip the x axis
+	horizontalAngle += mouseSpeed * float(1280 / 2 - xpos);		//1280 - xpos to flip the x axis
 
 	verticalAngle += mouseSpeed * float(720 / 2 - ypos);
 	if (verticalAngle > 1.5f) {
