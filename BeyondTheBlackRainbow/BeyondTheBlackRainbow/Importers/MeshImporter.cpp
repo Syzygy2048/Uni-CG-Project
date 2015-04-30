@@ -63,6 +63,6 @@ MeshNode* MeshImporter::getMesh(const MeshLoadInfo::LoadInfo* loadInfo)
 		loadMesh(loadInfo);
 	}
 	const aiScene* scene = assets.find(&(loadInfo->meshPath))->second;
-	return new MeshNode(generateUuid(), scene->mMeshes[0]);
+	return new MeshNode(generateUuid(), scene->mMeshes[0], loadInfo);
 }
 

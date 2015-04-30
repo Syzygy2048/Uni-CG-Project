@@ -23,10 +23,10 @@ void LightingShaderProgram::loadUniformLocations()
 
 void LightingShaderProgram::fillUniformLocation(MeshNode* node)
 {
-	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, node->getMVP());
+	/*glUniformMatrix4fv(locationMVP, 1, GL_FALSE, node->getMVP());
 	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, node->getMV());
 	glUniformMatrix4fv(locationV, 1, GL_FALSE, node->getView());
 	glUniformMatrix4fv(locationM, 1, GL_FALSE, node->getModelMatrix());
 	glUniform3fv(locationLightInvDirection_worldspace, 1, GL_FALSE, node->getLightDirection());
-	glUniformMatrix4fv(locationDepthBiasMVP, 1, GL_FALSE, node->getDepthBiasMVP());
+	glUniformMatrix4fv(locationDepthBiasMVP, 1, GL_FALSE, node->getDepthBiasMVP());*/
 }

@@ -13,7 +13,7 @@ class MeshNode :
 	public SceneNode
 {
 public:
-	MeshNode(UUID uuid, aiMesh* triangleMesh, MeshLoadInfo* meshLoadInfo);
+	MeshNode(UUID uuid, aiMesh* triangleMesh, const MeshLoadInfo::LoadInfo* meshLoadInfo);
 	~MeshNode();
 
 	//TODO: should probably be moved into Renderer class (renderer->initMeshNodeForRendering(this))
@@ -30,7 +30,7 @@ public:
 
 	virtual glm::mat4 propagateMatrix();
 
-	glm::mat4 getMVP();
+	glm::mat4 getVP();
 
 	GLuint getShaderID();
 	Texture* getTexture(const char* path, GLuint shaerID);

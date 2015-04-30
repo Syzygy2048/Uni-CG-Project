@@ -1,7 +1,7 @@
 #include "TextureShaderProgram.h"
 
 
-TextureShaderProgram::TextureShaderProgram()
+TextureShaderProgram::TextureShaderProgram(GLuint shaderProgramID) : ShaderProgram(shaderProgramID)
 {
 }
 
@@ -19,7 +19,8 @@ void TextureShaderProgram::loadUniformLocations()
 
 void TextureShaderProgram::fillUniformLocation(MeshNode* node)
 {
-	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, node->getMVP());
+	glm::mat4 MVP = node->getVP() * node->propagateMatrix();
+	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, &MVP[0][0]);
 	glUniform1i(locationTexture, GL_TEXTURE0);
 	
 }

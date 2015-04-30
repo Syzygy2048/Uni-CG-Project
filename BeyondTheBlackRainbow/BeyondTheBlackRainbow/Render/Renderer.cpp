@@ -123,14 +123,8 @@ void Renderer::bindVertexArray(GLuint vertexArrayId)
 void Renderer::draw(MeshNode* node)
 {
 	GLuint shaderID = node->getShaderID();
-	this->useShader(shaderID);
-	glm::mat4 MVP = this->getMVP() * node->propagateMatrix();
-	GLuint MatrixID = glGetUniformLocation(shaderID, "MVP");
-	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-	Texture* texture = node->getTexture("duck.png", shaderID);
-	texture->bind(0);
-	GLuint tex_location = glGetUniformLocation(shaderID, "first_texture");
-	glUniform1i(tex_location, 0);
+	this->useShader(shaderID, node);
+	
 	bindVertexArray(node->getVao());
 	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);
 	bindVertexArray(0);
@@ -138,9 +132,30 @@ void Renderer::draw(MeshNode* node)
 	//texture->~Texture();
 }
 
-void Renderer::useShader(GLuint shaderID)
+void Renderer::useShader(GLuint shaderID, MeshNode* node)
 {
 	glUseProgram(shaderID);
+
+	glm::mat4 MVP = this->getMVP() * node->propagateMatrix();
+	GLuint MatrixID = glGetUniformLocation(shaderID, "MVP");
+	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+
+	Texture* texture = node->getTexture("duck.png", shaderID);
+	texture->bind(0);
+	GLuint tex_location = glGetUniformLocation(shaderID, "myTextureSampler");
+	glUniform1i(tex_location, 0);
+
+	glm::mat4 V = camera->getViewMatrix();
+	GLuint viewMatrixID = glGetUniformLocation(shaderID, "V");
+	glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &V[0][0]);
+
+	glm::mat4 M = node->propagateMatrix();
+	GLuint modelMatrixID = glGetUniformLocation(shaderID, "M");
+	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &M[0][0]);
+
+	GLuint lightID = glGetUniformLocation(shaderID, "LightPosition_worldspace");
+	glm::vec3 pos = glm::vec3(4, 4, 4);
+	glUniform3f(lightID, pos.x, pos.y, pos.z);
 }
 
 glm::mat4 Renderer::getMVP()
@@ -154,4 +169,9 @@ glm::mat4 Renderer::getMVP()
 void Renderer::input(InputHandler* input)
 {
 	input->update(window, camera);
+}
+
+glm::mat4 Renderer::getViewMatrix()
+{
+	return camera->getViewMatrix();
 }

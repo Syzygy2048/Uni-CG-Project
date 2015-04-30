@@ -5,7 +5,7 @@
 #include "../Render/Renderer.h"
 #include "..\shader.hpp"
 
-MeshNode::MeshNode(UUID uuid, aiMesh* triangleMesh, MeshLoadInfo* meshLoadInfo) : SceneNode(uuid, NodeType::MESH_NODE)
+MeshNode::MeshNode(UUID uuid, aiMesh* triangleMesh, const MeshLoadInfo::LoadInfo* meshLoadInfo) : SceneNode(uuid, NodeType::MESH_NODE)
 {
 	this->triangleMesh = triangleMesh;
 	shaderID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
@@ -125,7 +125,9 @@ Texture* MeshNode::getTexture(const char* path, GLuint shaderID)
 	return  texture;
 }
 
-glm::mat4 getMVP()
+glm::mat4 getVP()
 {
-
+	glm::mat4 viewMatrix = Renderer::getInstance()->getViewMatrix();
+	glm::mat4 projectionMatrix = glm::perspective(75.0f, 16.0f / 9.0f, 0.1f, 100.0f);
+	return projectionMatrix*viewMatrix;
 }

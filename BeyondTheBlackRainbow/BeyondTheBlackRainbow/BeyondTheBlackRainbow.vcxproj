@@ -72,6 +72,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Shader\LightingShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\Camera.cpp" />
     <ClCompile Include="GLDebug.cpp" />
@@ -83,11 +84,12 @@
     <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="Shader\ShaderProgram.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="SceneGraph\TransformNode.cpp" />
-    <ClCompile Include="Shader\TextureShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Shader\LightingShaderProgram.h" />
     <ClInclude Include="SceneGraph\Camera.h" />
     <ClInclude Include="GLDebug.h" />
@@ -100,12 +102,13 @@
     <ClInclude Include="SceneGraph\SceneNode.h" />
     <ClInclude Include="shader.hpp" />
     <ClInclude Include="SceneGraph\TransformNode.h" />
-    <ClInclude Include="Shader\TextureShaderProgram.h" />
+    <ClInclude Include="Shader\ShaderProgram.h" />
     <ClInclude Include="Util\FileChecker.h" />
     <ClInclude Include="Util\UuidHelper.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shader\Fragment\TextureShader.fragmentshader" />
     <None Include="SimpleFragmentShader.fragmentshader" />
     <None Include="SimpleVertexShader.vertexshader" />
   </ItemGroup>

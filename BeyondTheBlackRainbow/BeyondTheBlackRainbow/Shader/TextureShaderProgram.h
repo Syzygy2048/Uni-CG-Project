@@ -6,7 +6,7 @@
 class TextureShaderProgram : public ShaderProgram
 {
 public:
-	TextureShaderProgram();
+	TextureShaderProgram(GLuint shaderProgramID);
 	~TextureShaderProgram();
 	virtual void loadUniformLocations();
 	virtual void fillUniformLocation(MeshNode* node);

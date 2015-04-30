@@ -33,7 +33,7 @@ public:
 
 	GLFWwindow* getWindow();
 	void input(InputHandler* input);
-	
+	glm::mat4 getViewMatrix();
 
 private:
 	//singleton
@@ -45,7 +45,7 @@ private:
 	GLFWwindow* window;
 	Camera* camera;
 	
-	void useShader(GLuint shaderID);
+	void useShader(GLuint shaderID, MeshNode* node);
 	glm::mat4 getMVP();
 };
 

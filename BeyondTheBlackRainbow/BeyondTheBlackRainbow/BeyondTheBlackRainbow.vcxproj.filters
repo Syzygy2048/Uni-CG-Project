@@ -14,7 +14,8 @@
     <ClCompile Include="SceneGraph\TransformNode.cpp" />
     <ClCompile Include="SceneGraph\Camera.cpp" />
     <ClCompile Include="Shader\LightingShaderProgram.cpp" />
-    <ClCompile Include="Shader\TextureShaderProgram.cpp" />
+    <ClCompile Include="Shader\ShaderProgram.cpp" />
+    <ClCompile Include="Light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLDebug.h" />
@@ -32,10 +33,12 @@
     <ClInclude Include="SceneGraph\TransformNode.h" />
     <ClInclude Include="SceneGraph\Camera.h" />
     <ClInclude Include="Shader\LightingShaderProgram.h" />
-    <ClInclude Include="Shader\TextureShaderProgram.h" />
+    <ClInclude Include="Shader\ShaderProgram.h" />
+    <ClInclude Include="Light.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleFragmentShader.fragmentshader" />
     <None Include="SimpleVertexShader.vertexshader" />
+    <None Include="Shader\Fragment\TextureShader.fragmentshader" />
   </ItemGroup>
 </Project>
