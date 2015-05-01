@@ -80,18 +80,16 @@ void MeshNode::prepareForRendering()
 	delete indexArray;
 }
 
-void MeshNode::draw()
+void MeshNode::update(double timeStep, InputHandler* input)
 {
+}
+
+void MeshNode::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix)
+{
+	this->viewMatrix = viewMatrix;
+	this->projectionMatrix = projectionMatrix;
+	this->viewProjectionMatrix = viewProjectionMatrix;
 	Renderer::getInstance()->draw(this);
-
-
-	//Renderer::UseShader();
-	//Renderer::bindThisMesh();
-
-	//Push data to shader
-
-
-
 }
 
 GLuint MeshNode::getShaderID()
@@ -125,9 +123,21 @@ Texture* MeshNode::getTexture(const char* path, GLuint shaderID)
 	return  texture;
 }
 
-glm::mat4 getVP()
+glm::mat4 MeshNode::getModelViewProjectionMatrix()
 {
-	glm::mat4 viewMatrix = Renderer::getInstance()->getViewMatrix();
-	glm::mat4 projectionMatrix = glm::perspective(75.0f, 16.0f / 9.0f, 0.1f, 100.0f);
-	return projectionMatrix*viewMatrix;
+	return projectionMatrix * viewMatrix * propagateMatrix();
+}
+glm::mat4 MeshNode::getViewMatrix()
+{
+	return viewMatrix;
+}
+
+glm::mat4 MeshNode::getProjectionMatrix()
+{
+	return projectionMatrix;
+}
+
+glm::mat4 MeshNode::getViewProjectionMatrix()
+{
+	return viewProjectionMatrix;
 }

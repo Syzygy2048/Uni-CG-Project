@@ -1,22 +1,18 @@
 #pragma once
+
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
-#include <..\SceneGraph\Camera.h>
+
 
 class InputHandler
 {
-private:
-	int w, a, s, d;
-	double xpos, ypos;
-	float horizontalAngle = 3.14f;
-	float verticalAngle = 0.0f;
-	float speed = 3.0f;
-	float mouseSpeed = 0.0025f;
-
 public:
 	InputHandler();
 	~InputHandler();
-	void update(GLFWwindow* window, Camera* camera);
+	void update(GLFWwindow* window);
+
+	bool w, a, s, d;
+	double xpos, ypos;
 };
 

@@ -48,8 +48,7 @@ int Renderer::init()
 		std::cerr << "Failed to initialize GLEW" << std::endl;
 		return -1;
 	}
-
-
+	
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
 	glClearColor(0.8f, 0.9f, 1.0f, 0.0f);
@@ -57,13 +56,6 @@ int Renderer::init()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-}
-
-void Renderer::initCamera(UUID uuid)
-{
-	if (camera == nullptr) {
-		camera = new Camera(uuid);
-	}
 }
 
 GLFWwindow* Renderer::getWindow()
@@ -136,7 +128,7 @@ void Renderer::useShader(GLuint shaderID, MeshNode* node)
 {
 	glUseProgram(shaderID);
 
-	glm::mat4 MVP = this->getMVP() * node->propagateMatrix();
+	glm::mat4 MVP = node->getModelViewProjectionMatrix();
 	GLuint MatrixID = glGetUniformLocation(shaderID, "MVP");
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
@@ -145,7 +137,7 @@ void Renderer::useShader(GLuint shaderID, MeshNode* node)
 	GLuint tex_location = glGetUniformLocation(shaderID, "myTextureSampler");
 	glUniform1i(tex_location, 0);
 
-	glm::mat4 V = camera->getViewMatrix();
+	glm::mat4 V = node->getViewMatrix();
 	GLuint viewMatrixID = glGetUniformLocation(shaderID, "V");
 	glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &V[0][0]);
 
@@ -156,22 +148,4 @@ void Renderer::useShader(GLuint shaderID, MeshNode* node)
 	GLuint lightID = glGetUniformLocation(shaderID, "LightPosition_worldspace");
 	glm::vec3 pos = glm::vec3(4, 4, 4);
 	glUniform3f(lightID, pos.x, pos.y, pos.z);
-}
-
-glm::mat4 Renderer::getMVP()
-{
-	glm::mat4 Projection = glm::perspective(75.0f, 16.0f / 9.0f, 0.1f, 100.0f);
-	glm::mat4 View = camera->getViewMatrix();
-	glm::mat4 Model = glm::mat4(1.0f); //bringt nichts
-	return Projection*View*Model;
-}
-
-void Renderer::input(InputHandler* input)
-{
-	input->update(window, camera);
-}
-
-glm::mat4 Renderer::getViewMatrix()
-{
-	return camera->getViewMatrix();
 }

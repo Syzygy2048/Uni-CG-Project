@@ -14,17 +14,11 @@ SceneNode::~SceneNode()
 	}
 }
 
-void SceneNode::update(double timeStep){
+void SceneNode::update(double timeStep, InputHandler* input){
 	for (SceneNode* child : childList){
-		child->update(timeStep);
+		child->update(timeStep, input);
 	}
 }
-
-/*void SceneNode::draw(){
-	for (SceneNode* child : childList){
-		child->draw();
-	}
-}*/
 
 void SceneNode::attachChild(SceneNode* child){
 	childList.push_back(child);

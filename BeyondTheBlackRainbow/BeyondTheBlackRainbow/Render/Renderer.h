@@ -6,7 +6,7 @@
 #include "../SceneGraph/MeshNode.h"
 #include "../InputHandler.h"
 #include "../Texture.h"
-#include "../SceneGraph/Camera.h"
+#include "../SceneGraph/CameraNode.h"
 
 class Renderer
 {
@@ -15,7 +15,6 @@ public:
 	~Renderer();
 
 	int init();
-	void initCamera(UUID uuid);
 
 	void generateBufferObject(GLuint* bufferID);
 	
@@ -32,7 +31,6 @@ public:
 	void draw(MeshNode* node);
 
 	GLFWwindow* getWindow();
-	void input(InputHandler* input);
 	glm::mat4 getViewMatrix();
 
 private:
@@ -40,12 +38,9 @@ private:
 	Renderer();
 	Renderer(Renderer const&);
 	void operator=(Renderer const&);
-
-
+	
 	GLFWwindow* window;
-	Camera* camera;
 	
 	void useShader(GLuint shaderID, MeshNode* node);
-	glm::mat4 getMVP();
 };
 

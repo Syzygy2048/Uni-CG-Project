@@ -4,6 +4,7 @@
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
+#include <map>
 
 #include "InputHandler.h"
 #include "shader.hpp"
@@ -12,7 +13,8 @@
 #include "Util\UuidHelper.h"
 #include "Importers\MeshImporter.h"
 #include "SceneGraph\TransformNode.h"
-#include "SceneGraph\Camera.h"
+#include "SceneGraph\CameraNode.h"
+
 
 int main() {
 
@@ -24,7 +26,12 @@ int main() {
 	GLDebug::registerDebugCallbacks();
 	
 	InputHandler* input = new InputHandler();
-	renderer->initCamera(generateUuid());
+	
+	CameraNode* activeCamera = new CameraNode(generateUuid());
+	std::map<std::string, CameraNode*> cameraList;
+	
+	//this way we have a list of cameras and can switch between them as we want just by doing activeCamera = cameraList.find("whichever camera we want")->second;
+	cameraList.insert(std::pair<std::string, CameraNode*>(std::string("player camera"), activeCamera));
 
 
 	//start of part that should be in a scene loader
@@ -38,6 +45,7 @@ int main() {
 	drawArray.push_back(duckMesh);
 	
 	SceneNode* sceneGraph = new SceneNode(generateUuid(), NodeType::ROOT_NODE);
+	sceneGraph->setParent(nullptr);
 	
 	SceneNode* transformNode = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
@@ -47,7 +55,9 @@ int main() {
 	transformNode->attachChild(tableMesh);
 	sceneGraph->attachChild(duckMesh);
 	sceneGraph->attachChild(transformNode);
-	sceneGraph->setParent(nullptr);
+	sceneGraph->attachChild(activeCamera);
+	
+
 	//end of part that should be in a scene loader
 	
 	//should be part of model loading
@@ -70,29 +80,24 @@ int main() {
 		//start of part that should be part of individual rendering
 		// Use our shader
 		
-		//input.update(window);
-		renderer->input(input);
-		/*glm::mat4 Projection = input->getProjectionMatrix();
-		glm::mat4 View = input->getViewMatrix();
-		glm::mat4 Model = glm::mat4(1.0f);
-		glm::mat4 MVP = Projection*View*Model;*/
-		//scenegraph test
-		//glm::mat4 m2vp = Projection*View*testMatrix;
-		
-		//glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-		//end of part that should be part of individual rendering
+		input->update(renderer->getWindow());
 
 		time = glfwGetTime();
 		double deltaTime = time - oldTime;
 		while (deltaTime > timeStep)
 		{
 			deltaTime -= timeStep;
-			sceneGraph->update(timeStep);
+			sceneGraph->update(timeStep, input);
 		}
 		oldTime = time;
+
+		glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
+		glm::mat4 viewMatrix = activeCamera->getViewMatrix();
+		glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 		for (MeshNode* node : drawArray){
-			node->draw();
+			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix);
 		}
+
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();
 	}

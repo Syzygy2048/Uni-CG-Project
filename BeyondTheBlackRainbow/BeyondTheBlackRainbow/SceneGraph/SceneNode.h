@@ -6,6 +6,7 @@
 #include <rpc.h>
 
 #include "SceneGraphEnum.h"
+#include "../InputHandler.h"
 
 class SceneNode
 {
@@ -14,7 +15,7 @@ public:
 	~SceneNode();
 
 	void setParent(SceneNode* parent);
-	virtual void update(double timeStep);
+	virtual void update(double timeStep, InputHandler* input);
 	//virtual void draw();
 	virtual glm::mat4 propagateMatrix();
 	void attachChild(SceneNode* child);

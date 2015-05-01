@@ -74,7 +74,7 @@
   <ItemGroup>
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Shader\LightingShaderProgram.cpp" />
-    <ClCompile Include="SceneGraph\Camera.cpp" />
+    <ClCompile Include="SceneGraph\CameraNode.cpp" />
     <ClCompile Include="GLDebug.cpp" />
     <ClCompile Include="Importers\MeshLoadInfo.cpp" />
     <ClCompile Include="InputHandler.cpp" />
@@ -91,7 +91,7 @@
   <ItemGroup>
     <ClInclude Include="Light.h" />
     <ClInclude Include="Shader\LightingShaderProgram.h" />
-    <ClInclude Include="SceneGraph\Camera.h" />
+    <ClInclude Include="SceneGraph\CameraNode.h" />
     <ClInclude Include="GLDebug.h" />
     <ClInclude Include="Importers\MeshLoadInfo.h" />
     <ClInclude Include="InputHandler.h" />

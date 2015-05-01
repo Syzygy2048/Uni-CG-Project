@@ -21,7 +21,9 @@ public:
 	void prepareForRendering();
 	void unprepareForRendering();
 
-	void draw();
+	virtual void update(double timeStep, InputHandler* input);
+	//this takes both the viewprojection matrix as well as the individual matrices so that they don't have to be multiplied per object per frame.
+	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix);
 
 	GLuint getVao();
 	int getDrawSize();
@@ -30,7 +32,11 @@ public:
 
 	virtual glm::mat4 propagateMatrix();
 
-	glm::mat4 getVP();
+	glm::mat4 getModelViewProjectionMatrix();
+	glm::mat4 getViewProjectionMatrix();
+	glm::mat4 getModelMatrix();
+	glm::mat4 getViewMatrix();
+	glm::mat4 getProjectionMatrix();
 
 	GLuint getShaderID();
 	Texture* getTexture(const char* path, GLuint shaerID);
@@ -49,6 +55,9 @@ private:
 	int textureAttribPointer;
 
 	glm::mat4 modelMatrix;
+	glm::mat4 viewMatrix;
+	glm::mat4 projectionMatrix;
+	glm::mat4 viewProjectionMatrix;
 	
 	GLuint shaderID;
 	Texture* texture;
