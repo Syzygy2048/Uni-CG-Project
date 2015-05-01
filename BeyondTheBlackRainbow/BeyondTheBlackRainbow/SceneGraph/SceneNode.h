@@ -3,27 +3,30 @@
 #include <windows.h>
 #include <vector>
 #include <glm\glm.hpp>
+#include <rpc.h>
 
 #include "SceneGraphEnum.h"
+#include "../InputHandler.h"
 
 class SceneNode
 {
 public:
-	SceneNode(UUID* id, NodeType nodeType);
+	SceneNode(UUID id, NodeType nodeType);
 	~SceneNode();
 
-	//virtual void update(double timeStep);
+	void setParent(SceneNode* parent);
+	virtual void update(double timeStep, InputHandler* input);
 	//virtual void draw();
-	virtual glm::mat4 propagateMatrix() = 0;
-	/*void attachChild(SceneNode* child);
-	bool detachChild(SceneNode* child);*/
+	virtual glm::mat4 propagateMatrix();
+	void attachChild(SceneNode* child);
+	bool detachChild(SceneNode* child);
 
 protected:
 	SceneNode* parent;
 private:
-	//std::vector<SceneNode*> childList;	
+	std::vector<SceneNode*> childList;	
 
-	const UUID* objectId;
+	const UUID objectId;
 	const NodeType nodeType;
 };
 

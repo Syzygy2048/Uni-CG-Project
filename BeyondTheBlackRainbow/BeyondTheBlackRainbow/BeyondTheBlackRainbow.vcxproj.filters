@@ -1,73 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Source Files\SceneGraph">
-      <UniqueIdentifier>{6ef446cf-dc94-47e8-a01a-97e78eb6d124}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="GLDebug.cpp" />
+    <ClCompile Include="Importers\MeshLoadInfo.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Importers\MeshImporter.cpp" />
+    <ClCompile Include="SceneGraph\MeshNode.cpp" />
+    <ClCompile Include="Render\Renderer.cpp" />
+    <ClCompile Include="SceneGraph\SceneNode.cpp" />
+    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="SceneGraph\TransformNode.cpp" />
+    <ClCompile Include="Shader\LightingShaderProgram.cpp" />
+    <ClCompile Include="Shader\ShaderProgram.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="SceneGraph\CameraNode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Render\Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneGraph\SceneNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneGraph\MeshNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InputHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLDebug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Render\Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneGraph\SceneNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneGraph\SceneGraphEnum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneGraph\MeshNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InputHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="shader.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLDebug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="GLDebug.h" />
+    <ClInclude Include="Importers\MeshLoadInfo.h" />
+    <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="Importers\MeshImporter.h" />
+    <ClInclude Include="SceneGraph\MeshNode.h" />
+    <ClInclude Include="Render\Renderer.h" />
+    <ClInclude Include="SceneGraph\SceneGraphEnum.h" />
+    <ClInclude Include="SceneGraph\SceneNode.h" />
+    <ClInclude Include="shader.hpp" />
+    <ClInclude Include="Util\FileChecker.h" />
+    <ClInclude Include="Util\UuidHelper.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="SceneGraph\TransformNode.h" />
+    <ClInclude Include="Shader\LightingShaderProgram.h" />
+    <ClInclude Include="Shader\ShaderProgram.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="SceneGraph\CameraNode.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleFragmentShader.fragmentshader" />
     <None Include="SimpleVertexShader.vertexshader" />
+    <None Include="Shader\Fragment\TextureShader.fragmentshader" />
   </ItemGroup>
 </Project>
