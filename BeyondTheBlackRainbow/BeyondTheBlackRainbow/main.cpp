@@ -73,7 +73,7 @@ int main() {
 	double timeStep = 1.0 / 60.0;
 	//gameloop
 	double timeOld = 0;
-	while (glfwGetKey(renderer->getWindow(), GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(renderer->getWindow()) == 0) {
+	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
 		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

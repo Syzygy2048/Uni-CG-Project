@@ -17,9 +17,9 @@ CameraNode::~CameraNode()
 
 void CameraNode::update(double deltaTime, InputHandler* input)
 {
-	horizontalAngle += turnSpeed * float(1280 / 2 - input->xpos);		//1280 - xpos to flip the x axis
+	horizontalAngle += turnSpeed * deltaTime * float(1280 / 2 - input->xpos);		//1280 - xpos to flip the x axis
 
-	verticalAngle += turnSpeed * float(720 / 2 - input->ypos);
+	verticalAngle += turnSpeed * deltaTime * float(720 / 2 - input->ypos);
 	if (verticalAngle > 1.5f) {
 		verticalAngle = 1.5f;
 	}

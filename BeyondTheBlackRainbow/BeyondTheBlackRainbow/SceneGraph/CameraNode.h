@@ -30,7 +30,7 @@ private:
 	float horizontalAngle = 3.14f;
 	float verticalAngle = 0.0f;
 	float speed = 3.0f;
-	float turnSpeed = 0.0025f;
+	float turnSpeed = 0.1f;
 
 	void updateDirection(float hAngle, float vAngle);
 	void move(float time, float speed, int dir);
