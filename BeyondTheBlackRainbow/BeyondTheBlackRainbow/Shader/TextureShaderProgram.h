@@ -13,8 +13,6 @@ public:
 	virtual void fillUniformLocation(MeshNode* node);
 
 private:
-	GLuint shaderID;
-
 	GLuint locationMVP;
 	GLuint locationTexture;
 };

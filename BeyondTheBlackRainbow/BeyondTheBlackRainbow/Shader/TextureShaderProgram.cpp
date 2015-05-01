@@ -16,8 +16,8 @@ TextureShaderProgram::~TextureShaderProgram()
 
 void TextureShaderProgram::loadUniformLocations()
 {
-	locationMVP = glGetUniformLocation(shaderID, "MVP");
-	locationTexture = glGetUniformLocation(shaderID, "myTextureSampler");
+	locationMVP = glGetUniformLocation(programId, "MVP");
+	locationTexture = glGetUniformLocation(programId, "myTextureSampler");
 }
 
 void TextureShaderProgram::fillUniformLocation(MeshNode* node)

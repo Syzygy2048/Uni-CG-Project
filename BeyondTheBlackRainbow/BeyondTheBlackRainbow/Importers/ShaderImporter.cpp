@@ -24,8 +24,6 @@ GLuint ShaderImporter::loadShader(std::string shaderPath)
 {
 	
 	GLuint shaderID;
-	
-	
 		if (shaderPath.find("Vertex") != std::string::npos)
 			shaderID = glCreateShader(GL_VERTEX_SHADER);
 		else if (shaderPath.find("Fragment") != std::string::npos)
@@ -72,6 +70,21 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	glAttachShader(shaderProgramID, vertexShaderID);
 	glAttachShader(shaderProgramID, fragmentShaderID);
 	glLinkProgram(shaderProgramID);
+	
+	GLint isLinked = 0;
+	glGetProgramiv(shaderProgramID, GL_LINK_STATUS, &isLinked);
+	if (isLinked == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetProgramiv(shaderProgramID, GL_INFO_LOG_LENGTH, &maxLength);
+
+		//The maxLength includes the NULL character
+		std::vector<GLchar> shaderErrorMessage(maxLength);
+		glGetProgramInfoLog(shaderProgramID, maxLength, &maxLength, &shaderErrorMessage[0]);
+		fprintf(stdout, "%s\n", &shaderErrorMessage[0]);
+		//std::cerr << infoLog << std::endl;
+	}	
+
 	ShaderProgram* result = nullptr;
 	if (shader == MeshLoadInfo::LIGHTING_SHADER)
 	{
@@ -81,7 +94,6 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	{
 		result = new TextureShaderProgram(shaderProgramID);
 	}
-	result->loadUniformLocations();
 	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;
 }

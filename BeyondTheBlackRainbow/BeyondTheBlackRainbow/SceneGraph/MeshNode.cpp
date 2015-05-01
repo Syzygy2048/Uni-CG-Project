@@ -76,6 +76,7 @@ void MeshNode::prepareForRendering()
 
 	/**/
 	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->DUCK->shaderInfo);
+	//renderer->linkShader(shaderProgram);
 	shaderProgram->loadUniformLocations();
 	myTexture = new Texture((loadInfo->DUCK->texturePath).c_str());
 	//myTexture->bind(0);

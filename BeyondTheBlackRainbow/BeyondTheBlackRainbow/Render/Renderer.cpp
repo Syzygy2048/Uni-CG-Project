@@ -116,6 +116,11 @@ void Renderer::draw(MeshNode* node)
 	bindVertexArray(0);
 }
 
+
+void Renderer::linkShader(ShaderProgram* shader)
+{
+	glUseProgram(shader->getShaderId());
+}
 void Renderer::useShader(MeshNode* node)
 {
 	ShaderProgram* shaderProgram = node->getShaderProgram();

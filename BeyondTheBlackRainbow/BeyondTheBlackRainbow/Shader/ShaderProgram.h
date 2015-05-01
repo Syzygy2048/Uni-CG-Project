@@ -22,7 +22,7 @@ public:
 	virtual void loadUniformLocations() = 0;
 	virtual void fillUniformLocation(MeshNode* node) = 0;
 
-private:
+protected:
 	GLuint programId;
 };
 
