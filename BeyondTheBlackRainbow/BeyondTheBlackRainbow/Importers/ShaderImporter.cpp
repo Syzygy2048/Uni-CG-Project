@@ -6,6 +6,7 @@
 
 #include "..\Shader\LightingShaderProgram.h"
 #include "..\Shader\TextureShaderProgram.h"
+#include "..\Shader\SimpleLightingShaderProgram.h"
 
 
 
@@ -93,6 +94,10 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	else if (shader == MeshLoadInfo::TEXTURE_SHADER)
 	{
 		result = new TextureShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::SIMPLE_LIGHTING_SHADER)
+	{
+		result = new SimpleLightingShaderProgram(shaderProgramID);
 	}
 	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;

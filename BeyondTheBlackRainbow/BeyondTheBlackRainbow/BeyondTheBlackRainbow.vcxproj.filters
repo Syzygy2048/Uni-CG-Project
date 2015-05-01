@@ -19,6 +19,7 @@
     <ClCompile Include="Importers\ShaderImporter.cpp" />
     <ClCompile Include="Shader\TextureShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\LightNode.cpp" />
+    <ClCompile Include="Shader\SimpleLightingShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLDebug.h" />
@@ -41,10 +42,13 @@
     <ClInclude Include="Importers\ShaderImporter.h" />
     <ClInclude Include="Shader\TextureShaderProgram.h" />
     <ClInclude Include="SceneGraph\LightNode.h" />
+    <ClInclude Include="Shader\SimpleLightingShaderProgram.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleFragmentShader.fragmentshader" />
     <None Include="SimpleVertexShader.vertexshader" />
     <None Include="Shader\Fragment\TextureShader.fragmentshader" />
+    <None Include="Shader\Fragment\SimpleFragmentShader.fragmentshader" />
+    <None Include="Shader\Vertex\SimpleVertexShader.vertexshader" />
   </ItemGroup>
 </Project>

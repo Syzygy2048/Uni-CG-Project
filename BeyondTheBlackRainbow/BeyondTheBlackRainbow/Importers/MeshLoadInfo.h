@@ -9,6 +9,7 @@ public:
 	};
 	static const ShaderLoadInfo* LIGHTING_SHADER;
 	static const ShaderLoadInfo* TEXTURE_SHADER;
+	static const ShaderLoadInfo* SIMPLE_LIGHTING_SHADER;
 
 	struct LoadInfo {
 		const std::string meshPath;
