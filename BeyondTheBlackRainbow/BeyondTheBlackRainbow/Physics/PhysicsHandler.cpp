@@ -1,5 +1,7 @@
 #include "PhysicsHandler.h"
 
+#include <iostream>
+
 
 PhysicsHandler::PhysicsHandler()
 {
@@ -8,20 +10,19 @@ PhysicsHandler::PhysicsHandler()
 
 void PhysicsHandler::initPhysics()
 {
-/*	physicsFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, defaultAllocatorCallback, defaultErrorCallback);
+	/*physicsFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, physxDefaultAllocatorCallback, physxDefaultErrorCallback);
 	physicsSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxTolerancesScale());
 	if (!physicsSDK)
 	{
 		std::cerr << "Error initializing PhysX3" << std::endl;
-		return -1;
+		return;
 	}
 	physx::PxCooking* cooking = PxCreateCooking(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxCookingParams(physx::PxTolerancesScale()));
 	if (!cooking)
 	{
 		std::cerr << "Error initializing PhysX3 cooking" << std::endl;
-		return -1;
+		return;
 	}
-
 
 	physx::PxSceneDesc sceneDesc(physicsSDK->getTolerancesScale());
 
@@ -32,9 +33,7 @@ void PhysicsHandler::initPhysics()
 	physicsScene = physicsSDK->createScene(sceneDesc);
 	physicsScene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.0f);	//for physx debug visualization
 
-
-	physx::PxVisualDebuggerConnection* pvdConnection = NULL;
-	*/
+	physx::PxVisualDebuggerConnection* pvdConnection = NULL; */
 }
 
 PhysicsHandler::~PhysicsHandler()

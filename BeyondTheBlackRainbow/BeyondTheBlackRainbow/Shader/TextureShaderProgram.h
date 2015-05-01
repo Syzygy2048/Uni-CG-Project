@@ -8,11 +8,9 @@ class TextureShaderProgram : public ShaderProgram
 public:
 	TextureShaderProgram(GLuint shaderProgramID);
 	~TextureShaderProgram();
-	virtual void loadUniformLocations();
-//	virtual void fillUniformLocation(MeshNode* node);
 
-	GLuint getLocationMVP();
-	GLuint getLocationTexture();
+	virtual void loadUniformLocations();
+	virtual void fillUniformLocation(MeshNode* node);
 
 private:
 	GLuint shaderID;

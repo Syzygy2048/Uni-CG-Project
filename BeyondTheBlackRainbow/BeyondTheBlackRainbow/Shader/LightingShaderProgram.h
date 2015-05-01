@@ -9,7 +9,7 @@ public:
 	~LightingShaderProgram();
 
 	virtual void loadUniformLocations();
-//	virtual void fillUniformLocation(MeshNode* node);
+	virtual void fillUniformLocation(MeshNode* node);
 
 	GLuint getLocationMVP();
 	GLuint getLocationTexture();

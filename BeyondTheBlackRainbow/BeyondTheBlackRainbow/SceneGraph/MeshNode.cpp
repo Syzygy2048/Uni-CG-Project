@@ -75,8 +75,8 @@ void MeshNode::prepareForRendering()
 	}
 
 	/**/
-	myShaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->DUCK->shaderInfo);
-	myShaderID = myShaderProgram->getShaderId();
+	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->DUCK->shaderInfo);
+	shaderProgram->loadUniformLocations();
 	myTexture = new Texture((loadInfo->DUCK->texturePath).c_str());
 	//myTexture->bind(0);
 	/**/
@@ -97,11 +97,6 @@ void MeshNode::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 
 	this->projectionMatrix = projectionMatrix;
 	this->viewProjectionMatrix = viewProjectionMatrix;
 	Renderer::getInstance()->draw(this);
-}
-
-GLuint MeshNode::getShaderID()
-{
-	return myShaderID;
 }
 
 GLuint MeshNode::getVao()
@@ -149,30 +144,12 @@ glm::mat4 MeshNode::getViewProjectionMatrix()
 	return viewProjectionMatrix;
 }
 
-void MeshNode::fillShaderProgram()
+glm::mat4 MeshNode::getModelMatrix()
 {
-//	myShaderProgram->fillUniformLocation(this);
-	
-	if (loadInfo->TEXTURE_SHADER)
-	{
-		//std::cout << "use texture shader" << std::endl;
-		glm::mat4 MVP = getModelViewProjectionMatrix();
-		glUniformMatrix4fv(myShaderProgram->getLocationMVP(), 1, GL_FALSE, &MVP[0][0]);
-		myTexture->bind(0);
-		glUniform1i(myShaderProgram->getLocationTexture(), 0);
-	} 
-	else if (loadInfo->LIGHTING_SHADER)
-	{
-
-	}
+	return propagateMatrix();
 }
 
-GLuint MeshNode::getMVPLocation()
+ShaderProgram* MeshNode::getShaderProgram()
 {
-	return myShaderProgram->getLocationMVP();
-}
-
-GLuint MeshNode::getTextureLocation()
-{
-	return myShaderProgram->getLocationTexture();
+	return shaderProgram;
 }

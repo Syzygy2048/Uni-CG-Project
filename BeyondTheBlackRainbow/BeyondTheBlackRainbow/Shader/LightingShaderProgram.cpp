@@ -31,12 +31,12 @@ GLuint LightingShaderProgram::getLocationTexture()
 	return -1;
 }
 
-//void LightingShaderProgram::fillUniformLocation(MeshNode* node)
-//{
-//	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, node->getMVP());
-//	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, node->getMV());
-//	glUniformMatrix4fv(locationV, 1, GL_FALSE, node->getView());
-//	glUniformMatrix4fv(locationM, 1, GL_FALSE, node->getModelMatrix());
-//	glUniform3fv(locationLightInvDirection_worldspace, 1, GL_FALSE, node->getLightDirection());
-//	glUniformMatrix4fv(locationDepthBiasMVP, 1, GL_FALSE, node->getDepthBiasMVP());
-//}
+void LightingShaderProgram::fillUniformLocation(MeshNode* node)
+{
+	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, &node->getModelViewProjectionMatrix()[0][0]);
+	//glUniformMatrix4fv(locationMVP, 1, GL_FALSE, node->getMV());
+	glUniformMatrix4fv(locationV, 1, GL_FALSE, &node->getViewMatrix()[0][0]);
+	glUniformMatrix4fv(locationM, 1, GL_FALSE, &node->propagateMatrix()[0][0]);
+	//glUniform3fv(locationLightInvDirection_worldspace, 1, GL_FALSE, node->getLightDirection());
+	//glUniformMatrix4fv(locationDepthBiasMVP, 1, GL_FALSE, node->getDepthBiasMVP());
+}

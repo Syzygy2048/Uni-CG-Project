@@ -9,6 +9,7 @@
 #include "../Importers/MeshLoadInfo.h"
 #include "../Shader/ShaderProgram.h"
 
+class ShaderProgram;
 
 class MeshNode :
 	public SceneNode
@@ -39,12 +40,11 @@ public:
 	glm::mat4 getViewMatrix();
 	glm::mat4 getProjectionMatrix();
 
-	GLuint getShaderID();
 	Texture* getTexture(const char* path);
-	void fillShaderProgram();
 
 	GLuint getMVPLocation();
 	GLuint getTextureLocation();
+	ShaderProgram* getShaderProgram();
 
 private:
 	aiMesh* triangleMesh;
@@ -70,6 +70,6 @@ private:
 	bool textureInit;
 
 	MeshLoadInfo* loadInfo;
-	ShaderProgram* myShaderProgram;
+	ShaderProgram* shaderProgram;
 };
 
