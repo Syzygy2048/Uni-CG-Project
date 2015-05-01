@@ -89,7 +89,7 @@ int main() {
 			deltaTime -= timeStep;
 			sceneGraph->update(timeStep, input);
 		}
-		oldTime = time;
+		oldTime = time - deltaTime;
 
 		glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 		glm::mat4 viewMatrix = activeCamera->getViewMatrix();
