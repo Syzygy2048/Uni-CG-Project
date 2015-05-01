@@ -63,6 +63,8 @@ void APIENTRY GLDebug::debugCallbackAMD(GLuint id, GLenum category, GLenum sever
 }
 
 void APIENTRY GLDebug::debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+	if (severity <= GL_DEBUG_SEVERITY_LOW)
+		return;
 	std::string error = formatDebugOutput(source, type, id, severity, message);
 	std::cout << error << std::endl;
 }
