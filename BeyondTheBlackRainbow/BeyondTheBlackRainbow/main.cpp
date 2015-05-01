@@ -27,14 +27,15 @@ int main() {
 	
 	InputHandler* input = new InputHandler();
 	
-	CameraNode* activeCamera = new CameraNode(generateUuid());
 	std::map<std::string, CameraNode*> cameraList;
+
+	//start of part that should be in a scene loader
+	CameraNode* activeCamera = new CameraNode(generateUuid());
+	
 	
 	//this way we have a list of cameras and can switch between them as we want just by doing activeCamera = cameraList.find("whichever camera we want")->second;
 	cameraList.insert(std::pair<std::string, CameraNode*>(std::string("player camera"), activeCamera));
-
-
-	//start of part that should be in a scene loader
+	
 	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
 	MeshNode* duckMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
 	tableMesh->prepareForRendering();
@@ -56,30 +57,18 @@ int main() {
 	sceneGraph->attachChild(duckMesh);
 	sceneGraph->attachChild(transformNode);
 	sceneGraph->attachChild(activeCamera);
-	
-
 	//end of part that should be in a scene loader
-	
-	//should be part of model loading
-	//GLuint programID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
-
-	// Get a handle for our "MVP" uniform.
-	// Only at initialisation time.
-	//should be in a shader class
-	//GLuint MatrixID = glGetUniformLocation(programID, "MVP");
 	
 	double time = glfwGetTime();
 	double oldTime = glfwGetTime();
 	double timeStep = 1.0 / 60.0;
+	
 	//gameloop
 	double timeOld = 0;
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
 		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//start of part that should be part of individual rendering
-		// Use our shader
-		
 		input->update(renderer->getWindow());
 
 		time = glfwGetTime();

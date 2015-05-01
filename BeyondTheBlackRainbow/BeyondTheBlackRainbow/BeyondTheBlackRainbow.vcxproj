@@ -38,18 +38,20 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IntDir>$(SolutionDir)\build\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\libs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;Rpcrt4.lib;assimp.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;Rpcrt4.lib;assimp.lib;FreeImage.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3CookingDEBUG_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\libs\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -72,7 +74,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Importers\ShaderImporter.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Physics\PhysicsHandler.cpp" />
     <ClCompile Include="Shader\LightingShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\CameraNode.cpp" />
     <ClCompile Include="GLDebug.cpp" />
@@ -85,11 +89,14 @@
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="Shader\ShaderProgram.cpp" />
+    <ClCompile Include="Shader\TextureShaderProgram.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="SceneGraph\TransformNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Importers\ShaderImporter.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Physics\PhysicsHandler.h" />
     <ClInclude Include="Shader\LightingShaderProgram.h" />
     <ClInclude Include="SceneGraph\CameraNode.h" />
     <ClInclude Include="GLDebug.h" />
@@ -103,6 +110,7 @@
     <ClInclude Include="shader.hpp" />
     <ClInclude Include="SceneGraph\TransformNode.h" />
     <ClInclude Include="Shader\ShaderProgram.h" />
+    <ClInclude Include="Shader\TextureShaderProgram.h" />
     <ClInclude Include="Util\FileChecker.h" />
     <ClInclude Include="Util\UuidHelper.h" />
     <ClInclude Include="Texture.h" />
