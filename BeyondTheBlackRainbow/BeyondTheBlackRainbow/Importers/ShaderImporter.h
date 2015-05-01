@@ -15,7 +15,7 @@ public:
 	//GLuint loadShaderArray(std::vector<std::string> shaderPaths);
 	
 	GLuint loadShader(std::string shaderPath);
-	ShaderProgram* loadShaderProgram(MeshLoadInfo::ShaderLoadInfo* shader);
+	ShaderProgram* loadShaderProgram(const MeshLoadInfo::ShaderLoadInfo* shader);
 	static ShaderImporter* getInstance();
 	~ShaderImporter();
 
@@ -24,7 +24,7 @@ private:
 	ShaderImporter(ShaderImporter const&);
 	void operator=(ShaderImporter const&);
 	
-	std::map<MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*> shaderPrograms;
+	std::map<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*> shaderPrograms;
 
 	
 };

@@ -3,12 +3,14 @@
 #include <iostream>
 
 #include "../Render/Renderer.h"
+#include "../Importers/MeshImporter.h"
+#include "../Importers/ShaderImporter.h"
 #include "..\shader.hpp"
 
 MeshNode::MeshNode(UUID uuid, aiMesh* triangleMesh, const MeshLoadInfo::LoadInfo* meshLoadInfo) : SceneNode(uuid, NodeType::MESH_NODE)
 {
 	this->triangleMesh = triangleMesh;
-	shaderID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
+	//shaderID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
 	textureInit = false;
 }
 
@@ -72,7 +74,12 @@ void MeshNode::prepareForRendering()
 		renderer->setVertexAttribPointer(textureAttribPointer, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
-
+	/**/
+	myShaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->DUCK->shaderInfo);
+	myShaderID = myShaderProgram->getShaderId();
+	myTexture = new Texture((loadInfo->DUCK->texturePath).c_str());
+	//myTexture->bind(0);
+	/**/
 
 	renderer->bindVertexArray(0);
 	renderer->bindBuffer(GL_ARRAY_BUFFER, 0);
@@ -94,7 +101,7 @@ void MeshNode::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 
 
 GLuint MeshNode::getShaderID()
 {
-	return shaderID;
+	return myShaderID;
 }
 
 GLuint MeshNode::getVao()
@@ -112,15 +119,15 @@ int MeshNode::getDrawSize()
 	return triangleMesh->mNumFaces * 3;
 }
 
-Texture* MeshNode::getTexture(const char* path, GLuint shaderID)
+Texture* MeshNode::getTexture(const char* path)
 {
 	if (textureInit == false) {
-		texture = new Texture(path);
+		myTexture = new Texture(path);
 		textureInit = true;
 	}
 	
 
-	return  texture;
+	return  myTexture;
 }
 
 glm::mat4 MeshNode::getModelViewProjectionMatrix()
@@ -140,4 +147,32 @@ glm::mat4 MeshNode::getProjectionMatrix()
 glm::mat4 MeshNode::getViewProjectionMatrix()
 {
 	return viewProjectionMatrix;
+}
+
+void MeshNode::fillShaderProgram()
+{
+//	myShaderProgram->fillUniformLocation(this);
+	
+	if (loadInfo->TEXTURE_SHADER)
+	{
+		//std::cout << "use texture shader" << std::endl;
+		glm::mat4 MVP = getModelViewProjectionMatrix();
+		glUniformMatrix4fv(myShaderProgram->getLocationMVP(), 1, GL_FALSE, &MVP[0][0]);
+		myTexture->bind(0);
+		glUniform1i(myShaderProgram->getLocationTexture(), 0);
+	} 
+	else if (loadInfo->LIGHTING_SHADER)
+	{
+
+	}
+}
+
+GLuint MeshNode::getMVPLocation()
+{
+	return myShaderProgram->getLocationMVP();
+}
+
+GLuint MeshNode::getTextureLocation()
+{
+	return myShaderProgram->getLocationTexture();
 }

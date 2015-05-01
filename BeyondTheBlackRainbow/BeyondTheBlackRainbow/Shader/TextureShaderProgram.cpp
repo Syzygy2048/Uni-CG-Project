@@ -1,4 +1,5 @@
 #include "TextureShaderProgram.h"
+#include <iostream>
 
 
 TextureShaderProgram::TextureShaderProgram(GLuint shaderProgramID) : ShaderProgram(shaderProgramID)
@@ -17,10 +18,21 @@ void TextureShaderProgram::loadUniformLocations()
 	locationTexture = glGetUniformLocation(shaderID, "myTextureSampler");
 }
 
-void TextureShaderProgram::fillUniformLocation(MeshNode* node)
+GLuint TextureShaderProgram::getLocationMVP()
 {
-	glm::mat4 MVP = node->getModelViewProjectionMatrix();
-	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, &MVP[0][0]);
-	glUniform1i(locationTexture, GL_TEXTURE0);
-	
+	std::cout << "getLocaonMVP" << std::endl;
+	return locationMVP;
 }
+
+GLuint TextureShaderProgram::getLocationTexture()
+{
+	std::cout << "getLocaonTexture" << std::endl;
+	return locationTexture;
+}
+//void TextureShaderProgram::fillUniformLocation(MeshNode* node)
+//{
+//	glm::mat4 MVP = node->getModelViewProjectionMatrix();
+//	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, &MVP[0][0]);
+//	glUniform1i(locationTexture, GL_TEXTURE0);
+//	
+//}

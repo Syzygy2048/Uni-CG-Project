@@ -41,6 +41,6 @@ private:
 	
 	GLFWwindow* window;
 	
-	void useShader(GLuint shaderID, MeshNode* node);
+	void useShader(MeshNode* node);
 };
 

@@ -61,7 +61,7 @@ GLuint ShaderImporter::loadShader(std::string shaderPath)
 	return shaderID;
 }
 
-ShaderProgram* ShaderImporter::loadShaderProgram(MeshLoadInfo::ShaderLoadInfo* shader)
+ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadInfo* shader)
 {
 	if (shaderPrograms.find(shader) != shaderPrograms.end()) {
 		return shaderPrograms.find(shader)->second;
@@ -82,7 +82,7 @@ ShaderProgram* ShaderImporter::loadShaderProgram(MeshLoadInfo::ShaderLoadInfo* s
 		result = new TextureShaderProgram(shaderProgramID);
 	}
 	result->loadUniformLocations();
-	shaderPrograms.insert(std::pair<MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
+	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;
 }
 
