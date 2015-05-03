@@ -75,8 +75,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Importers\ShaderImporter.cpp" />
-    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Physics\PhysicsHandler.cpp" />
+    <ClCompile Include="SceneGraph\LightNode.cpp" />
     <ClCompile Include="Shader\LightingShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\CameraNode.cpp" />
     <ClCompile Include="GLDebug.cpp" />
@@ -89,14 +89,15 @@
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="Shader\ShaderProgram.cpp" />
+    <ClCompile Include="Shader\SimpleLightingShaderProgram.cpp" />
     <ClCompile Include="Shader\TextureShaderProgram.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="SceneGraph\TransformNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Importers\ShaderImporter.h" />
-    <ClInclude Include="Light.h" />
     <ClInclude Include="Physics\PhysicsHandler.h" />
+    <ClInclude Include="SceneGraph\LightNode.h" />
     <ClInclude Include="Shader\LightingShaderProgram.h" />
     <ClInclude Include="SceneGraph\CameraNode.h" />
     <ClInclude Include="GLDebug.h" />
@@ -110,13 +111,16 @@
     <ClInclude Include="shader.hpp" />
     <ClInclude Include="SceneGraph\TransformNode.h" />
     <ClInclude Include="Shader\ShaderProgram.h" />
+    <ClInclude Include="Shader\SimpleLightingShaderProgram.h" />
     <ClInclude Include="Shader\TextureShaderProgram.h" />
     <ClInclude Include="Util\FileChecker.h" />
     <ClInclude Include="Util\UuidHelper.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shader\Fragment\SimpleFragmentShader.fragmentshader" />
     <None Include="Shader\Fragment\TextureShader.fragmentshader" />
+    <None Include="Shader\Vertex\SimpleVertexShader.vertexshader" />
     <None Include="SimpleFragmentShader.fragmentshader" />
     <None Include="SimpleVertexShader.vertexshader" />
   </ItemGroup>

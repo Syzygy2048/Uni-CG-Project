@@ -3,17 +3,21 @@
 #include "..\Shader\ShaderProgram.h"
 #include "..\Texture.h"
 
-class TextureShaderProgram : public ShaderProgram
+class SimpleLightingShaderProgram : public ShaderProgram
 {
 public:
-	TextureShaderProgram(GLuint shaderProgramID);
-	~TextureShaderProgram();
+	SimpleLightingShaderProgram(GLuint shaderProgramID);
+	~SimpleLightingShaderProgram();
 
 	virtual void loadUniformLocations();
 	virtual void fillUniformLocation(MeshNode* node);
 
 private:
 	GLuint locationMVP;
+	GLuint locationV;
+	GLuint locationM;
 	GLuint locationTexture;
+	GLuint locationLight;
+	
 };
 

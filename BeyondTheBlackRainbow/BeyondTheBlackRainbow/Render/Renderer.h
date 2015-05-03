@@ -28,10 +28,12 @@ public:
 	void disableVertexAttribArray(int id);
 	void setVertexAttribPointer(int id, int size, GLenum type, GLboolean normalized, int stride, const GLvoid* pointer);
 
+	void linkShader(ShaderProgram* shader);
+
 	void draw(MeshNode* node);
 
 	GLFWwindow* getWindow();
-	glm::mat4 getViewMatrix();
+
 
 private:
 	//singleton
@@ -41,6 +43,6 @@ private:
 	
 	GLFWwindow* window;
 	
-	void useShader(GLuint shaderID, MeshNode* node);
+	void useShader(MeshNode* node);
 };
 
