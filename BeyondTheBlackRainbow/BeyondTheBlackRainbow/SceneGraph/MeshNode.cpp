@@ -10,6 +10,7 @@
 MeshNode::MeshNode(UUID uuid, aiMesh* triangleMesh, const MeshLoadInfo::LoadInfo* meshLoadInfo) : SceneNode(uuid, NodeType::MESH_NODE)
 {
 	this->triangleMesh = triangleMesh;
+	loadInfo = meshLoadInfo;
 	//shaderID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
 	textureInit = false;
 }
@@ -55,30 +56,31 @@ void MeshNode::prepareForRendering()
 	renderer->fillBuffer(indexBuffer, GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)* triangleMesh->mNumFaces * 3, indexArray, GL_STATIC_DRAW);
 
 	if (triangleMesh->HasPositions()){
-		renderer->fillBuffer(vertexBuffer, GL_ARRAY_BUFFER, sizeof(float)* 3 * triangleMesh->mNumVertices, triangleMesh->mVertices, GL_STATIC_DRAW);
+		renderer->fillBuffer(vertexBuffer, GL_ARRAY_BUFFER, sizeof(float) * 3 * triangleMesh->mNumVertices, triangleMesh->mVertices, GL_STATIC_DRAW);
 		renderer->setVertexAttribPointer(vertexAttribPointer, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
 	if (triangleMesh->HasNormals()){
-		renderer->fillBuffer(normalBuffer, GL_ARRAY_BUFFER, sizeof(float)* 3 * triangleMesh->mNumVertices, triangleMesh->mNormals, GL_STATIC_DRAW);
+		renderer->fillBuffer(normalBuffer, GL_ARRAY_BUFFER, sizeof(float) * 3 * triangleMesh->mNumVertices, triangleMesh->mNormals, GL_STATIC_DRAW);
 		renderer->setVertexAttribPointer(normalAttribPointer, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
 	if (triangleMesh->HasTextureCoords(0)){
-		float *texCoords = (float*)malloc(sizeof(float)* 2 * triangleMesh->mNumVertices);
+		float *texCoords = (float*)malloc(sizeof(float) * 2 * triangleMesh->mNumVertices);
 		for (unsigned int k = 0; k < triangleMesh->mNumVertices; ++k){
 			texCoords[k * 2] = triangleMesh->mTextureCoords[0][k].x;
 			texCoords[k * 2 + 1] = triangleMesh->mTextureCoords[0][k].y;
 		}
-		renderer->fillBuffer(textureBuffer, GL_ARRAY_BUFFER, sizeof(float)* 2 * triangleMesh->mNumVertices, texCoords, GL_STATIC_DRAW);
+		renderer->fillBuffer(textureBuffer, GL_ARRAY_BUFFER, sizeof(float) * 2 * triangleMesh->mNumVertices, texCoords, GL_STATIC_DRAW);
 		renderer->setVertexAttribPointer(textureAttribPointer, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
 	/**/
-	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->DUCK->shaderInfo);
+	
+	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->shaderInfo);
 	//renderer->linkShader(shaderProgram);
 	shaderProgram->loadUniformLocations();
-	myTexture = new Texture((loadInfo->DUCK->texturePath).c_str());
+	myTexture = new Texture((loadInfo->texturePath).c_str());
 	//myTexture->bind(0);
 	/**/
 
@@ -115,14 +117,8 @@ int MeshNode::getDrawSize()
 	return triangleMesh->mNumFaces * 3;
 }
 
-Texture* MeshNode::getTexture(const char* path)
+Texture* MeshNode::getTexture()
 {
-	if (textureInit == false) {
-		myTexture = new Texture(path);
-		textureInit = true;
-	}
-	
-
 	return  myTexture;
 }
 
@@ -153,4 +149,9 @@ glm::mat4 MeshNode::getModelMatrix()
 ShaderProgram* MeshNode::getShaderProgram()
 {
 	return shaderProgram;
+}
+
+const MeshLoadInfo::LoadInfo* MeshNode::getLoadInfo()
+{
+	return loadInfo;
 }

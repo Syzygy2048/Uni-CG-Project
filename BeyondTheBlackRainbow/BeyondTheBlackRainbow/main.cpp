@@ -36,26 +36,64 @@ int main() {
 	//this way we have a list of cameras and can switch between them as we want just by doing activeCamera = cameraList.find("whichever camera we want")->second;
 	cameraList.insert(std::pair<std::string, CameraNode*>(std::string("player camera"), activeCamera));
 	
-	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
+	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TABLE);
 	MeshNode* duckMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
+	MeshNode* bedMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::BED);
+	MeshNode* roomMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::ROOM);
+	MeshNode* doorMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR);
 	tableMesh->prepareForRendering();
 	duckMesh->prepareForRendering();
+	bedMesh->prepareForRendering();
+	roomMesh->prepareForRendering();
+	doorMesh->prepareForRendering();
 
 	std::vector<MeshNode*> drawArray;
 	drawArray.push_back(tableMesh);
 	drawArray.push_back(duckMesh);
-	
+	drawArray.push_back(bedMesh);
+	drawArray.push_back(roomMesh);
+	drawArray.push_back(doorMesh);
+
 	SceneNode* sceneGraph = new SceneNode(generateUuid(), NodeType::ROOT_NODE);
 	sceneGraph->setParent(nullptr);
 	
-	SceneNode* transformNode = new TransformNode(generateUuid(), glm::mat4(
+	SceneNode* transformNodeRoom = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
 		3, 3, -3, 1));
-	transformNode->attachChild(tableMesh);
-	sceneGraph->attachChild(duckMesh);
-	sceneGraph->attachChild(transformNode);
+	//glm::rotate(transformNodeRoom->propagateMatrix(), 90.0f , glm::vec3(1, 0, 0));
+	SceneNode* transformNodeDuck = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		3, 3, -3, 1));
+	SceneNode* transformNodeBed = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		3, 3, -3, 1));
+	SceneNode* transformNodeTable = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		3, 3, -3, 1));
+	SceneNode* transformNodeDoor = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		3, 3, -3, 1));
+	transformNodeRoom->attachChild(roomMesh);
+	transformNodeRoom->attachChild(transformNodeDuck);
+	transformNodeRoom->attachChild(transformNodeBed);
+	transformNodeRoom->attachChild(transformNodeTable);
+	transformNodeDuck->attachChild(duckMesh);
+	transformNodeBed->attachChild(bedMesh);
+	transformNodeTable->attachChild(tableMesh);
+	transformNodeDoor->attachChild(doorMesh);
+	
+	sceneGraph->attachChild(transformNodeRoom);
+	sceneGraph->attachChild(transformNodeDoor);
 	sceneGraph->attachChild(activeCamera);
 	//end of part that should be in a scene loader
 	
