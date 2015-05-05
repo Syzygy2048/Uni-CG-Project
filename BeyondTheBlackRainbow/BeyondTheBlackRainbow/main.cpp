@@ -65,28 +65,28 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		3, 3, -3, 1));
+		0, 0, 0, 1));
 	//glm::rotate(transformNodeRoom->propagateMatrix(), 90.0f , glm::vec3(1, 0, 0));
 	SceneNode* transformNodeDuck = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		3, 3, -3, 1));
+		1, -0.1, -3.5, 1));
 	SceneNode* transformNodeBed = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		3, 3, -3, 1));
+		3, 0, -1.01, 1));
 	SceneNode* transformNodeTable = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		3, 3, -3, 1));
+		0, 0, 0, 1));
 	SceneNode* transformNodeDoor = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		3, 3, -3, 1));
+		2, 0, -5.1, 1));
 	transformNodeRoom->attachChild(roomMesh);
 	transformNodeRoom->attachChild(transformNodeDuck);
 	transformNodeRoom->attachChild(transformNodeBed);
