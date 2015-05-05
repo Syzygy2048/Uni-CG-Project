@@ -19,4 +19,7 @@ public:
 	};
 	static const LoadInfo* TABLE;
 	static const LoadInfo* DUCK;
+	static const LoadInfo* BED;
+	static const LoadInfo* ROOM;
+	static const LoadInfo* DOOR;
 };

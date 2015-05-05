@@ -44,11 +44,13 @@ public:
 	glm::mat4 getViewMatrix();
 	glm::mat4 getProjectionMatrix();
 
-	Texture* getTexture(const char* path);
+	Texture* getTexture();
 
 	GLuint getMVPLocation();
 	GLuint getTextureLocation();
 	ShaderProgram* getShaderProgram();
+
+	const MeshLoadInfo::LoadInfo* getLoadInfo();
 
 private:
 	aiMesh* triangleMesh;
@@ -73,7 +75,7 @@ private:
 	Texture* myTexture;
 	bool textureInit;
 
-	MeshLoadInfo* loadInfo;
+	const MeshLoadInfo::LoadInfo* loadInfo;
 	ShaderProgram* shaderProgram;
 
 	physx::PxRigidActor* physicsActor;
