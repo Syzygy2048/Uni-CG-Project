@@ -15,3 +15,13 @@ glm::mat4 TransformNode::propagateMatrix()
 {
 	return transformMatrix * parent->propagateMatrix();	
 }
+
+glm::mat4 TransformNode::getTransform()
+{
+	return transformMatrix;
+}
+
+void TransformNode::setNewTransform(glm::mat4 newTransformMatrix)
+{
+	transformMatrix = newTransformMatrix;
+}

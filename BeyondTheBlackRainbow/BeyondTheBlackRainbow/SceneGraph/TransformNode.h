@@ -13,6 +13,9 @@ public:
 
 	virtual glm::mat4 propagateMatrix();
 
+	glm::mat4 getTransform();
+	void setNewTransform(glm::mat4 newTransformMatrix);
+
 private:
 	glm::mat4 transformMatrix;
 

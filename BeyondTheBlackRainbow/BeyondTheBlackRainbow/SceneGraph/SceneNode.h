@@ -21,6 +21,8 @@ public:
 	void attachChild(SceneNode* child);
 	bool detachChild(SceneNode* child);
 
+	NodeType getType();
+
 protected:
 	SceneNode* parent;
 private:

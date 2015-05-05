@@ -50,7 +50,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;Rpcrt4.lib;assimp.lib;FreeImage.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3CookingDEBUG_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;Rpcrt4.lib;assimp.lib;FreeImage.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3CookingDEBUG_x86.lib;PhysX3Extensions.lib;PhysX3CharacterKinematicDEBUG_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\libs\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClCompile Include="Importers\ShaderImporter.cpp" />
     <ClCompile Include="Physics\PhysicsHandler.cpp" />
+    <ClCompile Include="SceneGraph\PlayerNode.cpp" />
     <ClCompile Include="SceneGraph\LightNode.cpp" />
     <ClCompile Include="Shader\LightingShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\CameraNode.cpp" />
@@ -97,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="Importers\ShaderImporter.h" />
     <ClInclude Include="Physics\PhysicsHandler.h" />
+    <ClInclude Include="SceneGraph\PlayerNode.h" />
     <ClInclude Include="SceneGraph\LightNode.h" />
     <ClInclude Include="Shader\LightingShaderProgram.h" />
     <ClInclude Include="SceneGraph\CameraNode.h" />

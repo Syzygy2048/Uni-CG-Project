@@ -8,6 +8,7 @@
 #include "../InputHandler.h"
 #include "../Importers/MeshLoadInfo.h"
 #include "../Shader/ShaderProgram.h"
+#include "../Physics/PhysicsHandler.h"
 
 class ShaderProgram;
 
@@ -22,6 +23,9 @@ public:
 	//MeshNode should only store the data and pass calls through itself.
 	void prepareForRendering();
 	void unprepareForRendering();
+	
+	//needs to be called after inserting into the scenegraph because it needs the position which is defined by the parent transform nodes
+	void createCollisionShape(PhysicsHandler* physicsHandler);
 
 	virtual void update(double timeStep, InputHandler* input);
 	//this takes both the viewprojection matrix as well as the individual matrices so that they don't have to be multiplied per object per frame.
@@ -71,5 +75,7 @@ private:
 
 	MeshLoadInfo* loadInfo;
 	ShaderProgram* shaderProgram;
+
+	physx::PxRigidActor* physicsActor;
 };
 

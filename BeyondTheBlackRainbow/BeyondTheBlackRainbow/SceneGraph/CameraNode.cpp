@@ -4,7 +4,7 @@
 
 CameraNode::CameraNode(UUID uuid) : SceneNode(uuid, NodeType::CAMERA_NODE)
 {	
-	position = glm::vec3(0, 0, 5);
+	position = glm::vec3(0, 0, 0);
 	glm::vec3 up = glm::vec3(0, 1, 0);
 	viewMatrix = glm::lookAt(position, position, up);
 	projectionMatrix = glm::perspective(75.0f, 16.0f / 9.0f, 0.1f, 100.0f);
@@ -17,9 +17,9 @@ CameraNode::~CameraNode()
 
 void CameraNode::update(double deltaTime, InputHandler* input)
 {
-	horizontalAngle += turnSpeed * deltaTime * float(1280 / 2 - input->xpos);		//1280 - xpos to flip the x axis
+	/*horizontalAngle += turnSpeed * deltaTime * float(1280 / 2 - input->xPos);		//1280 - xPos to flip the x axis
 
-	verticalAngle += turnSpeed * deltaTime * float(720 / 2 - input->ypos);
+	verticalAngle += turnSpeed * deltaTime * float(720 / 2 - input->yPos);
 	if (verticalAngle > 1.5f) {
 		verticalAngle = 1.5f;
 	}
@@ -40,7 +40,9 @@ void CameraNode::update(double deltaTime, InputHandler* input)
 	}
 	else if (input->a) {
 		move(deltaTime, speed, 4);
-	}
+	}*/
+
+
 }
 void CameraNode::updateDirection(float hAngle, float vAngle)
 {
@@ -71,12 +73,13 @@ void CameraNode::move(float time, float speed, int dir)
 
 glm::mat4 CameraNode::getViewMatrix()
 {
-	viewMatrix = glm::lookAt(
+	return propagateMatrix();
+	/*viewMatrix = glm::lookAt(
 		position,
 		position + direction,
 		up
 		);
-	return viewMatrix;
+	return viewMatrix; */
 }
 
 glm::mat4 CameraNode::getProjectionMatrix()

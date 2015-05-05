@@ -5,7 +5,7 @@
 #include "../Render/Renderer.h"
 #include "../Importers/MeshImporter.h"
 #include "../Importers/ShaderImporter.h"
-#include "..\shader.hpp"
+#include "TransformNode.h"
 
 MeshNode::MeshNode(UUID uuid, aiMesh* triangleMesh, const MeshLoadInfo::LoadInfo* meshLoadInfo) : SceneNode(uuid, NodeType::MESH_NODE)
 {
@@ -88,8 +88,36 @@ void MeshNode::prepareForRendering()
 	delete indexArray;
 }
 
+void MeshNode::createCollisionShape(PhysicsHandler* physicsHandler)
+{
+	physicsActor = physicsHandler->createDynamicActor(propagateMatrix(), physicsHandler->createSphereCollisionShape(), physicsHandler->createPhysicsMaterial(0.01, 0.01, 0.1f), 0.3);
+	physicsHandler->addActorToScene(physicsActor);
+}
+
 void MeshNode::update(double timeStep, InputHandler* input)
 {
+	physx::PxTransform trans = physicsActor->getGlobalPose();
+	physx::PxVec3 pos = trans.p;
+	physx::PxVec3 rotAxis(0, 0, 0);
+	physx::PxReal rotAngle(0);
+	trans.q.toRadiansAndUnitAxis(rotAngle, rotAxis);
+
+	glm::vec3 position(pos.x, pos.y, pos.z);
+	
+	glm::vec3 rotationAxis(rotAxis.x, rotAxis.y, rotAxis.z);
+
+	if (parent->getType() == NodeType::TRANSFORM_NODE)
+	{
+		TransformNode* node = (TransformNode *)parent;
+		//glm::mat4 trans = node->getTransform();
+		glm::mat4 posMat = glm::translate(glm::mat4(1.0f), position);
+		glm::rotate(posMat, rotAngle, rotationAxis);
+		node->setNewTransform(posMat);
+	}
+	else
+	{
+		std::cerr << "Node is not attached to a TransformNode, that shouldn't happen." << std::endl;
+	}
 }
 
 void MeshNode::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix)

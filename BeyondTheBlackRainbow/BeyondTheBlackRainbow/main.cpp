@@ -14,6 +14,8 @@
 #include "Importers\MeshImporter.h"
 #include "SceneGraph\TransformNode.h"
 #include "SceneGraph\CameraNode.h"
+#include "SceneGraph\PlayerNode.h"
+#include "Physics\PhysicsHandler.h"
 
 
 int main() {
@@ -26,6 +28,9 @@ int main() {
 	GLDebug::registerDebugCallbacks();
 	
 	InputHandler* input = new InputHandler();
+
+	PhysicsHandler* physics = new PhysicsHandler();
+	physics->initPhysics();
 	
 	std::map<std::string, CameraNode*> cameraList;
 
@@ -38,9 +43,7 @@ int main() {
 	
 	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
 	MeshNode* duckMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
-	tableMesh->prepareForRendering();
-	duckMesh->prepareForRendering();
-
+	
 	std::vector<MeshNode*> drawArray;
 	drawArray.push_back(tableMesh);
 	drawArray.push_back(duckMesh);
@@ -52,11 +55,39 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		3, 3, -3, 1));
+		0, 0, -1, 1));
+	SceneNode* transformNode2 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		3, 5, 0, 1));
+
+	SceneNode* playerTransform = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		3, 3, 3, 1));
+
 	transformNode->attachChild(tableMesh);
-	sceneGraph->attachChild(duckMesh);
+	transformNode2->attachChild(duckMesh);
+	sceneGraph->attachChild(transformNode2);
 	sceneGraph->attachChild(transformNode);
-	sceneGraph->attachChild(activeCamera);
+	
+
+	PlayerNode* player = new PlayerNode(generateUuid());
+	playerTransform->attachChild(activeCamera);
+	playerTransform->attachChild(player);
+	sceneGraph->attachChild(playerTransform);
+	player->createCollisionShape(physics);
+
+
+	//should probably done recursively in sceneNode
+	tableMesh->prepareForRendering();
+	duckMesh->prepareForRendering();
+	
+	//should probably done recursively in sceneNode	
+	duckMesh->createCollisionShape(physics);
+	tableMesh->createCollisionShape(physics);
 	//end of part that should be in a scene loader
 	
 	double time = glfwGetTime();
@@ -76,6 +107,7 @@ int main() {
 		while (deltaTime > timeStep)
 		{
 			deltaTime -= timeStep;
+			physics->updatePhysics();
 			sceneGraph->update(timeStep, input);
 		}
 		oldTime = time - deltaTime;
@@ -86,6 +118,7 @@ int main() {
 		for (MeshNode* node : drawArray){
 			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix);
 		}
+		physics->renderCollisionShapes();
 
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();
