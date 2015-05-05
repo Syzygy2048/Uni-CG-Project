@@ -131,6 +131,7 @@ void Renderer::useShader(MeshNode* node)
 
 void Renderer::drawText(Text* text)
 {
+
 	bindVertexArray(text->getVAO());
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -139,4 +140,9 @@ void Renderer::drawText(Text* text)
 	glDrawArrays(GL_TRIANGLES, 0, text->getVerticesSize());
 
 	glDisable(GL_BLEND);
+}
+
+void Renderer::useShader(Text* text)
+{
+	text->useShader(text);
 }

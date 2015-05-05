@@ -15,6 +15,7 @@ public:
 	void prepareText(const char* text, int length, int x, int y);
 	GLuint getVAO();
 	int getVerticesSize();
+	void useShader(Text* text);
 
 private:
 	Texture* texture;

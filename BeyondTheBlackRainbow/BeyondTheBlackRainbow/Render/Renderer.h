@@ -46,5 +46,6 @@ private:
 	GLFWwindow* window;
 	
 	void useShader(MeshNode* node);
+	void useShader(Text* text);
 };
 
