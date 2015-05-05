@@ -14,6 +14,7 @@
 #include "Importers\MeshImporter.h"
 #include "SceneGraph\TransformNode.h"
 #include "SceneGraph\CameraNode.h"
+#include "Text\Text.h"
 
 
 int main() {
@@ -26,6 +27,9 @@ int main() {
 	GLDebug::registerDebugCallbacks();
 	
 	InputHandler* input = new InputHandler();
+
+	Text* text = new Text();
+	text->prepareText("Escape!", 60, 500, 100);
 	
 	std::map<std::string, CameraNode*> cameraList;
 
@@ -124,6 +128,7 @@ int main() {
 		for (MeshNode* node : drawArray){
 			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix);
 		}
+		renderer->drawText(text);
 
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();

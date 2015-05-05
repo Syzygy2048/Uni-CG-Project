@@ -20,6 +20,7 @@
     <ClCompile Include="Shader\TextureShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\LightNode.cpp" />
     <ClCompile Include="Shader\SimpleLightingShaderProgram.cpp" />
+    <ClCompile Include="Text\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLDebug.h" />
@@ -43,6 +44,7 @@
     <ClInclude Include="Shader\TextureShaderProgram.h" />
     <ClInclude Include="SceneGraph\LightNode.h" />
     <ClInclude Include="Shader\SimpleLightingShaderProgram.h" />
+    <ClInclude Include="Text\Text.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleFragmentShader.fragmentshader" />
