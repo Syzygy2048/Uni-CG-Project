@@ -55,7 +55,7 @@ void SimpleLightingShaderProgram::fillUniformLocation(MeshNode* node)
 	glUniformMatrix4fv(locationM, 1, GL_FALSE, &M[0][0]);
 	glm::mat4 V = node->getViewMatrix();
 	glUniformMatrix4fv(locationV, 1, GL_FALSE, &V[0][0]);
-	glm::vec3 lightPos = glm::vec3(2, 2, -2);
+	glm::vec3 lightPos = glm::vec3(11, 2, 11);
 	glUniform3f(locationLight, lightPos.x, lightPos.y, lightPos.z);
 
 }

@@ -41,10 +41,12 @@ void PhysicsHandler::initPhysics()
 	sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 
 	physicsScene = physicsSDK->createScene(sceneDesc);
-	//physicsScene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.0f);	//for physx debug visualization
+	physicsScene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.0f);	//for physx debug visualization
+	physicsScene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 2.0f);
+	physicsScene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 2.0f);
 
-	//physx::PxVisualDebuggerConnection* pvdConnection = NULL; 
-	createPhysicsFloor();
+	physx::PxVisualDebuggerConnection* pvdConnection = NULL; 
+	
 }
 
 void PhysicsHandler::updatePhysics()
@@ -62,14 +64,11 @@ physx::PxMaterial* PhysicsHandler::createPhysicsMaterial(float staticFriction, f
 void PhysicsHandler::renderCollisionShapes()
 {
 	const physx::PxRenderBuffer& rb = physicsScene->getRenderBuffer();
-	physicsScene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 2.0f);
-	physicsScene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 2.0f);
-
 	for (physx::PxU32 i = 0; i < rb.getNbLines(); i++)
 	{
 		const physx::PxDebugLine& line = rb.getLines()[i];
 		glLineWidth(2.5);
-		glColor3f(1.0f, 1.0f, 0.0f);
+		glColor3f(1.0f, 0.1f, 1.0f);
 		glBegin(GL_LINES);
 		glVertex3f(line.pos0.x, line.pos0.y, line.pos0.z);
 		glVertex3f(line.pos1.x, line.pos1.y, line.pos1.z);
@@ -84,9 +83,12 @@ physx::PxShape* PhysicsHandler::createSphereCollisionShape()
 
 physx::PxRigidActor* PhysicsHandler::createDynamicActor(glm::mat4 modelMatrix, physx::PxShape* collisionShape, physx::PxMaterial* collisionMaterial, physx::PxReal density)
 {
+	collisionShape->setFlag(physx::PxShapeFlag::eVISUALIZATION, true);
 	physx::PxRigidDynamic* actor = physicsSDK->createRigidDynamic(physx::PxTransform(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]));
 	actor->attachShape(*collisionShape);
 	physx::PxRigidBodyExt::updateMassAndInertia(*actor, density);
+	actor->setActorFlag(physx::PxActorFlag::eVISUALIZATION, true);
+	
 	//physx::PxRigidActor* actor = physx::PxCreateDynamic(*physicsSDK, physx::PxTransform(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), collisionShape->getGeometry().any, *collisionMaterial, density);
 	return actor;
 }
@@ -98,7 +100,7 @@ void PhysicsHandler::addActorToScene(physx::PxRigidActor* actor)
 
 void PhysicsHandler::createPhysicsFloor()
 {
-	physx::PxRigidStatic* plane = physx::PxCreatePlane(*physicsSDK, physx::PxPlane(physx::PxVec3(0, 1, 0), 0), *createPhysicsMaterial(90, 90, 0.1f));
+	physx::PxRigidStatic* plane = physx::PxCreatePlane(*physicsSDK, physx::PxPlane(physx::PxVec3(0, 1, 0), 4), *createPhysicsMaterial(90, 90, 0.1f));
 	addActorToScene(plane);
 }
 

@@ -79,5 +79,8 @@ private:
 	ShaderProgram* shaderProgram;
 
 	physx::PxRigidActor* physicsActor;
+
+	glm::vec3 oldRotationAxis;
+	physx::PxReal oldRotationAngle;
 };
 

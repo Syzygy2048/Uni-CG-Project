@@ -67,7 +67,7 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		10, 0, 10, 1);
+		0, 3, 0, 1);
 	transform = glm::rotate(transform, -90.0f, glm::vec3(1, 0, 0));
 	SceneNode* transformNodeRoom = new TransformNode(generateUuid(), transform);
 	
@@ -80,12 +80,12 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		3, 0, -1.01, 1));
+		0, 30, 0, 1));
 	SceneNode* transformNodeTable = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		0, 0, 0, 1));
+		10, 1, 0, 1));
 	SceneNode* transformNodeDoor = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -124,15 +124,43 @@ int main() {
 	bedMesh->prepareForRendering();
 	bedMesh->createCollisionShape(physics);
 	roomMesh->prepareForRendering();
-	//roomMesh-
 	doorMesh->prepareForRendering();
 	doorMesh->createCollisionShape(physics);
 
+	
+	
+	TransformNode* debugNode1 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 3, -3.5, 1));
+	TransformNode* debugNode2 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 13, -4, 1));
+
+	MeshNode* debugMesh1 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
+	MeshNode* debugMesh2 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
+	
+	debugNode1->attachChild(debugMesh1);
+	debugNode2->attachChild(debugMesh2);
+	sceneGraph->attachChild(debugNode1);
+	sceneGraph->attachChild(debugNode2);
+
+	debugMesh1->prepareForRendering();
+	debugMesh1->createCollisionShape(physics);
+	drawArray.push_back(debugMesh1);
+	debugMesh2->prepareForRendering();
+	debugMesh2->createCollisionShape(physics);
+	drawArray.push_back(debugMesh2);
 	//should probably done recursively in sceneNode
 	//should probably done recursively in sceneNode	
 	
 	
 	//end of part that should be in a scene loader
+
+	physics->createPhysicsFloor();
 	
 	double time = glfwGetTime();
 	double oldTime = glfwGetTime();
@@ -163,8 +191,12 @@ int main() {
 			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix);
 		}
 
+		glLoadMatrixf(&viewProjectionMatrix[0][0]);
 		physics->renderCollisionShapes();
 		renderer->drawText(text);
+
+		glm::mat4 debug = debugNode2->getTransform();
+		std::cerr << "debugNode: x " << debug[3][0] << " y " << debug[3][1] << " z " << debug[3][2] << std::endl;
 
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();

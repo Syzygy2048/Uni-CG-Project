@@ -92,7 +92,8 @@ void MeshNode::prepareForRendering()
 
 void MeshNode::createCollisionShape(PhysicsHandler* physicsHandler)
 {
-	physicsActor = physicsHandler->createDynamicActor(propagateMatrix(), physicsHandler->createSphereCollisionShape(), physicsHandler->createPhysicsMaterial(0.01, 0.01, 0.1f), 0.3);
+	glm::mat4 modelMatrix = propagateMatrix();
+	physicsActor = physicsHandler->createDynamicActor(modelMatrix, physicsHandler->createSphereCollisionShape(), physicsHandler->createPhysicsMaterial(0.01, 0.01, 0.1f), 0.3);
 	physicsHandler->addActorToScene(physicsActor);
 }
 
@@ -112,15 +113,27 @@ void MeshNode::update(double timeStep, InputHandler* input)
 	if (parent->getType() == NodeType::TRANSFORM_NODE)
 	{
 		TransformNode* node = (TransformNode *)parent;
-		//glm::mat4 trans = node->getTransform();
-		glm::mat4 posMat = glm::translate(glm::mat4(1.0f), position);
-		glm::rotate(posMat, rotAngle, rotationAxis);
-		node->setNewTransform(posMat);
+		glm::mat4 modelMatrix = propagateMatrix();
+		glm::mat4 transMatrix = node->getTransform();
+		position = position - glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]);	//position difference between old and new transform after physics simulation
+		glm::vec3 deltaAxis(0, 1, 0);
+		physx::PxReal deltaAngle;
+		if (oldRotationAxis != glm::vec3(0, 0, 0)){
+			deltaAxis = rotationAxis + oldRotationAxis;
+			deltaAxis = glm::normalize(deltaAxis);
+			deltaAngle = rotAngle - oldRotationAngle;
+		}
+		//transMatrix = glm::rotate(transMatrix, deltaAngle, deltaAxis);
+		transMatrix = glm::translate(transMatrix, position);
+		
+		node->setNewTransform(transMatrix);
 	}
 	else
 	{
 		std::cerr << "Node is not attached to a TransformNode, that shouldn't happen." << std::endl;
 	}
+	oldRotationAxis = rotationAxis;
+	oldRotationAngle = rotAngle;
 }
 
 void MeshNode::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix)

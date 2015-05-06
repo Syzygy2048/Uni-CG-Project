@@ -9,7 +9,6 @@ LightNode::LightNode(UUID uuid, glm::vec3 position, glm::vec3 intensity, glm::ve
 	this->direction = direction;
 }
 
-
 LightNode::~LightNode()
 {
 }

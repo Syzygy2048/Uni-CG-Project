@@ -76,8 +76,6 @@ void PlayerNode::update(double deltaTime, InputHandler* input)
 	collisionSide = playerController->move(physx::PxVec3(disp.x, yImpulse, disp.z), 0.001f, deltaTime, filters);
 	touchingGround = (collisionSide & physx::PxControllerFlag::eCOLLISION_DOWN) == physx::PxControllerFlag::eCOLLISION_DOWN;
 
-	std::cerr << "direction before: " << direction.x << " " << direction.y << " " << direction.z << " ------ " << oldMousePosY - input->yPos << std::endl;
-
 	//prevent camera from flipping
 	if (direction.y > 0.9 && (oldMousePosY - input->yPos) > 0 || direction.y < -0.9 && oldMousePosY - input->yPos < 0)
 	{
