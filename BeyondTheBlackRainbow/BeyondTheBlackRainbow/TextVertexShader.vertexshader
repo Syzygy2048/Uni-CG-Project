@@ -1,8 +1,8 @@
 #version 330 core
 
 // Input vertex data, different for all executions of this shader.
-layout(location = 4) in vec2 vertexPosition_screenspace;
-layout(location = 5) in vec2 vertexUV;
+layout(location = 10) in vec2 vertexPosition_screenspace;
+layout(location = 11) in vec2 vertexUV;
 
 // Output data ; will be interpolated for each fragment.
 out vec2 UV;

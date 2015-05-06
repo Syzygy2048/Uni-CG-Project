@@ -34,8 +34,9 @@ int main() {
 	physics->initPhysics();
 
 	Text* text = new Text();
-	text->prepareText("Escape!", 60, 500, 100);
+	text->prepareText("Escape!", 60, 0, 0);
 	
+
 	std::map<std::string, CameraNode*> cameraList;
 
 	//start of part that should be in a scene loader
@@ -47,11 +48,14 @@ int main() {
 	
 	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TABLE);
 	MeshNode* duckMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
-
 	MeshNode* bedMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::BED);
 	MeshNode* roomMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::ROOM);
 	MeshNode* doorMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR);
-
+	tableMesh->prepareForRendering();
+	duckMesh->prepareForRendering();
+	bedMesh->prepareForRendering();
+	roomMesh->prepareForRendering();
+	doorMesh->prepareForRendering();
 
 	std::vector<MeshNode*> drawArray;
 	drawArray.push_back(tableMesh);
@@ -63,14 +67,12 @@ int main() {
 	SceneNode* sceneGraph = new SceneNode(generateUuid(), NodeType::ROOT_NODE);
 	sceneGraph->setParent(nullptr);
 	
-	glm::mat4 transform = glm::mat4(
+	SceneNode* transformNodeRoom = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		0, 3, 0, 1);
-	transform = glm::rotate(transform, -90.0f, glm::vec3(1, 0, 0));
-	SceneNode* transformNodeRoom = new TransformNode(generateUuid(), transform);
-	
+		0, 0, 0, 1));
+	//glm::rotate(transformNodeRoom->propagateMatrix(), 90.0f , glm::vec3(1, 0, 0));
 	SceneNode* transformNodeDuck = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -80,12 +82,12 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		0, 30, 0, 1));
+		3.4, 0, -1.01, 1));
 	SceneNode* transformNodeTable = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		10, 1, 0, 1));
+		0, 0, 0, 1));
 	SceneNode* transformNodeDoor = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -102,8 +104,7 @@ int main() {
 	
 	sceneGraph->attachChild(transformNodeRoom);
 	sceneGraph->attachChild(transformNodeDoor);
-	sceneGraph->attachChild(activeCamera);
-
+	
 	SceneNode* playerTransform = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -117,46 +118,11 @@ int main() {
 	
 	player->createCollisionShape(physics);
 	
-	tableMesh->prepareForRendering();
 	tableMesh->createCollisionShape(physics);
-	duckMesh->prepareForRendering();
 	duckMesh->createCollisionShape(physics);
-	bedMesh->prepareForRendering();
 	bedMesh->createCollisionShape(physics);
-	roomMesh->prepareForRendering();
-	doorMesh->prepareForRendering();
 	doorMesh->createCollisionShape(physics);
-
-	
-	
-	TransformNode* debugNode1 = new TransformNode(generateUuid(), glm::mat4(
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 3, -3.5, 1));
-	TransformNode* debugNode2 = new TransformNode(generateUuid(), glm::mat4(
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 13, -4, 1));
-
-	MeshNode* debugMesh1 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
-	MeshNode* debugMesh2 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
-	
-	debugNode1->attachChild(debugMesh1);
-	debugNode2->attachChild(debugMesh2);
-	sceneGraph->attachChild(debugNode1);
-	sceneGraph->attachChild(debugNode2);
-
-	debugMesh1->prepareForRendering();
-	debugMesh1->createCollisionShape(physics);
-	drawArray.push_back(debugMesh1);
-	debugMesh2->prepareForRendering();
-	debugMesh2->createCollisionShape(physics);
-	drawArray.push_back(debugMesh2);
-	//should probably done recursively in sceneNode
-	//should probably done recursively in sceneNode	
-	
+	//should probably done recursively in sceneNode		
 	
 	//end of part that should be in a scene loader
 
@@ -196,7 +162,6 @@ int main() {
 		renderer->drawText(text);
 
 		glm::mat4 debug = debugNode2->getTransform();
-		std::cerr << "debugNode: x " << debug[3][0] << " y " << debug[3][1] << " z " << debug[3][2] << std::endl;
 
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();
