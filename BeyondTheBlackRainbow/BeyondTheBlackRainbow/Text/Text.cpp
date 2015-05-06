@@ -5,19 +5,12 @@
 
 #include "shader.hpp"
 
-Text::Text(const char* text, int length, int x, int y)
+#include "..\Render\Renderer.h"
+
+Text::Text()
 {
-	texture = new Texture("Holstein.DDS");
-	myText = text;
-	mySize = length;
-	myX = x;
-	myY = y;
-
-	glGenBuffers(1, &vertexBufferID);
-	glGenBuffers(1, &UVBufferID);
-
 	shaderID = LoadShaders("TextVertexShader.vertexshader", "TextVertexShader.fragmentshader");
-
+	texture = new Texture("Holstein.DDS");
 	uniformID = glGetUniformLocation(shaderID, "myTextureSampler");
 }
 
@@ -35,12 +28,16 @@ Text::~Text()
 	glDeleteProgram(shaderID);
 }
 
-const char* Text::getText() {
-	return myText;
-}
-
-void Text::drawText(const char* text, int size, int x, int y)
+void Text::prepareText(const char* text, int size, int x, int y)
 {
+	Renderer* renderer = Renderer::getInstance();
+	renderer->generateVertexArray(&vao);
+	renderer->generateBufferObject(&vertexBufferID);
+	renderer->generateBufferObject(&UVBufferID);
+
+	vertexAttribPointer = 10;
+	textureAttribPointer = 11;
+
 	unsigned int length = strlen(text);
 
 	// Fill buffers
@@ -77,40 +74,77 @@ void Text::drawText(const char* text, int size, int x, int y)
 		UVs.push_back(uv_up_right);
 		UVs.push_back(uv_down_left);
 	}
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
+	renderer->fillBuffer(vertexBufferID, GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_STATIC_DRAW);
+	renderer->setVertexAttribPointer(vertexAttribPointer, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	renderer->fillBuffer(UVBufferID, GL_ARRAY_BUFFER, UVs.size() * sizeof(glm::vec2), &UVs[0], GL_STATIC_DRAW);
+	renderer->setVertexAttribPointer(textureAttribPointer, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	renderer->bindVertexArray(0);
+	renderer->bindBuffer(GL_ARRAY_BUFFER, 0);
+	renderer->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	/*glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, UVBufferID);
-	glBufferData(GL_ARRAY_BUFFER, UVs.size() * sizeof(glm::vec2), &UVs[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, UVs.size() * sizeof(glm::vec2), &UVs[0], GL_STATIC_DRAW);*/
 
 	// Bind shader
-	glUseProgram(shaderID);
+	//glUseProgram(shaderID);
 
-	// Bind texture
-	texture->bind(1);
-	glActiveTexture(GL_TEXTURE1);
+	//// Bind texture
+	///*texture->bind(0);
+	//glActiveTexture(GL_TEXTURE0);*/
+
+	//glActiveTexture(GL_TEXTURE30);
+	//glBindTexture(GL_TEXTURE_2D, texture->getTextureID());
+	//glUniform1i(uniformID, 30);
 	
 	//glBindTexture(GL_TEXTURE_2D, Text2DTextureID);
 	// Set our "myTextureSampler" sampler to user Texture Unit 0
-	glUniform1i(uniformID, 0);
+	//glUniform1i(uniformID, 0);
+
+	verticesSize = vertices.size();
 
 	// 1rst attribute buffer : vertices
-	glEnableVertexAttribArray(4);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	//glEnableVertexAttribArray(4);
+	//glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
+	//glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-	// 2nd attribute buffer : UVs
-	glEnableVertexAttribArray(5);
-	glBindBuffer(GL_ARRAY_BUFFER, UVBufferID);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	//// 2nd attribute buffer : UVs
+	//glEnableVertexAttribArray(5);
+	//glBindBuffer(GL_ARRAY_BUFFER, UVBufferID);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// Draw call
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+	//// Draw call
+	//glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
 
-	glDisableVertexAttribArray(4);
-	glDisableVertexAttribArray(5);
+	/*glDisableVertexAttribArray(4);
+	glDisableVertexAttribArray(5);*/
+}
+
+GLuint Text::getVAO()
+{
+	return vao;
+}
+
+int Text::getVerticesSize()
+{
+	return verticesSize;
+}
+
+void Text::useShader(Text* text)
+{
+	glUseProgram(text->shaderID);
+
+	// Bind texture
+	/*texture->bind(0);
+	glActiveTexture(GL_TEXTURE0);*/
+
+	glActiveTexture(GL_TEXTURE30);
+	glBindTexture(GL_TEXTURE_2D, text->texture->getTextureID());
+	glUniform1i(uniformID, 30);
 }

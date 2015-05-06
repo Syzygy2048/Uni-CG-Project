@@ -21,6 +21,7 @@
     <ClCompile Include="SceneGraph\LightNode.cpp" />
     <ClCompile Include="Shader\SimpleLightingShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\PlayerNode.cpp" />
+    <ClCompile Include="Text\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLDebug.h" />
@@ -45,6 +46,7 @@
     <ClInclude Include="SceneGraph\LightNode.h" />
     <ClInclude Include="Shader\SimpleLightingShaderProgram.h" />
     <ClInclude Include="SceneGraph\PlayerNode.h" />
+    <ClInclude Include="Text\Text.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleFragmentShader.fragmentshader" />

@@ -9,22 +9,27 @@
 class Text
 {
 public:
-	Text(const char* text, int length, int x, int y);
+	Text();
 	~Text();
 
-	void drawText(const char* text, int length, int x, int y);
-	const char* getText();
+	void prepareText(const char* text, int length, int x, int y);
+	GLuint getVAO();
+	int getVerticesSize();
+	void useShader(Text* text);
 
 private:
-	const char* myText;
-	int mySize;
-	int myX;
-	int myY;
 	Texture* texture;
 
+
+	int vertexAttribPointer;
+	int textureAttribPointer;
+
+	GLuint vao;
 	GLuint vertexBufferID;
 	GLuint UVBufferID;
 	GLuint shaderID;
 	GLuint uniformID;
+
+	int verticesSize;
 };
 

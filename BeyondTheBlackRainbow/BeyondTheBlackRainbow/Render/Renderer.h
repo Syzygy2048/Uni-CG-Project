@@ -7,6 +7,7 @@
 #include "../InputHandler.h"
 #include "../Texture.h"
 #include "../SceneGraph/CameraNode.h"
+#include "../Text/Text.h"
 
 class Renderer
 {
@@ -31,6 +32,7 @@ public:
 	void linkShader(ShaderProgram* shader);
 
 	void draw(MeshNode* node);
+	void drawText(Text* text);
 
 	GLFWwindow* getWindow();
 
@@ -44,5 +46,6 @@ private:
 	GLFWwindow* window;
 	
 	void useShader(MeshNode* node);
+	void useShader(Text* text);
 };
 
