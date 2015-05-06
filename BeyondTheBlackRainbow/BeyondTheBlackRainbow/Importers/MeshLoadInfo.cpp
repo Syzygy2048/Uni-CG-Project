@@ -5,7 +5,7 @@ const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::SIMPLE_LIGHTING_SHADER = new S
 
 
 const MeshLoadInfo::LoadInfo* MeshLoadInfo::TABLE = new LoadInfo(std::string("../BeyondTheBlackRainbow/Assets/Models/Table.obj"), std::string("../BeyondTheBlackRainbow/Assets/Models/duck_textures/wood _texture.jpg"), SIMPLE_LIGHTING_SHADER);
-const MeshLoadInfo::LoadInfo* MeshLoadInfo::ROOM = new LoadInfo(std::string("../BeyondTheBlackRainbow/Assets/Models/Room.obj"), std::string("../BeyondTheBlackRainbow/Assets/Models/duck_textures/rainbowdash.png"), SIMPLE_LIGHTING_SHADER);
+const MeshLoadInfo::LoadInfo* MeshLoadInfo::ROOM = new LoadInfo(std::string("../BeyondTheBlackRainbow/Assets/Models/Room.obj"), std::string("../BeyondTheBlackRainbow/Assets/Models/duck_textures/room.png"), SIMPLE_LIGHTING_SHADER);
 const MeshLoadInfo::LoadInfo* MeshLoadInfo::BED = new LoadInfo(std::string("../BeyondTheBlackRainbow/Assets/Models/Bed.obj"), std::string("../BeyondTheBlackRainbow/Assets/Models/duck_textures/whiteBed.jpg"), SIMPLE_LIGHTING_SHADER);
 const MeshLoadInfo::LoadInfo* MeshLoadInfo::DOOR = new LoadInfo(std::string("../BeyondTheBlackRainbow/Assets/Models/Door.obj"), std::string("../BeyondTheBlackRainbow/Assets/Models/duck_textures/door.png"), SIMPLE_LIGHTING_SHADER);
 const MeshLoadInfo::LoadInfo* MeshLoadInfo::DUCK = new LoadInfo(std::string("../BeyondTheBlackRainbow/Assets/Models/duck.dae"), std::string("../BeyondTheBlackRainbow/Assets/Models/duck_textures/duck.png"), SIMPLE_LIGHTING_SHADER);

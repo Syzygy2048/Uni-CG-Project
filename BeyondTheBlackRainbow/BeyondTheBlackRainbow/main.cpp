@@ -77,7 +77,7 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		3, 0, -1.01, 1));
+		3.4, 0, -1.01, 1));
 	SceneNode* transformNodeTable = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
