@@ -38,6 +38,8 @@ void Text::prepareText(const char* text, int size, int x, int y)
 	vertexAttribPointer = 10;
 	textureAttribPointer = 11;
 
+	renderer->bindVertexArray(vao);
+
 	unsigned int length = strlen(text);
 
 	// Fill buffers
@@ -87,6 +89,7 @@ void Text::prepareText(const char* text, int size, int x, int y)
 	glBindBuffer(GL_ARRAY_BUFFER, UVBufferID);
 	glBufferData(GL_ARRAY_BUFFER, UVs.size() * sizeof(glm::vec2), &UVs[0], GL_STATIC_DRAW);*/
 
+	
 	// Bind shader
 	//glUseProgram(shaderID);
 

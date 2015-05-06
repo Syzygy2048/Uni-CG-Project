@@ -29,8 +29,9 @@ int main() {
 	InputHandler* input = new InputHandler();
 
 	Text* text = new Text();
-	text->prepareText("Escape!", 60, 500, 100);
+	text->prepareText("Escape!", 60, 0, 0);
 	
+
 	std::map<std::string, CameraNode*> cameraList;
 
 	//start of part that should be in a scene loader
