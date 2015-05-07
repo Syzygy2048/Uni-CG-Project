@@ -18,7 +18,7 @@ PlayerNode::~PlayerNode()
 
 void PlayerNode::createCollisionShape(PhysicsHandler* physicsHandler)
 {
-	playerController = physicsHandler->createPlayerActor(propagateMatrix());
+	playerController = physicsHandler->createPlayerActor(glm::mat4(propagateMatrix()));
 	physicsHandler->addActorToScene(playerController->getActor());
 	
 	/*//init character controller https://developer.nvidia.com/sites/default/files/akamai/physx/Docs/CharacterControllers.html#character
@@ -35,7 +35,7 @@ void PlayerNode::createCollisionShape(PhysicsHandler* physicsHandler)
 	characterController->getActor()->setName("player"); */
 }
 
-glm::mat4 PlayerNode::propagateMatrix()
+glm::highp_mat4 PlayerNode::propagateMatrix()
 {
 	return parent->propagateMatrix();
 }
@@ -92,12 +92,40 @@ void PlayerNode::update(double deltaTime, InputHandler* input)
 
 	TransformNode* node;
 	glm::mat4 parentTransform;
+	glm::vec3 positionViewHack = glm::vec3(position.x, position.y + 0.7, position.z);
 	if (parent->getType() == NodeType::TRANSFORM_NODE)
 	{
 		node = (TransformNode*)parent;
-		node->setNewTransform(glm::lookAt(position, position + direction, up));
+		node->setNewTransform(glm::highp_mat4(glm::lookAt(positionViewHack, positionViewHack + direction, up)));
 	}
 	
+
+	if (input->e)
+	{		
+		physx::PxVec3 origin = physx::PxVec3(positionViewHack.x, positionViewHack.y, positionViewHack.z);                 // [in] Ray origin
+		glm::vec3 normDir = glm::normalize(direction);
+		physx::PxVec3 unitDir = physx::PxVec3(normDir.x, normDir.y, normDir.z);                // [in] Normalized ray direction
+		physx::PxReal maxDistance = 3;            // [in] Raycast max distance
+		physx::PxRaycastBuffer hit;                 // [out] Raycast results
+
+		// Raycast against all static & dynamic objects (no filtering)
+		// The main result from this call is the closest hit, stored in the 'hit.block' structure
+		bool status = playerController->getScene()->raycast(origin, unitDir, maxDistance, hit);
+		if (status){
+			if (!hit.block.actor->getName()){
+				std::cerr << "object name wasn't set" << std::endl;
+				//std::cerr << "userdata " << hit.block.actor->userData << std::endl;
+			}
+			else
+			{
+				UUID id;
+				UuidFromString((RPC_CSTR)hit.block.actor->getName(), &id);
+				eventManager->eventTriggered(id, EventTrigger::RAYTRACE_HIT, this);
+			}
+		}
+
+
+	}
 }
 
 void PlayerNode::updateDirection(double dT, float rotateX, float rotateY)

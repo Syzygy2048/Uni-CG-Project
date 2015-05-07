@@ -6,6 +6,9 @@
 #include <glm\glm.hpp>
 #include <iostream>
 
+#include "../Importers/MeshLoadInfo.h"
+
+
 class PhysicsHandler
 {
 public:
@@ -17,12 +20,16 @@ public:
 	void updatePhysics();
 
 	physx::PxMaterial* createPhysicsMaterial(float staticFriction, float dynamicFriction, float bounciness);
-	physx::PxShape* createSphereCollisionShape();
+	
+	physx::PxShape* createCollisionShape(const MeshLoadInfo::LoadInfo* loadInfo, aiMesh* mesh);
+	physx::PxShape* createSphereShape();
+	physx::PxShape* createConvexHullShape(aiMesh* mesh);
+	physx::PxShape* createTriangleMeshShape(aiMesh* mesh);
 
-	physx::PxRigidActor* createMeshStaticActor(glm::mat4 modelMatrix, aiMesh mesh);
-	physx::PxRigidActor* createConvexHullDynamicActor(glm::mat4 modelMatrix, aiMesh mesh);
+	
+	physx::PxRigidActor* createRigidActor(glm::mat4 modelMatrix, aiMesh* mesh, const MeshLoadInfo::LoadInfo* loadInfo);
 	physx::PxRigidActor* createDynamicActor(glm::mat4 modelMatrix, physx::PxShape* collisionShape, physx::PxMaterial* collisionMaterial, float collisionDensity);
-	physx::PxRigidActor* createStaticActor(glm::mat4 modelMatrix);
+	physx::PxRigidActor* createStaticActor(glm::mat4 modelMatrix, physx::PxShape* collisionShape, physx::PxMaterial* collisionMaterial, float collisionDensity);
 
 	physx::PxController* createPlayerActor(glm::mat4 modelMatrix);
 

@@ -13,7 +13,7 @@ LightNode::~LightNode()
 {
 }
 
-glm::mat4 LightNode::propagateMatrix()
+glm::highp_mat4 LightNode::propagateMatrix()
 {
 	return parent->propagateMatrix();
 }

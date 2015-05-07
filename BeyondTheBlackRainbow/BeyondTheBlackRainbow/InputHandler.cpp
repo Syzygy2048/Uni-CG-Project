@@ -25,5 +25,6 @@ void InputHandler::update(GLFWwindow* window)
 	space = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
 	shift = glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS;
 	r = glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS;
+	e = glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS;
 }
 

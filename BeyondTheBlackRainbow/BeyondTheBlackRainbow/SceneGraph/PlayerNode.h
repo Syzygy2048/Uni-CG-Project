@@ -14,7 +14,7 @@ public:
 
 	virtual void update(double timeStep, InputHandler* input);
 
-	virtual glm::mat4 propagateMatrix();
+	virtual glm::highp_mat4 propagateMatrix();
 
 private:
 	physx::PxController* playerController = nullptr;

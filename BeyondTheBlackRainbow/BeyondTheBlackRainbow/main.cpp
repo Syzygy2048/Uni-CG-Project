@@ -17,7 +17,7 @@
 #include "SceneGraph\PlayerNode.h"
 #include "Physics\PhysicsHandler.h"
 #include "Text\Text.h"
-
+#include "Event\EventFactory.h"
 
 int main() {
 
@@ -66,6 +66,15 @@ int main() {
 
 	SceneNode* sceneGraph = new SceneNode(generateUuid(), NodeType::ROOT_NODE);
 	sceneGraph->setParent(nullptr);
+
+	EventManager* eventManager = new EventManager(sceneGraph);
+	sceneGraph->setEventManager(eventManager);
+	tableMesh->setEventManager(eventManager);
+	duckMesh->setEventManager(eventManager);
+	bedMesh->setEventManager(eventManager);
+	roomMesh->setEventManager(eventManager);
+	doorMesh->setEventManager(eventManager);
+	
 	
 	SceneNode* transformNodeRoom = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
@@ -74,9 +83,9 @@ int main() {
 		0, 0, 0, 1));
 	//glm::rotate(transformNodeRoom->propagateMatrix(), 90.0f , glm::vec3(1, 0, 0));
 	SceneNode* transformNodeDuck = new TransformNode(generateUuid(), glm::mat4(
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
+		0.1, 0, 0, 0,
+		0, 0.1, 0, 0,
+		0, 0, 0.1, 0,
 		1, -0.1, -3.5, 1));
 	SceneNode* transformNodeBed = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
@@ -109,19 +118,40 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		3, 3, 3, 1));
+		2, 0, -3, 1));
 
 	PlayerNode* player = new PlayerNode(generateUuid());
 	playerTransform->attachChild(activeCamera);
 	playerTransform->attachChild(player);
 	sceneGraph->attachChild(playerTransform);
+	player->setEventManager(eventManager);
 	
+	roomMesh->createCollisionShape(physics);
 	player->createCollisionShape(physics);
-	
 	tableMesh->createCollisionShape(physics);
 	duckMesh->createCollisionShape(physics);
 	bedMesh->createCollisionShape(physics);
 	doorMesh->createCollisionShape(physics);
+
+	bedMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER));
+	doorMesh->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR));
+
+
+	/*SceneNode* debugTransform = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		2, 3, -2.3, 1));
+	MeshNode* debugMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
+	debugTransform->attachChild(debugMesh);
+	sceneGraph->attachChild(debugTransform);
+	drawArray.push_back(debugMesh);
+	debugMesh->prepareForRendering();
+	debugMesh->createCollisionShape(physics); */
+	
+	
+	
+	
 	//should probably done recursively in sceneNode		
 	
 	//end of part that should be in a scene loader
@@ -158,11 +188,9 @@ int main() {
 		}
 
 		glLoadMatrixf(&viewProjectionMatrix[0][0]);
-		physics->renderCollisionShapes();
+		//physics->renderCollisionShapes();
 		renderer->drawText(text);
-
-		glm::mat4 debug = debugNode2->getTransform();
-
+		
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();
 	}

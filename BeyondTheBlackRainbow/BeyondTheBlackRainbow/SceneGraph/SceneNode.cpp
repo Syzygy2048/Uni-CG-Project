@@ -2,7 +2,9 @@
 
 #include <rpc.h>
 
-SceneNode::SceneNode(UUID uuid, NodeType type) : objectId(uuid), nodeType(type)
+#include <iostream>
+
+SceneNode::SceneNode(UUID uuid, NodeType type) : uuid(uuid), nodeType(type)
 {
 	parent = nullptr;
 }
@@ -45,9 +47,9 @@ bool SceneNode::detachChild(SceneNode* deleteChild)
 	return false;
 }
 
-glm::mat4 SceneNode::propagateMatrix()
+glm::highp_mat4 SceneNode::propagateMatrix()
 {
-	return glm::mat4();
+	return glm::highp_mat4();
 }
 
 void SceneNode::setParent(SceneNode* parent)
@@ -58,4 +60,80 @@ void SceneNode::setParent(SceneNode* parent)
 NodeType SceneNode::getType()
 {
 	return nodeType;
+}
+
+UUID* SceneNode::getUuid()
+{
+	return &uuid;
+}
+
+bool SceneNode::receiveEvent(UUID target, EventTrigger eventTrigger, SceneNode* caller)
+{
+	bool* status = new bool;
+	if (UuidEqual(&target, &uuid, (RPC_STATUS*)&status))
+	{
+		triggerEvent(eventTrigger, caller);
+		delete status;
+		return true;
+	}
+	for (SceneNode* child : childList)
+	{
+		if (child->receiveEvent(target, eventTrigger, caller))
+		{
+			return true;
+		}
+	}
+	
+	//delete status;
+	return false;
+}
+
+bool SceneNode::receiveSpecificEvent(EventTrigger eventTrigger, EventIdentifier eventIdentifier, SceneNode* caller)
+{
+	{
+		bool* status = new bool;
+		for (Event* event : eventList)
+		{
+			if (event->trigger == eventTrigger && event->eventIdentifier == eventIdentifier){
+				event->executeEvent(caller);
+				return true;
+			}
+		}
+		for (SceneNode* child : childList)
+		{
+			if (child->receiveSpecificEvent(eventTrigger, eventIdentifier, caller))
+			{
+				return true;
+			}
+		}
+
+		//delete status;
+		return false;
+	}
+}
+
+void SceneNode::setEventManager(EventManager* eventManager)
+{
+	this->eventManager = eventManager;
+}
+
+void SceneNode::triggerEvent(EventTrigger eventTrigger, SceneNode* caller)
+{
+	for (Event* event : eventList)
+	{
+		if (event->trigger == eventTrigger){
+			event->executeEvent(caller);
+		}
+	}
+}
+
+void SceneNode::registerEvent(Event* event){
+	eventList.push_back(event);
+	event->setEventTarget(this);
+}
+
+
+EventManager* SceneNode::getEventManager()
+{
+	return eventManager;
 }

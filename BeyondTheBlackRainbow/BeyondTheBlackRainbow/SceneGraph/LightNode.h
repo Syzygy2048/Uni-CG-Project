@@ -8,7 +8,7 @@ public:
 	LightNode(UUID uuid, glm::vec3 position, glm::vec3 intensity, glm::vec3 color, glm::vec3 direction);
 	~LightNode();
 
-	glm::mat4 propagateMatrix();
+	glm::highp_mat4 propagateMatrix();
 
 	glm::vec3 getPosition();
 	glm::vec3 getIntensity();

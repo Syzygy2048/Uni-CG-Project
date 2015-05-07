@@ -36,7 +36,7 @@ public:
 
 	GLuint getUV();
 
-	virtual glm::mat4 propagateMatrix();
+	virtual glm::highp_mat4 propagateMatrix();
 
 	glm::mat4 getModelViewProjectionMatrix();
 	glm::mat4 getViewProjectionMatrix();
@@ -52,6 +52,15 @@ public:
 
 	const MeshLoadInfo::LoadInfo* getLoadInfo();
 
+	SceneNode* getParent();
+
+	void removeCollisionShape();
+
+
+
+	bool SUBMISSION1_ANIMATION_HACK = false;
+	glm::highp_float SUBMISSION1_ANIMATION_HACK_DOOR_ROTATION_AMOUNT = 90;
+
 private:
 	aiMesh* triangleMesh;
 
@@ -66,7 +75,7 @@ private:
 	int normalAttribPointer;
 	int textureAttribPointer;
 
-	glm::mat4 modelMatrix;
+	glm::highp_mat4 modelMatrix;
 	glm::mat4 viewMatrix;
 	glm::mat4 projectionMatrix;
 	glm::mat4 viewProjectionMatrix;
@@ -80,7 +89,5 @@ private:
 
 	physx::PxRigidActor* physicsActor;
 
-	glm::vec3 oldRotationAxis;
-	physx::PxReal oldRotationAngle;
 };
 

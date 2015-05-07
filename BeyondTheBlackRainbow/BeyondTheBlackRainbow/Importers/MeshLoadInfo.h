@@ -2,6 +2,20 @@
 #include <iostream>
 class MeshLoadInfo{
 public:
+	enum CollisionType{
+		DYNAMIC,	//physics applied
+		STATIC,		//doesn't move, e.g. ground
+		KINEMATIC	//moves, but isn't affected by physics (no gravity, isn't pushed by other objects). e.g moving platform. 
+	};
+
+	enum CollisionShapeType{
+		CONVEX,
+		SPHERE,
+		BOX,
+		CAPSULE,
+		TRIANGLE, //can only be kinematic
+	};
+
 	struct ShaderLoadInfo {
 		const std::string vertexShaderPath;
 		const std::string fragmentShaderPath;
@@ -15,11 +29,14 @@ public:
 		const std::string meshPath;
 		const std::string texturePath;
 		const ShaderLoadInfo* shaderInfo;
-		LoadInfo(const std::string& mPath, const std::string& tPath, const ShaderLoadInfo* sInfo) : meshPath(mPath), texturePath(tPath), shaderInfo(sInfo){}
+		const CollisionType collisionType;
+		const CollisionShapeType collisionShapeType;
+		LoadInfo(const std::string& mPath, const std::string& tPath, const ShaderLoadInfo* sInfo, const CollisionType cType, const CollisionShapeType cSType) : meshPath(mPath), texturePath(tPath), shaderInfo(sInfo), collisionType(cType), collisionShapeType(cSType){}
 	};
 	static const LoadInfo* TABLE;
 	static const LoadInfo* DUCK;
 	static const LoadInfo* BED;
 	static const LoadInfo* ROOM;
 	static const LoadInfo* DOOR;
+
 };
