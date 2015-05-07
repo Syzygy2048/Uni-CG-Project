@@ -188,7 +188,9 @@ int main() {
 		}
 
 		glLoadMatrixf(&viewProjectionMatrix[0][0]);
-		//physics->renderCollisionShapes();
+
+		physics->renderCollisionShapes();
+		
 		renderer->drawText(text);
 		
 		glfwSwapBuffers(renderer->getWindow());

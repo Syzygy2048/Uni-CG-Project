@@ -63,6 +63,7 @@ physx::PxMaterial* PhysicsHandler::createPhysicsMaterial(float staticFriction, f
 
 void PhysicsHandler::renderCollisionShapes()
 {
+#ifdef _DEBUG
 	const physx::PxRenderBuffer& rb = physicsScene->getRenderBuffer();
 	for (physx::PxU32 i = 0; i < rb.getNbLines(); i++)
 	{
@@ -74,6 +75,7 @@ void PhysicsHandler::renderCollisionShapes()
 		glVertex3f(line.pos1.x, line.pos1.y, line.pos1.z);
 		glEnd();
 	}
+#endif
 }
 
 physx::PxShape* PhysicsHandler::createSphereShape()
