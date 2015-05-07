@@ -25,9 +25,17 @@ int Renderer::init()
 	}
 
 	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
+#ifdef _DEBUG
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2); // We want OpenGL 3.3
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+
+#else
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // We want OpenGL 3.3
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
+#endif
+	
 
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 	
@@ -65,9 +73,6 @@ GLFWwindow* Renderer::getWindow()
 	return window;
 }
 
-
-
-
 void Renderer::enableVertexAttribArray(int id)
 {
 	glEnableVertexAttribArray(id);
@@ -79,12 +84,10 @@ void Renderer::disableVertexAttribArray(int id)
 
 void Renderer::setVertexAttribPointer(int id, int size, GLenum type, GLboolean normalized, int stride, const GLvoid* pointer)
 {
-	//bindBuffer(bufferType, bufferID);
 	enableVertexAttribArray(id);
 	glVertexAttribPointer(id, size, type, normalized, stride, pointer);
 }
 
-//possibly add buffer type when needed, or create specific functions for  buffer types. this might be wrong though as we technically went the renderer calls to be independant of OGL specific things like GLuint.
 void Renderer::generateBufferObject(GLuint* bufferID)
 {
 	glGenBuffers(1, bufferID);
@@ -114,38 +117,41 @@ void Renderer::bindVertexArray(GLuint vertexArrayId)
 
 void Renderer::draw(MeshNode* node)
 {
-	GLuint shaderID = node->getShaderID();
-	this->useShader(shaderID, node);
+	this->useShader(node);
 	
 	bindVertexArray(node->getVao());
 	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);
 	bindVertexArray(0);
-
-	//texture->~Texture();
+	glUseProgram(0);
 }
 
-void Renderer::useShader(GLuint shaderID, MeshNode* node)
+
+void Renderer::linkShader(ShaderProgram* shader)
 {
-	glUseProgram(shaderID);
+	glUseProgram(shader->getShaderId());
+}
+void Renderer::useShader(MeshNode* node)
+{
+	ShaderProgram* shaderProgram = node->getShaderProgram();
+	glUseProgram(shaderProgram->getShaderId());
+	
+	shaderProgram->fillUniformLocation(node);
+}
 
-	glm::mat4 MVP = node->getModelViewProjectionMatrix();
-	GLuint MatrixID = glGetUniformLocation(shaderID, "MVP");
-	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+void Renderer::drawText(Text* text)
+{
 
-	Texture* texture = node->getTexture("duck.png", shaderID);
-	texture->bind(0);
-	GLuint tex_location = glGetUniformLocation(shaderID, "myTextureSampler");
-	glUniform1i(tex_location, 0);
+	bindVertexArray(text->getVAO());
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glm::mat4 V = node->getViewMatrix();
-	GLuint viewMatrixID = glGetUniformLocation(shaderID, "V");
-	glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &V[0][0]);
+	// Draw call
+	glDrawArrays(GL_TRIANGLES, 0, text->getVerticesSize());
 
-	glm::mat4 M = node->propagateMatrix();
-	GLuint modelMatrixID = glGetUniformLocation(shaderID, "M");
-	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &M[0][0]);
+	glDisable(GL_BLEND);
+}
 
-	GLuint lightID = glGetUniformLocation(shaderID, "LightPosition_worldspace");
-	glm::vec3 pos = glm::vec3(4, 4, 4);
-	glUniform3f(lightID, pos.x, pos.y, pos.z);
+void Renderer::useShader(Text* text)
+{
+	text->useShader(text);
 }

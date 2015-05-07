@@ -6,6 +6,7 @@
 
 #include "..\Shader\LightingShaderProgram.h"
 #include "..\Shader\TextureShaderProgram.h"
+#include "..\Shader\SimpleLightingShaderProgram.h"
 
 
 
@@ -24,8 +25,6 @@ GLuint ShaderImporter::loadShader(std::string shaderPath)
 {
 	
 	GLuint shaderID;
-	
-	
 		if (shaderPath.find("Vertex") != std::string::npos)
 			shaderID = glCreateShader(GL_VERTEX_SHADER);
 		else if (shaderPath.find("Fragment") != std::string::npos)
@@ -61,7 +60,7 @@ GLuint ShaderImporter::loadShader(std::string shaderPath)
 	return shaderID;
 }
 
-ShaderProgram* ShaderImporter::loadShaderProgram(MeshLoadInfo::ShaderLoadInfo* shader)
+ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadInfo* shader)
 {
 	if (shaderPrograms.find(shader) != shaderPrograms.end()) {
 		return shaderPrograms.find(shader)->second;
@@ -72,6 +71,21 @@ ShaderProgram* ShaderImporter::loadShaderProgram(MeshLoadInfo::ShaderLoadInfo* s
 	glAttachShader(shaderProgramID, vertexShaderID);
 	glAttachShader(shaderProgramID, fragmentShaderID);
 	glLinkProgram(shaderProgramID);
+	
+	GLint isLinked = 0;
+	glGetProgramiv(shaderProgramID, GL_LINK_STATUS, &isLinked);
+	if (isLinked == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetProgramiv(shaderProgramID, GL_INFO_LOG_LENGTH, &maxLength);
+
+		//The maxLength includes the NULL character
+		std::vector<GLchar> shaderErrorMessage(maxLength);
+		glGetProgramInfoLog(shaderProgramID, maxLength, &maxLength, &shaderErrorMessage[0]);
+		fprintf(stdout, "%s\n", &shaderErrorMessage[0]);
+		//std::cerr << infoLog << std::endl;
+	}	
+
 	ShaderProgram* result = nullptr;
 	if (shader == MeshLoadInfo::LIGHTING_SHADER)
 	{
@@ -81,8 +95,11 @@ ShaderProgram* ShaderImporter::loadShaderProgram(MeshLoadInfo::ShaderLoadInfo* s
 	{
 		result = new TextureShaderProgram(shaderProgramID);
 	}
-	result->loadUniformLocations();
-	shaderPrograms.insert(std::pair<MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
+	else if (shader == MeshLoadInfo::SIMPLE_LIGHTING_SHADER)
+	{
+		result = new SimpleLightingShaderProgram(shaderProgramID);
+	}
+	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;
 }
 

@@ -7,7 +7,10 @@
 #include "../Texture.h"
 #include "../InputHandler.h"
 #include "../Importers/MeshLoadInfo.h"
+#include "../Shader/ShaderProgram.h"
+#include "../Physics/PhysicsHandler.h"
 
+class ShaderProgram;
 
 class MeshNode :
 	public SceneNode
@@ -20,6 +23,9 @@ public:
 	//MeshNode should only store the data and pass calls through itself.
 	void prepareForRendering();
 	void unprepareForRendering();
+	
+	//needs to be called after inserting into the scenegraph because it needs the position which is defined by the parent transform nodes
+	void createCollisionShape(PhysicsHandler* physicsHandler);
 
 	virtual void update(double timeStep, InputHandler* input);
 	//this takes both the viewprojection matrix as well as the individual matrices so that they don't have to be multiplied per object per frame.
@@ -30,7 +36,7 @@ public:
 
 	GLuint getUV();
 
-	virtual glm::mat4 propagateMatrix();
+	virtual glm::highp_mat4 propagateMatrix();
 
 	glm::mat4 getModelViewProjectionMatrix();
 	glm::mat4 getViewProjectionMatrix();
@@ -38,8 +44,23 @@ public:
 	glm::mat4 getViewMatrix();
 	glm::mat4 getProjectionMatrix();
 
-	GLuint getShaderID();
-	Texture* getTexture(const char* path, GLuint shaerID);
+	Texture* getTexture();
+
+	GLuint getMVPLocation();
+	GLuint getTextureLocation();
+	ShaderProgram* getShaderProgram();
+
+	const MeshLoadInfo::LoadInfo* getLoadInfo();
+
+	SceneNode* getParent();
+
+	void removeCollisionShape();
+
+
+
+	bool SUBMISSION1_ANIMATION_HACK = false;
+	glm::highp_float SUBMISSION1_ANIMATION_HACK_DOOR_ROTATION_AMOUNT = 90;
+
 private:
 	aiMesh* triangleMesh;
 
@@ -54,15 +75,19 @@ private:
 	int normalAttribPointer;
 	int textureAttribPointer;
 
-	glm::mat4 modelMatrix;
+	glm::highp_mat4 modelMatrix;
 	glm::mat4 viewMatrix;
 	glm::mat4 projectionMatrix;
 	glm::mat4 viewProjectionMatrix;
 	
-	GLuint shaderID;
-	Texture* texture;
+	GLuint myShaderID;
+	Texture* myTexture;
 	bool textureInit;
 
-	MeshLoadInfo* loadInfo;
+	const MeshLoadInfo::LoadInfo* loadInfo;
+	ShaderProgram* shaderProgram;
+
+	physx::PxRigidActor* physicsActor;
+
 };
 

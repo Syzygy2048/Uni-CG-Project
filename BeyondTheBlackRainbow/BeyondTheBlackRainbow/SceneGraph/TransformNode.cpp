@@ -11,7 +11,17 @@ TransformNode::~TransformNode()
 {
 }
 
-glm::mat4 TransformNode::propagateMatrix()
+glm::highp_mat4 TransformNode::propagateMatrix()
 {
 	return transformMatrix * parent->propagateMatrix();	
+}
+
+glm::highp_mat4 TransformNode::getTransform()
+{
+	return transformMatrix;
+}
+
+void TransformNode::setNewTransform(glm::highp_mat4 newTransformMatrix)
+{
+	transformMatrix = newTransformMatrix;
 }

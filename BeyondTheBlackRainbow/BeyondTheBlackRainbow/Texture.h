@@ -14,6 +14,8 @@ public:
 
 	void bind(int unit);
 
+	GLuint getTextureID();
+
 private:
 
 	GLubyte* texture;

@@ -6,4 +6,5 @@ static enum NodeType{
 	MESH_NODE,
 	LIGHT_NODE,
 	CAMERA_NODE,
+	PLAYER_NODE
 };

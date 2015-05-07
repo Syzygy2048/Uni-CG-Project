@@ -8,6 +8,12 @@
 #include "SceneGraphEnum.h"
 #include "../InputHandler.h"
 
+#include "../Event/EventEnums.h"
+class EventManager;
+#include "../Event/EventManager.h"
+class Event;
+#include "../Event/Event.h"
+
 class SceneNode
 {
 public:
@@ -17,16 +23,37 @@ public:
 	void setParent(SceneNode* parent);
 	virtual void update(double timeStep, InputHandler* input);
 	//virtual void draw();
-	virtual glm::mat4 propagateMatrix();
+	virtual glm::highp_mat4 propagateMatrix();
 	void attachChild(SceneNode* child);
 	bool detachChild(SceneNode* child);
 
+	NodeType getType();
+
+	UUID* getUuid();
+
+	bool receiveEvent(UUID target, EventTrigger eventTrigger, SceneNode* caller);
+	bool receiveSpecificEvent(EventTrigger eventTrigger, EventIdentifier eventIdentifier, SceneNode* caller);
+	
+	void setEventManager(EventManager* eventManager);
+
+	void registerEvent(Event* event);
+
+
+	
+	
+	EventManager* getEventManager();
+
 protected:
 	SceneNode* parent;
+	EventManager* eventManager;
+	std::vector<Event*> eventList;
+
 private:
 	std::vector<SceneNode*> childList;	
 
-	const UUID objectId;
+	UUID uuid;
 	const NodeType nodeType;
+
+	virtual void triggerEvent(EventTrigger eventTrigger, SceneNode* caller);
 };
 

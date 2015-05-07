@@ -11,10 +11,13 @@ public:
 	TransformNode(UUID uuid, glm::mat4 transform);
 	~TransformNode();
 
-	virtual glm::mat4 propagateMatrix();
+	virtual glm::highp_mat4 propagateMatrix();
+
+	glm::highp_mat4 getTransform();
+	void setNewTransform(glm::highp_mat4 newTransformMatrix);
 
 private:
-	glm::mat4 transformMatrix;
+	glm::highp_mat4 transformMatrix;
 
 };
 

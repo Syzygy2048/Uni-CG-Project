@@ -14,11 +14,17 @@
     <ClCompile Include="SceneGraph\TransformNode.cpp" />
     <ClCompile Include="Shader\LightingShaderProgram.cpp" />
     <ClCompile Include="Shader\ShaderProgram.cpp" />
-    <ClCompile Include="Light.cpp" />
     <ClCompile Include="SceneGraph\CameraNode.cpp" />
     <ClCompile Include="Physics\PhysicsHandler.cpp" />
     <ClCompile Include="Importers\ShaderImporter.cpp" />
     <ClCompile Include="Shader\TextureShaderProgram.cpp" />
+    <ClCompile Include="SceneGraph\LightNode.cpp" />
+    <ClCompile Include="Shader\SimpleLightingShaderProgram.cpp" />
+    <ClCompile Include="SceneGraph\PlayerNode.cpp" />
+    <ClCompile Include="Text\Text.cpp" />
+    <ClCompile Include="Event\EventManager.cpp" />
+    <ClCompile Include="Event\Event.cpp" />
+    <ClCompile Include="Event\EventFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLDebug.h" />
@@ -36,15 +42,24 @@
     <ClInclude Include="SceneGraph\TransformNode.h" />
     <ClInclude Include="Shader\LightingShaderProgram.h" />
     <ClInclude Include="Shader\ShaderProgram.h" />
-    <ClInclude Include="Light.h" />
     <ClInclude Include="SceneGraph\CameraNode.h" />
     <ClInclude Include="Physics\PhysicsHandler.h" />
     <ClInclude Include="Importers\ShaderImporter.h" />
     <ClInclude Include="Shader\TextureShaderProgram.h" />
+    <ClInclude Include="SceneGraph\LightNode.h" />
+    <ClInclude Include="Shader\SimpleLightingShaderProgram.h" />
+    <ClInclude Include="SceneGraph\PlayerNode.h" />
+    <ClInclude Include="Text\Text.h" />
+    <ClInclude Include="Event\EventManager.h" />
+    <ClInclude Include="Event\Event.h" />
+    <ClInclude Include="Event\EventEnums.h" />
+    <ClInclude Include="Event\EventFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleFragmentShader.fragmentshader" />
     <None Include="SimpleVertexShader.vertexshader" />
     <None Include="Shader\Fragment\TextureShader.fragmentshader" />
+    <None Include="Shader\Fragment\SimpleFragmentShader.fragmentshader" />
+    <None Include="Shader\Vertex\SimpleVertexShader.vertexshader" />
   </ItemGroup>
 </Project>
