@@ -96,14 +96,12 @@ void MeshNode::prepareForRendering()
 
 void MeshNode::createCollisionShape(PhysicsHandler* physicsHandler)
 {
-	std::cerr << " new object " << std::endl;
 	glm::highp_mat4 modelMatrix = propagateMatrix();
 	physicsActor = physicsHandler->createRigidActor(glm::mat4(propagateMatrix()), triangleMesh, loadInfo);
 	char* uuidString;
 	UuidToString(getUuid(), (RPC_CSTR*)&uuidString);
 	
 	physicsActor->setName(uuidString);
-	std::cerr << loadInfo->meshPath << " - " << uuidString << std::endl;
 	physicsHandler->addActorToScene(physicsActor);
 }
 
@@ -124,7 +122,10 @@ void MeshNode::update(double timeStep, InputHandler* input)
 		if (SUBMISSION1_ANIMATION_HACK)
 		{
 			if (SUBMISSION1_ANIMATION_HACK_DOOR_ROTATION_AMOUNT < 0)
+			{
+				//createCollisionShape();
 				SUBMISSION1_ANIMATION_HACK = false;
+			}
 			TransformNode* node = (TransformNode *)parent;
 			
 			glm::highp_mat4 trans = node->getTransform();

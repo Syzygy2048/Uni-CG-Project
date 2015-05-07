@@ -19,6 +19,31 @@
 #include "Text\Text.h"
 #include "Event\EventFactory.h"
 
+
+
+void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::vector<MeshNode*>* drawArray)
+{
+	
+	for (int i = 0; i < 20; i++){
+		float randomX = ((std::rand() % 100) - 50) / 100.f;
+		float randomY = ((std::rand() % 100) - 50) / 100.f;
+		float randomZ = ((std::rand() % 100) - 50) / 100.f;
+		SceneNode* debugTransform = new TransformNode(generateUuid(), glm::mat4(
+		0.1, 0, 0, 0,
+		0, 0.1, 0, 0,
+		0, 0, 0.1, 0,
+		1 + randomX, 2 + randomY, -3.5 + randomZ, 1));
+		MeshNode* debugMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
+		debugTransform->attachChild(debugMesh);
+		sceneGraph->attachChild(debugTransform);
+		drawArray->push_back(debugMesh);
+		debugMesh->prepareForRendering();
+		debugMesh->createCollisionShape(physicsHandler);
+	}
+}
+
+
+
 int main() {
 
 	Renderer* renderer = Renderer::getInstance();
@@ -136,19 +161,7 @@ int main() {
 	bedMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER));
 	doorMesh->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR));
 
-
-	/*SceneNode* debugTransform = new TransformNode(generateUuid(), glm::mat4(
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		2, 3, -2.3, 1));
-	MeshNode* debugMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
-	debugTransform->attachChild(debugMesh);
-	sceneGraph->attachChild(debugTransform);
-	drawArray.push_back(debugMesh);
-	debugMesh->prepareForRendering();
-	debugMesh->createCollisionShape(physics); */
-	
+	spawn20Ducks(sceneGraph, physics, &drawArray);
 	
 	
 	

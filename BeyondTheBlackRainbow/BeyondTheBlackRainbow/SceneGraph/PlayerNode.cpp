@@ -92,7 +92,7 @@ void PlayerNode::update(double deltaTime, InputHandler* input)
 
 	TransformNode* node;
 	glm::mat4 parentTransform;
-	glm::vec3 positionViewHack = glm::vec3(position.x, position.y + 0.7, position.z);
+	glm::vec3 positionViewHack = glm::vec3(position.x, position.y + 0.7, position.z);	//bumps up the camera position by 0.7
 	if (parent->getType() == NodeType::TRANSFORM_NODE)
 	{
 		node = (TransformNode*)parent;
@@ -119,12 +119,19 @@ void PlayerNode::update(double deltaTime, InputHandler* input)
 			else
 			{
 				UUID id;
+				/*if (std::string("player").compare(std::string(hit.block.actor->getName())))
+				{
+					std::cerr << "raytrace hit the player, this is a bug, please aim more up or down to hit the actual object" << std::endl;
+				} */
 				UuidFromString((RPC_CSTR)hit.block.actor->getName(), &id);
 				eventManager->eventTriggered(id, EventTrigger::RAYTRACE_HIT, this);
 			}
 		}
 
 
+	}
+	if (position.y >= 3.6 && position.z < -14.5){
+		std::cerr << "YOU HAVE WON!" << std::endl;
 	}
 }
 

@@ -80,7 +80,7 @@ void PhysicsHandler::renderCollisionShapes()
 
 physx::PxShape* PhysicsHandler::createSphereShape()
 {
-	return physicsSDK->createShape(physx::PxSphereGeometry(1.05f), *createPhysicsMaterial(90, 90, 0.9));
+	return physicsSDK->createShape(physx::PxSphereGeometry(0.05f), *createPhysicsMaterial(90, 90, 0.9));
 }
 
 physx::PxRigidActor* PhysicsHandler::createRigidActor(glm::mat4 modelMatrix, aiMesh* mesh, const MeshLoadInfo::LoadInfo* loadInfo)
