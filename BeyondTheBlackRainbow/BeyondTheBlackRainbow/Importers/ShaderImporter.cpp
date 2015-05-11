@@ -53,10 +53,11 @@ GLuint ShaderImporter::loadShader(std::string shaderPath)
 	// Check Shader
 	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &result);
 	glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &logLength);
-	std::vector<char> shaderErrorMessage(logLength);
-	glGetShaderInfoLog(shaderID, logLength, NULL, shaderErrorMessage.data());
-	fprintf(stdout, "%s\n", &shaderErrorMessage[0]);	
-
+	if (logLength > 0){
+		std::vector<char> shaderErrorMessage(logLength);
+		glGetShaderInfoLog(shaderID, logLength, NULL, shaderErrorMessage.data());
+		fprintf(stdout, "%s\n", &shaderErrorMessage[0]);	
+	}
 	return shaderID;
 }
 

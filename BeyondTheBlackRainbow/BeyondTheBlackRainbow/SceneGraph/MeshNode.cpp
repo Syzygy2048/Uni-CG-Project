@@ -145,7 +145,7 @@ void MeshNode::update(double timeStep, InputHandler* input)
 		//physx::PxReal rotAngle(0);
 		//trans.q.toRadiansAndUnitAxis(rotAngle, rotAxis);
 		//oldPosition = position;
-		glm::vec3 position(pos.x, pos.y, pos.z);
+		//glm::vec3 position(pos.x, pos.y, pos.z);
 
 		//glm::vec3 rotationAxis(rotAxis.x, rotAxis.y, rotAxis.z);
 		//glm::quat newQuat(trans.q.w, trans.q.x, trans.q.y, trans.q.z); // glm::angleAxis(rotAngle, rotationAxis);
@@ -155,36 +155,40 @@ void MeshNode::update(double timeStep, InputHandler* input)
 		glm::highp_mat4 modelMatrix = propagateMatrix();
 		glm::highp_mat4 transMatrix = node->getTransform();
 
-		//glm::highp_mat4 modelWithoutTrans = glm::inverse(transMatrix) * modelMatrix;
+		glm::highp_mat4 modelWithoutTrans = glm::inverse(transMatrix) * modelMatrix;
 
-		//physx::PxMat44 physicsMatrix(trans);
-		//glm::highp_mat4 glmMatrix = glm::highp_mat4(
-		//physicsMatrix.column0.x, physicsMatrix.column0.y, physicsMatrix.column0.z, physicsMatrix.column0.w,
-		//physicsMatrix.column1.x, physicsMatrix.column1.y, physicsMatrix.column1.z, physicsMatrix.column1.w,
-		//physicsMatrix.column2.x, physicsMatrix.column2.y, physicsMatrix.column2.z, physicsMatrix.column2.w,
-		//physicsMatrix.column3.x, physicsMatrix.column3.y, physicsMatrix.column3.z, physicsMatrix.column3.w);
-		//glm::highp_mat4 difference = glm::inverse(modelWithoutTrans) * glmMatrix;
+		physx::PxMat44 physicsMatrix(trans);
+		glm::highp_mat4 glmMatrix = glm::highp_mat4(
+			physicsMatrix.column0.x, physicsMatrix.column0.y, physicsMatrix.column0.z, physicsMatrix.column0.w,
+			physicsMatrix.column1.x, physicsMatrix.column1.y, physicsMatrix.column1.z, physicsMatrix.column1.w,
+			physicsMatrix.column2.x, physicsMatrix.column2.y, physicsMatrix.column2.z, physicsMatrix.column2.w,
+			physicsMatrix.column3.x, physicsMatrix.column3.y, physicsMatrix.column3.z, physicsMatrix.column3.w);
+		glm::highp_mat4 difference = glm::inverse(modelWithoutTrans) * glmMatrix;
 
-		//transMatrix = difference * transMatrix ; */
+		physx::PxMat44 noRotation = trans.getInverse() * trans;
+
+		//transMatrix.
+		transMatrix = transMatrix * difference;
 
 		
 		//glm::quat oldQuat = glm::quat_cast(modelMatrix); 
 
 		//glm::quat deltaQuat = newQuat * glm::inverse(oldQuat);
 		
-		position = position - glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]);	//position difference between old and new transform after physics simulation
+		//position = position - glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]);	//position difference between old and new transform after physics simulation
 		
 		
 		//glm::vec3 transToZero(transMatrix[3]);
 		
 		//transMatrix = glm::mat4_cast(deltaQuat) * transMatrix;
-		transMatrix = glm::translate(transMatrix, glm::highp_vec3(position));
+		//transMatrix = glm::translate(transMatrix, glm::highp_vec3(position));
 		//transMatrix = glm::translate(transMatrix, -transToZero);
 		
 		//transMatrix = glm::rotate(glm::highp_mat4(transMatrix), glm::angle(deltaQuat), glm::highp_vec3(0,1,0));;
 		//transMatrix = glm::translate(transMatrix, transToZero);
+		//glm::scatransMatrix->
 		
-		node->setNewTransform(transMatrix);
+		node->setNewTransform(difference);
 	}
 	else
 	{
