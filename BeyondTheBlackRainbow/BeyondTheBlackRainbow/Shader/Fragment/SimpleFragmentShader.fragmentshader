@@ -5,22 +5,26 @@ in vec2 UV;
 in vec3 Position_worldspace;
 in vec3 Normal_cameraspace;
 in vec3 EyeDirection_cameraspace;
-in vec3 LightDirection_cameraspace;
+//in vec3 LightDirection_cameraspace;
+in vec3 vertexPosition_cameraspace;
 
 // Ouput data
 out vec3 color;
 
 // Values that stay constant for the whole mesh.
 uniform sampler2D myTextureSampler;
-uniform mat4 MV;
+uniform mat4 V;
 uniform vec3 LightPosition_worldspace;
 
 void main(){
 
+	vec3 LightPosition_cameraspace = ( V * vec4(LightPosition_worldspace,1)).xyz;
+	vec3 LightDirection_cameraspace = LightPosition_cameraspace - vertexPosition_cameraspace;
+
 	// Light emission properties
 	// You probably want to put them as uniforms
 	vec3 LightColor = vec3(1,1,1);
-	float LightPower = 5.0f;
+	float LightPower = 3.0f;
 	
 	// Material properties
 	vec3 MaterialDiffuseColor = texture2D( myTextureSampler, UV ).rgb;
@@ -44,7 +48,7 @@ void main(){
 	// Eye vector (towards the camera)
 	vec3 E = normalize(EyeDirection_cameraspace);
 	// Direction in which the triangle reflects the light
-	vec3 R = reflect(-l,n);
+	vec3 R = reflect(l,n);
 	// Cosine of the angle between the Eye vector and the Reflect vector,
 	// clamped to 0
 	//  - Looking into the reflection -> 1
