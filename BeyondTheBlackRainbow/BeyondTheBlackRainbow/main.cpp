@@ -29,10 +29,10 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 		float randomY = ((std::rand() % 100) - 50) / 100.f;
 		float randomZ = ((std::rand() % 100) - 50) / 100.f;
 		SceneNode* debugTransform = new TransformNode(generateUuid(), glm::mat4(
-		0.1, 0, 0, 0,
-		0, 0.1, 0, 0,
-		0, 0, 0.1, 0,
-		1 + randomX, 2 + randomY, -3.5 + randomZ, 1));
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		2 + randomX, 2 + randomY, -3.5 + randomZ, 1));
 		MeshNode* debugMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
 		debugTransform->attachChild(debugMesh);
 		sceneGraph->attachChild(debugTransform);
@@ -108,9 +108,9 @@ int main() {
 		0, 0, 0, 1));
 	//glm::rotate(transformNodeRoom->propagateMatrix(), 90.0f , glm::vec3(1, 0, 0));
 	SceneNode* transformNodeDuck = new TransformNode(generateUuid(), glm::mat4(
-		0.1, 0, 0, 0,
-		0, 0.1, 0, 0,
-		0, 0, 0.1, 0,
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
 		1, -0.1, -3.5, 1));
 	SceneNode* transformNodeBed = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
@@ -143,7 +143,7 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		2, 0, -3, 1));
+		2, 0, -2.5, 1));
 
 	PlayerNode* player = new PlayerNode(generateUuid());
 	playerTransform->attachChild(activeCamera);
