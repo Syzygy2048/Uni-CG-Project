@@ -59,7 +59,7 @@ int main() {
 	physics->initPhysics();
 
 	Text* text = new Text("Escape!", MeshLoadInfo::TEXT);
-	text->prepareText();
+	text->prepareText(25.0f, 25.0f, 1.0f);
 	
 
 	std::map<std::string, CameraNode*> cameraList;
@@ -197,6 +197,8 @@ int main() {
 		glm::mat4 viewMatrix = activeCamera->getViewMatrix();
 		glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 		for (MeshNode* node : drawArray){
+			text->draw(projectionMatrix);
+
 			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix);
 		}
 
@@ -204,7 +206,6 @@ int main() {
 
 		physics->renderCollisionShapes();
 		
-		text->draw(projectionMatrix, 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 		
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();

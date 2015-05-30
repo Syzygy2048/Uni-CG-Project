@@ -3,25 +3,24 @@
 #include <GL\glew.h>
 #include <glm\glm.hpp>
 #include <map>
-#include <ft2build.h>
-#include FT_FREETYPE_H
 #include <iostream>
 
 #include "../Shader/ShaderProgram.h"
+#include "../Texture.h"
 
 class ShaderProgram;
 
 class Text
 {
 public:
-	Text(std::string text, const MeshLoadInfo::LoadInfo* meshLoadInfo);
+	Text(const char* text, const MeshLoadInfo::LoadInfo* meshLoadInfo);
 	~Text();
 
-	void prepareText();
+	void prepareText(GLfloat x, GLfloat y, GLfloat scale);
 	GLuint getVAO();
 	int getVerticesSize();
-	GLuint getTexture();
-	void draw(glm::mat4 projectionMatrix, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+	Texture* getTexture();
+	void draw(glm::mat4 projectionMatrix);
 	glm::mat4 getProjectionMatrix();
 	ShaderProgram* getShaderProgram();
 	glm::vec3 getColor();
@@ -40,10 +39,10 @@ public:
 private:
 
 	const MeshLoadInfo::LoadInfo* loadInfo;
-	std::string text;
-	FT_Library ft;
-	FT_Face face;
-	GLuint texture;
+	const char * text;
+	/*FT_Library ft;
+	FT_Face face;*/
+	Texture* texture;
 	ShaderProgram* shaderProgram;
 	glm::mat4 projectionMatrix;
 	glm::vec3 color;
