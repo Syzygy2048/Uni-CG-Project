@@ -40,3 +40,8 @@ void LightingShaderProgram::fillUniformLocation(MeshNode* node)
 	//glUniform3fv(locationLightInvDirection_worldspace, 1, GL_FALSE, node->getLightDirection());
 	//glUniformMatrix4fv(locationDepthBiasMVP, 1, GL_FALSE, node->getDepthBiasMVP());
 }
+
+void LightingShaderProgram::fillUniformLocation(Text* text)
+{
+
+}

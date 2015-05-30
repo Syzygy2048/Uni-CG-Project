@@ -6,20 +6,20 @@ in vec3 Position_worldspace;
 in vec3 Normal_cameraspace;
 in vec3 EyeDirection_cameraspace;
 in vec3 LightDirection_cameraspace;
-in vec4 ShadowCoord;
+//in vec4 ShadowCoord;
 //fog variables
-const vec3 fog_colour = vec3 (0.2,0.2,0.2);
-const float min_fog = 3.0;
+const vec3 fog_colour = vec3 (0.5,0.5,0.5);
+const float min_fog = 6.0;
 const float max_fog = 60.0;
 
 // Ouput data
-out vec4 color;
+out vec3 color;
 
 // Values that stay constant for the whole mesh.
 uniform sampler2D myTextureSampler;
 uniform mat4 MV;
 uniform vec3 LightPosition_worldspace;
-uniform sampler2D shadowMap;
+//uniform sampler2D shadowMap;
 
 vec2 poissonDisk[16] = vec2[]( 
    vec2( -0.94201624, -0.39906216 ), 
@@ -51,12 +51,12 @@ void main(){
 
 	// Light emission properties
 	vec3 LightColor = vec3(1,1,1);
-	float LightPower = 1.0f;
+	float LightPower = 50.0f;
 	
 	// Material properties
 	vec3 MaterialDiffuseColor = texture2D( myTextureSampler, UV ).rgb;
-	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
-	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);
+	vec3 MaterialAmbientColor = vec3(0.5,0.5,0.5) * MaterialDiffuseColor;
+	vec3 MaterialSpecularColor = vec3(1.0,1.0,1.0);
 
 	
 			// Distance to the light
@@ -82,7 +82,7 @@ void main(){
 	// Eye vector (towards the camera)
 	vec3 E = normalize(EyeDirection_cameraspace);
 	// Direction in which the triangle reflects the light
-	vec3 R = reflect(-l,n);
+	vec3 R = reflect(l,n);
 	// Cosine of the angle between the Eye vector and the Reflect vector,
 	// clamped to 0
 	//  - Looking into the reflection -> 1
@@ -98,11 +98,11 @@ void main(){
 	float bias = 0.005*tan(acos(cosTheta));
 	bias = clamp(bias, 0,0.01);
 	
-	if( ShadowCoord.x <= 1 && ShadowCoord.x >= 0 && ShadowCoord.y <= 1 && ShadowCoord.y >= 0 ){
+	/*if( ShadowCoord.x <= 1 && ShadowCoord.x >= 0 && ShadowCoord.y <= 1 && ShadowCoord.y >= 0 ){
 		if ( texture( shadowMap, ShadowCoord.xy).x   <  ShadowCoord.z - bias){
 			visibility = 0.2;
 		}
-	}
+	}*/
 
 	vec3 help =
 			// Ambient : simulates indirect lighting
@@ -111,6 +111,6 @@ void main(){
 	visibility * MaterialDiffuseColor * LightColor * LightPower * cosTheta +
 			// Specular : reflective highlight, like a mirror
 	visibility * MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,5);
-	color.rgb = mix(help,fog_colour,fog_fac);
-	color.a = 0.5;
+	color = mix(help,fog_colour,fog_fac);
+	//color.a = 0.5;
 }

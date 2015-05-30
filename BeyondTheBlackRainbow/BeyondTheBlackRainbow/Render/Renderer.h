@@ -21,6 +21,7 @@ public:
 	
 	void fillBuffer(GLuint bufferID, GLenum bufferType, int bufferSize, GLvoid* bufferData, GLenum bufferUsage);
 	void bindBuffer(GLenum bufferType, GLuint bufferID);
+	void buffersSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void* data);
 
 	void generateVertexArray(GLuint* vertexBufferID);
 	void bindVertexArray(GLuint vertexArrayId);

@@ -59,3 +59,8 @@ void SimpleLightingShaderProgram::fillUniformLocation(MeshNode* node)
 	glUniform3f(locationLight, lightPos.x, lightPos.y, lightPos.z);
 
 }
+
+void SimpleLightingShaderProgram::fillUniformLocation(Text* text)
+{
+
+}

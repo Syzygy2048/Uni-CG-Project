@@ -58,8 +58,8 @@ int main() {
 	PhysicsHandler* physics = new PhysicsHandler();
 	physics->initPhysics();
 
-	Text* text = new Text();
-	text->prepareText("Escape!", 60, 0, 0);
+	Text* text = new Text("Escape!", MeshLoadInfo::TEXT);
+	text->prepareText();
 	
 
 	std::map<std::string, CameraNode*> cameraList;
@@ -204,7 +204,7 @@ int main() {
 
 		physics->renderCollisionShapes();
 		
-		renderer->drawText(text);
+		text->draw(projectionMatrix, 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 		
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();

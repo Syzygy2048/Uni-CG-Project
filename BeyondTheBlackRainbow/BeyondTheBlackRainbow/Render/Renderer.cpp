@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+
 Renderer::Renderer()
 {
 }
@@ -39,7 +40,7 @@ int Renderer::init()
 
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 	
-	window = glfwCreateWindow(1280, 720, "Taste the Rainbow", NULL, NULL);
+	window = glfwCreateWindow(1024, 768, "Taste the Rainbow", NULL, NULL);
 
 	if (window == NULL)
 	{
@@ -99,6 +100,12 @@ void Renderer::bindBuffer(GLenum bufferType, GLuint bufferID)
 	glBindBuffer(bufferType, bufferID);
 }
 
+void buffersSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void* data)
+{
+	glBufferSubData(target, offset, size, data);
+}
+
+
 void Renderer::fillBuffer(GLuint bufferID, GLenum bufferType, int bufferSize, GLvoid* bufferData, GLenum bufferUsage)
 {
 	bindBuffer(bufferType, bufferID);
@@ -130,6 +137,7 @@ void Renderer::linkShader(ShaderProgram* shader)
 {
 	glUseProgram(shader->getShaderId());
 }
+
 void Renderer::useShader(MeshNode* node)
 {
 	ShaderProgram* shaderProgram = node->getShaderProgram();
@@ -140,18 +148,24 @@ void Renderer::useShader(MeshNode* node)
 
 void Renderer::drawText(Text* text)
 {
+	this->useShader(text);
 
 	bindVertexArray(text->getVAO());
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// Draw call
-	glDrawArrays(GL_TRIANGLES, 0, text->getVerticesSize());
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC1_ALPHA);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	glDisable(GL_BLEND);
+	bindVertexArray(0);
+	glUseProgram(0);
+
 }
 
 void Renderer::useShader(Text* text)
 {
-	text->useShader(text);
+	ShaderProgram* shaderProgram = text->getShaderProgram();
+	glUseProgram(shaderProgram->getShaderId());
+
+	shaderProgram->fillUniformLocation(text);
 }
