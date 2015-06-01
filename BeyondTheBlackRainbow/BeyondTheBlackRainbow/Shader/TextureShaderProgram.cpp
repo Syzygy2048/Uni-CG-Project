@@ -20,7 +20,7 @@ void TextureShaderProgram::loadUniformLocations()
 	locationTexture = glGetUniformLocation(programId, "myTextureSampler");
 }
 
-void TextureShaderProgram::fillUniformLocation(MeshNode* node)
+void TextureShaderProgram::fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights)
 {
 	glm::mat4 MVP = node->getModelViewProjectionMatrix();
 	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, &MVP[0][0]);

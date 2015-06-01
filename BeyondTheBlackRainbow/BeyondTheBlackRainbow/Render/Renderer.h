@@ -3,10 +3,15 @@
 #include <GL/glew.h>
 #include <GLFW\glfw3.h>
 
-#include "../SceneGraph/MeshNode.h"
 #include "../InputHandler.h"
 #include "../Texture.h"
+#include "../SceneGraph/PlayerNode.h"
+#include "../SceneGraph/SceneGraphEnum.h"
+#include "../SceneGraph/SceneNode.h"
+#include "../SceneGraph/TransformNode.h"
+#include "../SceneGraph/MeshNode.h"
 #include "../SceneGraph/CameraNode.h"
+#include "../SceneGraph/LightNode.h"
 #include "../Text/Text.h"
 
 class Renderer
@@ -45,7 +50,8 @@ private:
 	
 	GLFWwindow* window;
 	
-	void useShader(MeshNode* node);
+	void useShader(MeshNode* node, std::vector<LightNode*> lights);
 	void useShader(Text* text);
+	std::vector<LightNode*> getLights(MeshNode* node);
 };
 

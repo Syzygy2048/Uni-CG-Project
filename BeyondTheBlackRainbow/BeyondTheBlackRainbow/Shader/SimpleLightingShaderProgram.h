@@ -10,7 +10,7 @@ public:
 	~SimpleLightingShaderProgram();
 
 	virtual void loadUniformLocations();
-	virtual void fillUniformLocation(MeshNode* node);
+	virtual void fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights);
 
 private:
 	GLuint locationMVP;
@@ -19,5 +19,6 @@ private:
 	GLuint locationTexture;
 	GLuint locationLight;
 	
+	void useLights(std::vector<LightNode*> lights);
 };
 

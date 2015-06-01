@@ -1,11 +1,18 @@
 #version 330 core
 
+struct PointLight {
+	vec3 position;
+	vec3 intensity;
+	vec3 color;
+};
+
+#define NR_POINT_LIGHTS 2
+
 // Interpolated values from the vertex shaders
 in vec2 UV;
 in vec3 Position_worldspace;
 in vec3 Normal_cameraspace;
 in vec3 EyeDirection_cameraspace;
-//in vec3 LightDirection_cameraspace;
 in vec3 vertexPosition_cameraspace;
 
 // Ouput data
@@ -14,25 +21,30 @@ out vec3 color;
 // Values that stay constant for the whole mesh.
 uniform sampler2D myTextureSampler;
 uniform mat4 V;
-uniform vec3 LightPosition_worldspace;
+uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 void main(){
 
-	vec3 LightPosition_cameraspace = ( V * vec4(LightPosition_worldspace,1)).xyz;
-	vec3 LightDirection_cameraspace = LightPosition_cameraspace - vertexPosition_cameraspace;
-
-	// Light emission properties
-	// You probably want to put them as uniforms
-	vec3 LightColor = vec3(1,1,1);
-	float LightPower = 3.0f;
-	
 	// Material properties
 	vec3 MaterialDiffuseColor = texture2D( myTextureSampler, UV ).rgb;
 	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);
 
+	for (int i = 0; i < NR_POINT_LIGHTS; i++) {
+
+	PointLight light = pointLights[i];
+
+	vec3 LightPosition_cameraspace = ( V * vec4(light.position,1)).xyz;
+	vec3 LightDirection_cameraspace = LightPosition_cameraspace - vertexPosition_cameraspace;
+
+	// Light emission properties
+	// You probably want to put them as uniforms
+	vec3 LightColor = light.color;
+	float LightPower = light.intensity.x;
+	
+
 	// Distance to the light
-	float distance = length( LightPosition_worldspace - Position_worldspace );
+	float distance = length( pointLights[i].position - Position_worldspace );
 
 	// Normal of the computed fragment, in camera space
 	vec3 n = normalize( Normal_cameraspace );
@@ -55,7 +67,7 @@ void main(){
 	//  - Looking elsewhere -> < 1
 	float cosAlpha = clamp( dot( E,R ), 0,1 );
 	
-	color = 
+	color += 
 		// Ambient : simulates indirect lighting
 		MaterialAmbientColor +
 		// Diffuse : "color" of the object
@@ -63,4 +75,5 @@ void main(){
 		// Specular : reflective highlight, like a mirror
 		MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,5) / (distance*distance);
 
+		}
 }

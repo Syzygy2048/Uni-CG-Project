@@ -137,3 +137,13 @@ EventManager* SceneNode::getEventManager()
 {
 	return eventManager;
 }
+
+std::vector<SceneNode*> SceneNode::getChildren()
+{
+	return childList;
+}
+
+SceneNode* SceneNode::getParent()
+{
+	return parent;
+}

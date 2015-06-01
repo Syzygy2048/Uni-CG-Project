@@ -71,6 +71,10 @@ int main() {
 	//this way we have a list of cameras and can switch between them as we want just by doing activeCamera = cameraList.find("whichever camera we want")->second;
 	cameraList.insert(std::pair<std::string, CameraNode*>(std::string("player camera"), activeCamera));
 	
+	//glm::vec3 lightPos = glm::vec3(2, 1.5, -2.5);
+	LightNode* firstLight = new LightNode(generateUuid(), glm::vec3(2, 1.5, -4), glm::vec3(3, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+	LightNode* secondLight = new LightNode(generateUuid(), glm::vec3(2, 1.5, -1), glm::vec3(3, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+
 	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TABLE);
 	MeshNode* duckMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
 	MeshNode* bedMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::BED);
@@ -131,6 +135,8 @@ int main() {
 	transformNodeRoom->attachChild(transformNodeDuck);
 	transformNodeRoom->attachChild(transformNodeBed);
 	transformNodeRoom->attachChild(transformNodeTable);
+	transformNodeRoom->attachChild(firstLight);
+	transformNodeRoom->attachChild(secondLight);
 	transformNodeDuck->attachChild(duckMesh);
 	transformNodeBed->attachChild(bedMesh);
 	transformNodeTable->attachChild(tableMesh);

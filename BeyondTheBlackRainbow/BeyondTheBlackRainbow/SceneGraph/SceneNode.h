@@ -21,6 +21,7 @@ public:
 	~SceneNode();
 
 	void setParent(SceneNode* parent);
+	SceneNode* getParent();
 	virtual void update(double timeStep, InputHandler* input);
 	//virtual void draw();
 	virtual glm::highp_mat4 propagateMatrix();
@@ -38,13 +39,14 @@ public:
 
 	void registerEvent(Event* event);
 
-
+	std::vector<SceneNode*> getChildren();
 	
 	
 	EventManager* getEventManager();
+	SceneNode* parent;
+
 
 protected:
-	SceneNode* parent;
 	EventManager* eventManager;
 	std::vector<Event*> eventList;
 

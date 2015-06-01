@@ -31,7 +31,7 @@ GLuint LightingShaderProgram::getLocationTexture()
 	return -1;
 }
 
-void LightingShaderProgram::fillUniformLocation(MeshNode* node)
+void LightingShaderProgram::fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights)
 {
 	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, &node->getModelViewProjectionMatrix()[0][0]);
 	//glUniformMatrix4fv(locationMVP, 1, GL_FALSE, node->getMV());

@@ -117,10 +117,12 @@ void Renderer::bindVertexArray(GLuint vertexArrayId)
 
 void Renderer::draw(MeshNode* node)
 {
-	this->useShader(node);
+		this->useShader(node, this->getLights(node));
+
+		bindVertexArray(node->getVao());
+
+		glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);	
 	
-	bindVertexArray(node->getVao());
-	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);
 	bindVertexArray(0);
 	glUseProgram(0);
 }
@@ -130,12 +132,35 @@ void Renderer::linkShader(ShaderProgram* shader)
 {
 	glUseProgram(shader->getShaderId());
 }
-void Renderer::useShader(MeshNode* node)
+void Renderer::useShader(MeshNode* node, std::vector<LightNode*> lights)
 {
 	ShaderProgram* shaderProgram = node->getShaderProgram();
 	glUseProgram(shaderProgram->getShaderId());
 	
-	shaderProgram->fillUniformLocation(node);
+	shaderProgram->fillUniformLocation(node, lights);
+}
+
+std::vector<LightNode*> Renderer::getLights(MeshNode* node)
+{
+	std::vector<LightNode*> lights;
+	SceneNode* parentNode = node->parent;
+	bool find = true;
+	while (find) {
+		if (parentNode != nullptr) {			
+			std::vector<SceneNode*> children = parentNode->getChildren();
+			for (int i = 0; i < children.size(); i++) {
+				if (children.at(i)->getType() == LIGHT_NODE) {
+					lights.push_back(dynamic_cast<LightNode*>(children.at(i)));
+				}
+			}
+			parentNode = parentNode->parent;
+		}
+		else {
+			find = false;
+		}
+	}
+	//std::cout << "Sum of lights: " << lights.size() << std::endl;
+	return lights;
 }
 
 void Renderer::drawText(Text* text)
