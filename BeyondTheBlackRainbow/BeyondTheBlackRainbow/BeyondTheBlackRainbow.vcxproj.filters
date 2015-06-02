@@ -25,6 +25,8 @@
     <ClCompile Include="Event\EventManager.cpp" />
     <ClCompile Include="Event\Event.cpp" />
     <ClCompile Include="Event\EventFactory.cpp" />
+    <ClCompile Include="SceneGraph\DirectionalLightNode.cpp" />
+    <ClCompile Include="SceneGraph\PointLightNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLDebug.h" />
@@ -54,6 +56,9 @@
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="Event\EventEnums.h" />
     <ClInclude Include="Event\EventFactory.h" />
+    <ClInclude Include="SceneGraph\LightsEnum.h" />
+    <ClInclude Include="SceneGraph\DirectionalLightNode.h" />
+    <ClInclude Include="SceneGraph\PointLightNode.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleFragmentShader.fragmentshader" />

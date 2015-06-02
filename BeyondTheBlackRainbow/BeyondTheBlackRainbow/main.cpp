@@ -13,8 +13,11 @@
 #include "Util\UuidHelper.h"
 #include "Importers\MeshImporter.h"
 #include "SceneGraph\TransformNode.h"
+#include "SceneGraph\LightsEnum.h"
 #include "SceneGraph\CameraNode.h"
 #include "SceneGraph\PlayerNode.h"
+#include "SceneGraph\PointLightNode.h"
+#include "SceneGraph\DirectionalLightNode.h"
 #include "Physics\PhysicsHandler.h"
 #include "Text\Text.h"
 #include "Event\EventFactory.h"
@@ -72,8 +75,10 @@ int main() {
 	cameraList.insert(std::pair<std::string, CameraNode*>(std::string("player camera"), activeCamera));
 	
 	//glm::vec3 lightPos = glm::vec3(2, 1.5, -2.5);
-	LightNode* firstLight = new LightNode(generateUuid(), glm::vec3(2, 1.5, -4), glm::vec3(3, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
-	LightNode* secondLight = new LightNode(generateUuid(), glm::vec3(2, 1.5, -1), glm::vec3(3, 1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2, 1.5, -4), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* secondLight = new PointLightNode(generateUuid(), glm::vec3(2, 1.5, -1), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* thirdLight = new DirectionalLightNode(generateUuid(), glm::vec3(0, 0, 0), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, 0, 3), LightType::DIRECTIONAL_LIGHT);
+	LightNode* fourthLight = new DirectionalLightNode(generateUuid(), glm::vec3(0, 2, 0), 1.0f, glm::vec3(0, 0, 1), glm::vec3(1, 1, 1), LightType::DIRECTIONAL_LIGHT);
 
 	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TABLE);
 	MeshNode* duckMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
@@ -137,6 +142,8 @@ int main() {
 	transformNodeRoom->attachChild(transformNodeTable);
 	transformNodeRoom->attachChild(firstLight);
 	transformNodeRoom->attachChild(secondLight);
+	transformNodeRoom->attachChild(thirdLight);
+	transformNodeRoom->attachChild(fourthLight);
 	transformNodeDuck->attachChild(duckMesh);
 	transformNodeBed->attachChild(bedMesh);
 	transformNodeTable->attachChild(tableMesh);

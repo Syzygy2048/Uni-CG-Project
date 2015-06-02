@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <glm\glm.hpp>
+#include "..\SceneGraph\LightsEnum.h"
 
 SimpleLightingShaderProgram::SimpleLightingShaderProgram(GLuint shaderProgramID) : ShaderProgram(shaderProgramID)
 {
@@ -69,28 +70,79 @@ void SimpleLightingShaderProgram::useLights(std::vector<LightNode*> lights)
 		glUniform3f(glGetUniformLocation(programId, "pointLights[0].position"), lights.at(0)->getPosition().x, lights.at(0)->getPosition().y, lights.at(0)->getPosition().z);
 		glUniform3f(glGetUniformLocation(programId, "pointLights[0].intensity"), lights.at(0)->getIntensity().x, lights.at(0)->getIntensity().y, lights.at(0)->getIntensity().z);
 		glUniform3f(glGetUniformLocation(programId, "pointLights[0].color"), lights.at(0)->getColor().x, lights.at(0)->getColor().y, lights.at(0)->getColor().z);
-	}*/
+		}*/
 
-	glUniform1f(glGetUniformLocation(programId, "sumLights"), lights.size());
+	/*float sumPointLights = 0;
+	float sumDirLights = 0;*/
 	for (int i = 0; i < lights.size(); i++) {
+		//if (lights.at(i)->getLightType() == POINT_LIGHT) {
 		std::stringstream position;
-		position << "pointLights[";
+		position << "lights[";
 		position << i;
 		position << "].position";
-	//auto loc = glGetUniformLocation(programId, position.str().c_str());
-	glUniform3f(glGetUniformLocation(programId, position.str().c_str()), lights.at(i)->getPosition().x, lights.at(i)->getPosition().y, lights.at(i)->getPosition().z);
-	std::stringstream intensity;
-	intensity << "pointLights[";
-	intensity << i;
-	intensity << "].intensity";
-	//auto loc2 = glGetUniformLocation(programId, intensity.str().c_str());
-	glUniform3f(glGetUniformLocation(programId, intensity.str().c_str()), lights.at(i)->getIntensity().x, lights.at(i)->getIntensity().y, lights.at(i)->getIntensity().z);
-	std::stringstream color;
-	color << "pointLights[";
-	color << i;
-	color << "].color";
-	//auto loc3 = glGetUniformLocation(programId, color.str().c_str());
-	glUniform3f(glGetUniformLocation(programId, color.str().c_str()), lights.at(i)->getColor().x, lights.at(i)->getColor().y, lights.at(i)->getColor().z);
-	//std::cout << "Position: " << lights.at(i)->getPosition().x << " " << lights.at(i)->getPosition().y << " " << lights.at(i)->getPosition().z << std::endl;
+		auto loc = glGetUniformLocation(programId, position.str().c_str());
+		glUniform3f(glGetUniformLocation(programId, position.str().c_str()), lights.at(i)->getPosition().x, lights.at(i)->getPosition().y, lights.at(i)->getPosition().z);
+		std::stringstream intensity;
+		intensity << "lights[";
+		intensity << i;
+		intensity << "].intensity";
+		auto loc2 = glGetUniformLocation(programId, intensity.str().c_str());
+		glUniform1f(glGetUniformLocation(programId, intensity.str().c_str()), lights.at(i)->getIntensity());
+		std::stringstream color;
+		color << "lights[";
+		color << i;
+		color << "].color";
+		auto loc3 = glGetUniformLocation(programId, color.str().c_str());
+		glUniform3f(glGetUniformLocation(programId, color.str().c_str()), lights.at(i)->getColor().x, lights.at(i)->getColor().y, lights.at(i)->getColor().z);
+		std::stringstream type;
+		type << "lights[";
+		type << i;
+		type << "].type";
+		auto loc4 = glGetUniformLocation(programId, type.str().c_str());
+		if (lights.at(i)->getLightType() == POINT_LIGHT) {
+			glUniform1f(glGetUniformLocation(programId, type.str().c_str()), 1.0f);
+		}
+		else if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) {
+			glUniform1f(glGetUniformLocation(programId, type.str().c_str()), 2.0f);
+			std::stringstream direction;
+			direction << "lights[";
+			direction << i;
+			direction << "].direction";
+			auto loc5 = glGetUniformLocation(programId, direction.str().c_str());
+			glUniform3f(glGetUniformLocation(programId, direction.str().c_str()), lights.at(i)->getDirection().x, lights.at(i)->getDirection().y, lights.at(i)->getDirection().z);
+			//std::cout << lights.at(i)->getDirection().x << " " << lights.at(i)->getDirection().y << " " << lights.at(i)->getDirection().z << std::endl;
+		}
+		//std::cout << "Position: " << lights.at(i)->getPosition().x << " " << lights.at(i)->getPosition().y << " " << lights.at(i)->getPosition().z << std::endl;
+		//sumPointLights++;
+		//}
+		//else if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT)
+		//{
+		//	std::stringstream position;
+		//	position << "dirLights[";
+		//	position << sumDirLights;
+		//	position << "].position";
+		//	auto loc = glGetUniformLocation(programId, position.str().c_str());
+		//	glUniform3f(glGetUniformLocation(programId, position.str().c_str()), lights.at(i)->getPosition().x, lights.at(i)->getPosition().y, lights.at(i)->getPosition().z);
+		//	std::stringstream intensity;
+		//	intensity << "dirLights[";
+		//	intensity << sumDirLights;
+		//	intensity << "].intensity";
+		//	auto loc2 = glGetUniformLocation(programId, intensity.str().c_str());
+		//	glUniform1f(glGetUniformLocation(programId, intensity.str().c_str()), lights.at(i)->getIntensity());
+		//	std::stringstream color;
+		//	color << "dirLights[";
+		//	color << sumDirLights;
+		//	color << "].color";
+		//	auto loc3 = glGetUniformLocation(programId, color.str().c_str());
+		//	glUniform3f(glGetUniformLocation(programId, color.str().c_str()), lights.at(i)->getColor().x, lights.at(i)->getColor().y, lights.at(i)->getColor().z);
+		//	std::stringstream direction;
+		//	direction << "dirLights[";
+		//	direction << sumDirLights;
+		//	direction << "].direction";
+		//	auto loc4 = glGetUniformLocation(programId, direction.str().c_str());
+		//	glUniform3f(glGetUniformLocation(programId, direction.str().c_str()), lights.at(i)->getDirection().x, lights.at(i)->getDirection().y, lights.at(i)->getDirection().z);
+		//	sumDirLights++;
+		//	//std::cout << "Position (DirLight): " << lights.at(i)->getPosition().x << " " << lights.at(i)->getPosition().y << " " << lights.at(i)->getPosition().z << std::endl;
+		//}
 	}
 }
