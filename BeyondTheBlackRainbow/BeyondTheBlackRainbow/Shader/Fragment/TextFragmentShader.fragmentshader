@@ -10,9 +10,5 @@ uniform sampler2D myTextureSampler;
 
 void main(){
 
-	//color = texture2D( myTextureSampler, 1.0 );
-	color = vec4(1.0, 1.0, 1.0, texture(myTextureSampler, UVcoords).r);
-	
-	//color = vec4(texture(myTextureSampler, UVcoords).rgb, 1.0);
-	
+	color = texture2D( myTextureSampler, UVcoords);
 }
