@@ -98,7 +98,6 @@
     <ClCompile Include="SceneGraph\MeshNode.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
-    <ClCompile Include="shader.cpp" />
     <ClCompile Include="Shader\ShaderProgram.cpp" />
     <ClCompile Include="Shader\SimpleLightingShaderProgram.cpp" />
     <ClCompile Include="Shader\TextShaderProgram.cpp" />
@@ -129,7 +128,6 @@
     <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="SceneGraph\SceneGraphEnum.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />
-    <ClInclude Include="shader.hpp" />
     <ClInclude Include="SceneGraph\TransformNode.h" />
     <ClInclude Include="Shader\ShaderProgram.h" />
     <ClInclude Include="Shader\SimpleLightingShaderProgram.h" />
@@ -145,8 +143,6 @@
     <None Include="Shader\Fragment\SimpleFragmentShader.fragmentshader" />
     <None Include="Shader\Fragment\TextureShader.fragmentshader" />
     <None Include="Shader\Vertex\SimpleVertexShader.vertexshader" />
-    <None Include="SimpleFragmentShader.fragmentshader" />
-    <None Include="SimpleVertexShader.vertexshader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

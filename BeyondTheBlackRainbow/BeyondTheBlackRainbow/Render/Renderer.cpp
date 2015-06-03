@@ -100,12 +100,6 @@ void Renderer::bindBuffer(GLenum bufferType, GLuint bufferID)
 	glBindBuffer(bufferType, bufferID);
 }
 
-void buffersSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void* data)
-{
-	glBufferSubData(target, offset, size, data);
-}
-
-
 void Renderer::fillBuffer(GLuint bufferID, GLenum bufferType, int bufferSize, GLvoid* bufferData, GLenum bufferUsage)
 {
 	bindBuffer(bufferType, bufferID);

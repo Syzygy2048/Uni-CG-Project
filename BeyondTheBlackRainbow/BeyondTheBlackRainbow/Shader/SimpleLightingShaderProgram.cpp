@@ -20,8 +20,6 @@ void SimpleLightingShaderProgram::loadUniformLocations()
 	locationTexture = glGetUniformLocation(programId, "myTextureSampler");
 	locationV = glGetUniformLocation(programId, "V");
 	locationM = glGetUniformLocation(programId, "M");
-	//locationLight = glGetUniformLocation(programId, "LightPosition_worldspace");
-
 }
 
 void SimpleLightingShaderProgram::fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights)
@@ -58,47 +56,35 @@ void SimpleLightingShaderProgram::fillUniformLocation(MeshNode* node, std::vecto
 	glUniformMatrix4fv(locationM, 1, GL_FALSE, &M[0][0]);
 	glm::mat4 V = node->getViewMatrix();
 	glUniformMatrix4fv(locationV, 1, GL_FALSE, &V[0][0]);
-	//glm::vec3 lightPos = glm::vec3(2, 1.5, -2.5);
-	/*glm::vec3 lightPos = light->getPosition();
-	glUniform3f(locationLight, lightPos.x, lightPos.y, lightPos.z);*/
 
 }
 
 void SimpleLightingShaderProgram::useLights(std::vector<LightNode*> lights)
 {
-	/*if (lights.size() >= 1) {
-		glUniform3f(glGetUniformLocation(programId, "pointLights[0].position"), lights.at(0)->getPosition().x, lights.at(0)->getPosition().y, lights.at(0)->getPosition().z);
-		glUniform3f(glGetUniformLocation(programId, "pointLights[0].intensity"), lights.at(0)->getIntensity().x, lights.at(0)->getIntensity().y, lights.at(0)->getIntensity().z);
-		glUniform3f(glGetUniformLocation(programId, "pointLights[0].color"), lights.at(0)->getColor().x, lights.at(0)->getColor().y, lights.at(0)->getColor().z);
-		}*/
-
-	/*float sumPointLights = 0;
-	float sumDirLights = 0;*/
 	for (int i = 0; i < lights.size(); i++) {
-		//if (lights.at(i)->getLightType() == POINT_LIGHT) {
 		std::stringstream position;
 		position << "lights[";
 		position << i;
 		position << "].position";
-		auto loc = glGetUniformLocation(programId, position.str().c_str());
+		//auto loc = glGetUniformLocation(programId, position.str().c_str());
 		glUniform3f(glGetUniformLocation(programId, position.str().c_str()), lights.at(i)->getPosition().x, lights.at(i)->getPosition().y, lights.at(i)->getPosition().z);
 		std::stringstream intensity;
 		intensity << "lights[";
 		intensity << i;
 		intensity << "].intensity";
-		auto loc2 = glGetUniformLocation(programId, intensity.str().c_str());
+		//auto loc2 = glGetUniformLocation(programId, intensity.str().c_str());
 		glUniform1f(glGetUniformLocation(programId, intensity.str().c_str()), lights.at(i)->getIntensity());
 		std::stringstream color;
 		color << "lights[";
 		color << i;
 		color << "].color";
-		auto loc3 = glGetUniformLocation(programId, color.str().c_str());
+		//auto loc3 = glGetUniformLocation(programId, color.str().c_str());
 		glUniform3f(glGetUniformLocation(programId, color.str().c_str()), lights.at(i)->getColor().x, lights.at(i)->getColor().y, lights.at(i)->getColor().z);
 		std::stringstream type;
 		type << "lights[";
 		type << i;
 		type << "].type";
-		auto loc4 = glGetUniformLocation(programId, type.str().c_str());
+		//auto loc4 = glGetUniformLocation(programId, type.str().c_str());
 		if (lights.at(i)->getLightType() == POINT_LIGHT) {
 			glUniform1f(glGetUniformLocation(programId, type.str().c_str()), 1.0f);
 		}
@@ -108,42 +94,10 @@ void SimpleLightingShaderProgram::useLights(std::vector<LightNode*> lights)
 			direction << "lights[";
 			direction << i;
 			direction << "].direction";
-			auto loc5 = glGetUniformLocation(programId, direction.str().c_str());
+			//auto loc5 = glGetUniformLocation(programId, direction.str().c_str());
 			glUniform3f(glGetUniformLocation(programId, direction.str().c_str()), lights.at(i)->getDirection().x, lights.at(i)->getDirection().y, lights.at(i)->getDirection().z);
 			//std::cout << lights.at(i)->getDirection().x << " " << lights.at(i)->getDirection().y << " " << lights.at(i)->getDirection().z << std::endl;
-		}
-		//std::cout << "Position: " << lights.at(i)->getPosition().x << " " << lights.at(i)->getPosition().y << " " << lights.at(i)->getPosition().z << std::endl;
-		//sumPointLights++;
-		//}
-		//else if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT)
-		//{
-		//	std::stringstream position;
-		//	position << "dirLights[";
-		//	position << sumDirLights;
-		//	position << "].position";
-		//	auto loc = glGetUniformLocation(programId, position.str().c_str());
-		//	glUniform3f(glGetUniformLocation(programId, position.str().c_str()), lights.at(i)->getPosition().x, lights.at(i)->getPosition().y, lights.at(i)->getPosition().z);
-		//	std::stringstream intensity;
-		//	intensity << "dirLights[";
-		//	intensity << sumDirLights;
-		//	intensity << "].intensity";
-		//	auto loc2 = glGetUniformLocation(programId, intensity.str().c_str());
-		//	glUniform1f(glGetUniformLocation(programId, intensity.str().c_str()), lights.at(i)->getIntensity());
-		//	std::stringstream color;
-		//	color << "dirLights[";
-		//	color << sumDirLights;
-		//	color << "].color";
-		//	auto loc3 = glGetUniformLocation(programId, color.str().c_str());
-		//	glUniform3f(glGetUniformLocation(programId, color.str().c_str()), lights.at(i)->getColor().x, lights.at(i)->getColor().y, lights.at(i)->getColor().z);
-		//	std::stringstream direction;
-		//	direction << "dirLights[";
-		//	direction << sumDirLights;
-		//	direction << "].direction";
-		//	auto loc4 = glGetUniformLocation(programId, direction.str().c_str());
-		//	glUniform3f(glGetUniformLocation(programId, direction.str().c_str()), lights.at(i)->getDirection().x, lights.at(i)->getDirection().y, lights.at(i)->getDirection().z);
-		//	sumDirLights++;
-		//	//std::cout << "Position (DirLight): " << lights.at(i)->getPosition().x << " " << lights.at(i)->getPosition().y << " " << lights.at(i)->getPosition().z << std::endl;
-		//}
+		}		
 	}
 }
 

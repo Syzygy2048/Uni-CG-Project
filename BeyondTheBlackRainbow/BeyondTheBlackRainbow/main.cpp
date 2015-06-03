@@ -7,7 +7,6 @@
 #include <map>
 
 #include "InputHandler.h"
-#include "shader.hpp"
 #include "Render\Renderer.h"
 #include "GLDebug.h"
 #include "Util\UuidHelper.h"

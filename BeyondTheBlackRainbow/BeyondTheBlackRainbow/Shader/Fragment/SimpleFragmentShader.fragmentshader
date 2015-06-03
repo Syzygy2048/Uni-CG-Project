@@ -45,9 +45,6 @@ void main(){
 	vec3 LightColor = light.color;
 	float LightPower = light.intensity;
 	
-
-	
-
 	// Normal of the computed fragment, in camera space
 	vec3 n = normalize( Normal_cameraspace );
 
@@ -83,9 +80,7 @@ void main(){
 			// Diffuse : "color" of the object
 			MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
 			// Specular : reflective highlight, like a mirror
-			MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,50) / (distance*distance);
-
-		
+			MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,50) / (distance*distance);		
 		}
 		else if (light.type == 2)  {
 
@@ -104,9 +99,7 @@ void main(){
 				// Diffuse : "color" of the object
 				MaterialDiffuseColor * LightColor * LightPower * cosTheta +
 				// Specular : reflective highlight, like a mirror
-				MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,50);
-
-			
+				MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,50);			
 		}
 		}
 }

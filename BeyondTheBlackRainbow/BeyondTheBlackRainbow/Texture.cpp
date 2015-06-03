@@ -6,12 +6,11 @@
 Texture::Texture(const char* path)
 {
 	FREE_IMAGE_FORMAT formato = FreeImage_GetFileType(path, 0);
-	std::cout << path << std::endl;
 	FIBITMAP* image = FreeImage_Load(formato, path);
 	
 
 	if (!image) {
-		std::cout << "errorT_T" << std::endl;
+		std::cout << "errorT_T : " << path << std::endl;
 	}
 
 	FIBITMAP* temp = image;
@@ -20,7 +19,9 @@ Texture::Texture(const char* path)
 
 	int w = FreeImage_GetWidth(image);
 	int h = FreeImage_GetHeight(image);
-	std::cout << "The size of the image is: " << path << " is " << w << "*" << h << std::endl; //Some debugging code
+	if (w == 0 || h == 0) {
+		std::cout << "Error image loading : " << path << " size is  " << w << "*" << h << std::endl; //Some debugging code
+	}
 
 	texture = new GLubyte[4 * w*h];
 	char* pixeles = (char*)FreeImage_GetBits(image);
