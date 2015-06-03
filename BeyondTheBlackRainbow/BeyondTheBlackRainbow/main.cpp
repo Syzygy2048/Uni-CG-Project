@@ -61,8 +61,10 @@ int main() {
 	PhysicsHandler* physics = new PhysicsHandler();
 	physics->initPhysics();
 
-	Text* text = new Text();
-	text->prepareText("Escape!", 60, 0, 0);
+	Text* text = new Text("I <3 CG", MeshLoadInfo::TEXT);
+	Text* text2 = new Text(":D", MeshLoadInfo::TEXT);
+	text->prepareText(25.0f, 25.0f, 50.0f);
+	text2->prepareText(25.0f, 75.0f, 25.0f);
 	
 
 	std::map<std::string, CameraNode*> cameraList;
@@ -210,14 +212,18 @@ int main() {
 		glm::mat4 viewMatrix = activeCamera->getViewMatrix();
 		glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 		for (MeshNode* node : drawArray){
+
 			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix);
+
 		}
+
+		text->draw();
+		text2->draw();
 
 		glLoadMatrixf(&viewProjectionMatrix[0][0]);
 
 		physics->renderCollisionShapes();
 		
-		renderer->drawText(text);
 		
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();

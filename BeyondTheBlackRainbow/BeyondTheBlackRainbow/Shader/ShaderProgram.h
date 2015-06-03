@@ -5,8 +5,10 @@
 //forward declaration
 #include "../SceneGraph/MeshNode.h"
 #include "../SceneGraph/LightNode.h"
-class MeshNode;
+#include "../Text/Text.h"
 
+class MeshNode;
+class Text;
 
 
 class ShaderProgram
@@ -22,6 +24,8 @@ public:
 
 	virtual void loadUniformLocations() = 0;
 	virtual void fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights) = 0;
+	virtual void fillUniformLocation(Text* text) = 0;
+
 
 protected:
 	GLuint programId;

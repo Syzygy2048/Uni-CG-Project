@@ -7,6 +7,7 @@
 #include "..\Shader\LightingShaderProgram.h"
 #include "..\Shader\TextureShaderProgram.h"
 #include "..\Shader\SimpleLightingShaderProgram.h"
+#include "..\Shader\TextShaderProgram.h"
 
 
 
@@ -99,6 +100,10 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	else if (shader == MeshLoadInfo::SIMPLE_LIGHTING_SHADER)
 	{
 		result = new SimpleLightingShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::TEXT_SHADER)
+	{
+		result = new TextShaderProgram(shaderProgramID);
 	}
 	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;

@@ -146,3 +146,7 @@ void SimpleLightingShaderProgram::useLights(std::vector<LightNode*> lights)
 		//}
 	}
 }
+
+void SimpleLightingShaderProgram::fillUniformLocation(Text* text)
+{
+}

@@ -2,24 +2,37 @@
 
 #include <GL\glew.h>
 #include <glm\glm.hpp>
+#include <map>
 #include <iostream>
 
-#include "..\Texture.h"
+#include "../Shader/ShaderProgram.h"
+#include "../Texture.h"
+
+class ShaderProgram;
 
 class Text
 {
 public:
-	Text();
+	Text(const char* text, const MeshLoadInfo::LoadInfo* meshLoadInfo);
 	~Text();
 
-	void prepareText(const char* text, int length, int x, int y);
+	void prepareText(GLfloat x, GLfloat y, GLfloat scale);
+	void draw();
+
 	GLuint getVAO();
 	int getVerticesSize();
-	void useShader(Text* text);
+	Texture* getTexture();
+	ShaderProgram* getShaderProgram();
+	std::string getText();
+
+	
 
 private:
-	Texture* texture;
 
+	const MeshLoadInfo::LoadInfo* loadInfo;
+	const char * text;
+	Texture* texture;
+	ShaderProgram* shaderProgram;
 
 	int vertexAttribPointer;
 	int textureAttribPointer;
@@ -27,8 +40,6 @@ private:
 	GLuint vao;
 	GLuint vertexBufferID;
 	GLuint UVBufferID;
-	GLuint shaderID;
-	GLuint uniformID;
 
 	int verticesSize;
 };
