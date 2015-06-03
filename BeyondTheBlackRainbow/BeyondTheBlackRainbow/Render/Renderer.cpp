@@ -150,13 +150,14 @@ void Renderer::drawText(Text* text)
 {
 	this->useShader(text);
 
-	//bindVertexArray(text->getVAO());
+	bindVertexArray(text->getVAO());
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDrawArrays(GL_TRIANGLES, 0, text->getVerticesSize());
 	//glDrawArrays(GL_TRIANGLES, 0, 6);
 
+	
 	glDisable(GL_BLEND);
 	bindVertexArray(0);
 	glUseProgram(0);

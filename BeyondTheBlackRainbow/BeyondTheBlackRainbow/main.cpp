@@ -58,8 +58,8 @@ int main() {
 	PhysicsHandler* physics = new PhysicsHandler();
 	physics->initPhysics();
 
-	Text* text = new Text("Escape!", MeshLoadInfo::TEXT);
-	text->prepareText(25.0f, 25.0f, 1.0f);
+	Text* text = new Text("Escape", MeshLoadInfo::TEXT);
+	text->prepareText(25.0f, 25.0f, 100.0f);
 	
 
 	std::map<std::string, CameraNode*> cameraList;

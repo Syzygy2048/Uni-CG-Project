@@ -69,14 +69,14 @@ void Text::prepareText(GLfloat x, GLfloat y, GLfloat scale)
 	renderer->bindVertexArray(vertexAttribPointer);
 	*/
 	Renderer* renderer = Renderer::getInstance();
-	//renderer->generateVertexArray(&vao);
+	renderer->generateVertexArray(&vao);
 	renderer->generateBufferObject(&vertexBufferID);
 	renderer->generateBufferObject(&UVBufferID);
 
 	vertexAttribPointer = 0;
 	textureAttribPointer = 1;
 
-	//renderer->bindVertexArray(vao);
+	renderer->bindVertexArray(vao);
 	
 	unsigned int length = strlen(text);
 	std::vector<glm::vec2> vertices;
@@ -122,9 +122,8 @@ void Text::prepareText(GLfloat x, GLfloat y, GLfloat scale)
 	shaderProgram->loadUniformLocations();
 	texture = new Texture((loadInfo->texturePath).c_str());
 
-	//renderer->bindVertexArray(0);
-	renderer->bindBuffer(GL_ARRAY_BUFFER, vertexAttribPointer);
-	renderer->bindBuffer(GL_ARRAY_BUFFER, UVBufferID);
+	renderer->bindVertexArray(0);
+	renderer->bindBuffer(GL_ARRAY_BUFFER, 0);
 
 }
 

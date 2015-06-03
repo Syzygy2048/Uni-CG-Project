@@ -29,5 +29,5 @@ void TextShaderProgram::fillUniformLocation(Text* text)
 	
 	glActiveTexture(GL_TEXTURE30);
 	glBindTexture(GL_TEXTURE_2D, text->getTexture()->getTextureID());
-	glUniform1i(locationTexture, GL_TEXTURE30);
+	glUniform1i(locationTexture, 30);
 }
