@@ -23,6 +23,7 @@ public:
 	int getVerticesSize();
 	Texture* getTexture();
 	ShaderProgram* getShaderProgram();
+	void setText(char* text);
 	std::string getText();
 
 	
@@ -30,7 +31,12 @@ public:
 private:
 
 	const MeshLoadInfo::LoadInfo* loadInfo;
-	const char * text;
+	const char* text;
+
+	float x;
+	float y;
+	GLfloat scale;
+
 	Texture* texture;
 	ShaderProgram* shaderProgram;
 
