@@ -1,6 +1,7 @@
 #include "ShadowMappingShaderProgram.h"
 #include "..\Util\UuidHelper.h"
 #include "..\SceneGraph\DirectionalLightNode.h"
+#include <sstream>
 
 
 ShadowMappingShaderProgram::ShadowMappingShaderProgram(GLuint shaderProgramID) : ShaderProgram(shaderProgramID)
@@ -15,13 +16,13 @@ ShadowMappingShaderProgram::~ShadowMappingShaderProgram()
 void ShadowMappingShaderProgram::loadUniformLocations()
 {
 	locationMVP = glGetUniformLocation(programId, "MVP");
-	auto num = glGetUniformLocation(programId, "MV");
-	//locationMV = glGetUniformLocation(programId, "MV");
+	//auto num = glGetUniformLocation(programId, "MV");
+	locationMV = glGetUniformLocation(programId, "MV");
 	locationV = glGetUniformLocation(programId, "V");
 	locationM = glGetUniformLocation(programId, "M");
 	locationLightDirection = glGetUniformLocation(programId, "lightDirection");
-	auto num2 = glGetUniformLocation(programId, "lightPosition");
-	//locationLightPosition = glGetUniformLocation(programId, "lightPosition");
+	//auto num2 = glGetUniformLocation(programId, "LightPosition");
+	locationLightPosition = glGetUniformLocation(programId, "lightPosition");
 	locationDepthBiasMVP = glGetUniformLocation(programId, "DepthBiasMVP");
 	locationShadowMap = glGetUniformLocation(programId, "shadowMap");
 	locationTexture = glGetUniformLocation(programId, "myTextureSampler");
@@ -37,9 +38,7 @@ void ShadowMappingShaderProgram::fillUniformLocation(MeshNode* node, std::vector
 	glUniformMatrix4fv(locationV, 1, GL_FALSE, &V[0][0]);
 	glm::mat4 MV = V * M;
 	glUniformMatrix4fv(locationMV, 1, GL_FALSE, &MV[0][0]);
-	LightNode* light = this->useLights(lights);
-	glUniform4f(locationLightDirection, light->getDirection().x, light->getDirection().y, light->getDirection().z, 1.0f);
-	glUniform3f(locationLightPosition, light->getPosition().x, light->getPosition().y, light->getPosition().z);
+	this->useLights(lights);
 	glm::mat4 depthBiasMVP = node->getDepthBiasMatrix();
 	glUniformMatrix4fv(locationDepthBiasMVP, 1, GL_FALSE, &depthBiasMVP[0][0]);
 	this->bindTextures(node);
@@ -56,14 +55,46 @@ void ShadowMappingShaderProgram::bindTextures(MeshNode* node)
 	glUniform1i(locationShadowMap, 29);
 }
 
-LightNode* ShadowMappingShaderProgram::useLights(std::vector<LightNode*> lights)
+void ShadowMappingShaderProgram::useLights(std::vector<LightNode*> lights)
 {
 	for (int i = 0; i < lights.size(); i++) {
-		if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) {
-			return lights.at(i);
+		std::stringstream position;
+		position << "lights[";
+		position << i;
+		position << "].position";
+		auto loc = glGetUniformLocation(programId, position.str().c_str());
+		glUniform3f(glGetUniformLocation(programId, position.str().c_str()), lights.at(i)->getPosition().x, lights.at(i)->getPosition().y, lights.at(i)->getPosition().z);
+		std::stringstream intensity;
+		intensity << "lights[";
+		intensity << i;
+		intensity << "].intensity";
+		auto loc2 = glGetUniformLocation(programId, intensity.str().c_str());
+		glUniform1f(glGetUniformLocation(programId, intensity.str().c_str()), lights.at(i)->getIntensity());
+		std::stringstream color;
+		color << "lights[";
+		color << i;
+		color << "].color";
+		auto loc3 = glGetUniformLocation(programId, color.str().c_str());
+		glUniform3f(glGetUniformLocation(programId, color.str().c_str()), lights.at(i)->getColor().x, lights.at(i)->getColor().y, lights.at(i)->getColor().z);
+		std::stringstream type;
+		type << "lights[";
+		type << i;
+		type << "].type";
+		auto loc4 = glGetUniformLocation(programId, type.str().c_str());
+		if (lights.at(i)->getLightType() == POINT_LIGHT) {
+			glUniform1f(glGetUniformLocation(programId, type.str().c_str()), 1.0f);
+		}
+		else if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) {
+			glUniform1f(glGetUniformLocation(programId, type.str().c_str()), 2.0f);
+			std::stringstream direction;
+			direction << "lights[";
+			direction << i;
+			direction << "].direction";
+			auto loc5 = glGetUniformLocation(programId, direction.str().c_str());
+			glUniform3f(glGetUniformLocation(programId, direction.str().c_str()), lights.at(i)->getDirection().x, lights.at(i)->getDirection().y, lights.at(i)->getDirection().z);
+			//std::cout << lights.at(i)->getDirection().x << " " << lights.at(i)->getDirection().y << " " << lights.at(i)->getDirection().z << std::endl;
 		}
 	}
-	return new DirectionalLightNode(generateUuid(), glm::vec3(0, 2, 0), 10.0f, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), LightType::DIRECTIONAL_LIGHT);
 }
 
 void ShadowMappingShaderProgram::fillUniformLocation(Framebuffer* frameBuffer)

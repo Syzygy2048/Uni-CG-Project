@@ -13,12 +13,13 @@ DepthShaderProgram::~DepthShaderProgram()
 void DepthShaderProgram::loadUniformLocations() 
 {
 	locationDepthMVP = glGetUniformLocation(programId, "depthMVP");
-	auto num = locationDepthMVP;
+	locationMVP = glGetUniformLocation(programId, "MVP");
 }
 
 void DepthShaderProgram::fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights)
 {
-
+	glm::mat4 MVP = node->getModelMatrix();
+	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, &MVP[0][0]);
 }
 
 void DepthShaderProgram::fillUniformLocation(Text* text)

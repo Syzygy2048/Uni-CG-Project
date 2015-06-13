@@ -177,7 +177,7 @@ void Renderer::useShader(MeshNode* node, std::vector<LightNode*> lights)
 
 std::vector<LightNode*> Renderer::getLights(MeshNode* node)
 {
-	glm::vec3 playerPosition = glm::vec3(node->getViewMatrix()[3][0], node->getViewMatrix()[3][1], node->getViewMatrix()[3][2]);
+	glm::vec3 playerPosition = glm::vec3(glm::inverse(node->getViewMatrix())[0][3], glm::inverse(node->getViewMatrix())[1][3], glm::inverse(node->getViewMatrix())[2][3]);
 	int numDirLights = 0;		
 	for (int i = 0; i < lights.size(); i++) {
 		if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) {
@@ -217,8 +217,7 @@ void Renderer::useShader(Text* text)
 
 void Renderer::drawShadow(MeshNode* node, Framebuffer* framebuffer)
 {
-	framebuffer->setDepthMVP(framebuffer->getDepthMVP() * node->getModelViewProjectionMatrix());
-	this->useShader(framebuffer);
+	this->useShader(framebuffer, node);
 	bindVertexArray(node->getVao());
 	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);
 	bindVertexArray(0);
@@ -226,12 +225,13 @@ void Renderer::drawShadow(MeshNode* node, Framebuffer* framebuffer)
 	//this->unbindFrameBuffer(GL_FRAMEBUFFER);
 }
 
-void Renderer::useShader(Framebuffer* framebuffer)
+void Renderer::useShader(Framebuffer* framebuffer, MeshNode* node)
 {
 	ShaderProgram* shaderProgram = framebuffer->getShaderProgram();
 	glUseProgram(shaderProgram->getShaderId());
 
 	shaderProgram->fillUniformLocation(framebuffer);
+	shaderProgram->fillUniformLocation(node, lights);
 }
 
 

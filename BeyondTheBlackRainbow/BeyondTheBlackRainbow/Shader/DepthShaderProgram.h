@@ -15,5 +15,6 @@ public:
 
 private:
 	GLuint locationDepthMVP;
+	GLuint locationMVP;
 };
 

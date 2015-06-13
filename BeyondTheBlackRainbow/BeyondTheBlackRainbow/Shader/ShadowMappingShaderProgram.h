@@ -27,7 +27,7 @@ private:
 	GLuint locationTexture;
 	GLuint locationShadowMap;
 
-	LightNode* useLights(std::vector<LightNode*> lights);
+	void useLights(std::vector<LightNode*> lights);
 	void bindTextures(MeshNode* node);
 };
 

@@ -64,7 +64,7 @@ private:
 
 	void useShader(MeshNode* node, std::vector<LightNode*> lights);
 	void useShader(Text* text);
-	void useShader(Framebuffer* framebuffer);
+	void useShader(Framebuffer* framebuffer, MeshNode* node);
 	std::vector<LightNode*> getLights(MeshNode* node);
 
 	glm::mat4 depthProjectionMatrix;
