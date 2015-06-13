@@ -26,7 +26,7 @@
 void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::vector<MeshNode*>* drawArray)
 {
 	
-	for (int i = 0; i < 20; i++){
+	for (int i = 0; i < 1000; i++){
 		float randomX = ((std::rand() % 100) - 50) / 100.f;
 		float randomY = ((std::rand() % 100) - 50) / 100.f;
 		float randomZ = ((std::rand() % 100) - 50) / 100.f;
@@ -48,8 +48,12 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 
 int main() {
 
+	int viewPortResX = 1280;
+	int viewPortResY = 720;
+
+
 	Renderer* renderer = Renderer::getInstance();
-	if (renderer->init() == -1){
+	if (renderer->init(viewPortResX, viewPortResY) == -1){
 		return -1;
 	}
 	
@@ -74,7 +78,7 @@ int main() {
 	std::map<std::string, CameraNode*> cameraList;
 
 	//start of part that should be in a scene loader
-	CameraNode* activeCamera = new CameraNode(generateUuid());
+	CameraNode* activeCamera = new CameraNode(generateUuid(), viewPortResX, viewPortResY);
 	
 	
 	//this way we have a list of cameras and can switch between them as we want just by doing activeCamera = cameraList.find("whichever camera we want")->second;
@@ -199,6 +203,11 @@ int main() {
 	bool oldF3State = false;
 	bool oldF2State = false;
 
+	GLuint frameBuffer;
+	renderer->generateFramebuffer(&frameBuffer);
+	//renderer->bindFramebuffer(frameBuffer, viewPortResX, viewPortResY);
+
+	
 	//gameloop
 	double timeOld = 0;
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
@@ -261,7 +270,6 @@ int main() {
 		}
 
 
-
 		if (input->f3 && !oldF3State)
 			wireframeEnabled = !wireframeEnabled;
 		oldF3State = input->f3;
@@ -273,7 +281,6 @@ int main() {
 		else{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
-
 
 
 		glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
@@ -291,7 +298,7 @@ int main() {
 		//text->draw();
 		//text2->draw();
 
-		glLoadMatrixf(&viewProjectionMatrix[0][0]);
+		//glLoadMatrixf(&viewProjectionMatrix[0][0]);
 
 		physics->renderCollisionShapes();
 		

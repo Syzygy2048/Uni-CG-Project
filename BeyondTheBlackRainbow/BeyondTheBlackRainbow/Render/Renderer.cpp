@@ -17,7 +17,7 @@ Renderer::~Renderer()
 {
 }
 
-int Renderer::init()
+int Renderer::init(int viewPortResX, int viewPortResY)
 {
 	if (!glfwInit()) 
 	{
@@ -40,7 +40,7 @@ int Renderer::init()
 
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 	
-	window = glfwCreateWindow(1024, 768, "Taste the Rainbow", NULL, NULL);
+	window = glfwCreateWindow(viewPortResX, viewPortResY, "Taste the Rainbow", NULL, NULL);
 
 	if (window == NULL)
 	{
@@ -69,8 +69,8 @@ int Renderer::init()
 
 GLFWwindow* Renderer::getWindow()
 {
-	if (window == nullptr)
-		init();
+	//if (window == nullptr) //make sure it's already initialized
+		//init(viewPortResX, viewPortResY);
 	return window;
 }
 
@@ -189,4 +189,45 @@ void Renderer::useShader(Text* text)
 	glUseProgram(shaderProgram->getShaderId());
 
 	shaderProgram->fillUniformLocation(text);
+}
+
+
+void Renderer::generateFramebuffer(GLuint* id)
+{
+	glGenFramebuffers(1, id);
+	
+}
+
+void Renderer::bindFramebuffer(GLuint id, int viewPortResX, int viewPortRexY)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, id);
+	glViewport(0, 0, viewPortResX, viewPortRexY);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		//clear previous image after binding to prevent stuff from drawing on itself
+}
+
+void Renderer::genrateShadowMapTexture(GLuint* id)
+{
+	glGenTextures(1, id);
+}
+
+void Renderer::glBindShadowMapTexture(GLuint id, int viewPortResX, int viewPortRexY)
+{
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, viewPortResX, viewPortRexY, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, id, 0);
+	
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+	if (status != GL_FRAMEBUFFER_COMPLETE){
+		std::cerr << "error binding framebuffer: " << status << std::endl;
+	}
 }

@@ -20,7 +20,7 @@ public:
 	static Renderer* getInstance();
 	~Renderer();
 
-	int init();
+	int init(int viewPortResX, int viewPortResY);
 
 	void generateBufferObject(GLuint* bufferID);
 	
@@ -35,6 +35,12 @@ public:
 	void setVertexAttribPointer(int id, int size, GLenum type, GLboolean normalized, int stride, const GLvoid* pointer);
 
 	void linkShader(ShaderProgram* shader);
+
+	void generateFramebuffer(GLuint* id);
+	void bindFramebuffer(GLuint id, int viewPortResX, int viewPortRexY);
+
+	void genrateShadowMapTexture(GLuint* id);
+	void glBindShadowMapTexture(GLuint id, int viewPortResX, int viewPortRexY);
 
 	void draw(MeshNode* node);
 	void drawText(Text* text);
