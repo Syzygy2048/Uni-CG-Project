@@ -217,6 +217,7 @@ void Renderer::useShader(Text* text)
 
 void Renderer::drawShadow(MeshNode* node, Framebuffer* framebuffer)
 {
+	framebuffer->setDepthMVP(framebuffer->getDepthMVP() * node->getModelViewProjectionMatrix());
 	this->useShader(framebuffer);
 	bindVertexArray(node->getVao());
 	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);
