@@ -43,8 +43,12 @@ public:
 	glm::mat4 getModelMatrix();
 	glm::mat4 getViewMatrix();
 	glm::mat4 getProjectionMatrix();
+	void setDepthBiasMVP(glm::mat4 depthMVP);
+	glm::mat4 getDepthBiasMatrix();
 
 	Texture* getTexture();
+	void setShadowMap(Texture* shadowMap);
+	Texture* getShadowMap();
 
 	GLuint getMVPLocation();
 	GLuint getTextureLocation();
@@ -82,12 +86,21 @@ private:
 	
 	GLuint myShaderID;
 	Texture* myTexture;
+	Texture* shadowMap;
 	bool textureInit;
 
 	const MeshLoadInfo::LoadInfo* loadInfo;
 	ShaderProgram* shaderProgram;
 
 	physx::PxRigidActor* physicsActor;
+
+	glm::mat4 biasMatrix = glm::mat4(
+		0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+		0.5, 0.5, 0.5, 1.0
+		);
+	glm::mat4 depthBiasMatrix;
 
 };
 

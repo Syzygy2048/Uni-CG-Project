@@ -79,12 +79,9 @@ void MeshNode::prepareForRendering()
 	}
 
 	/**/
-	
 	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->shaderInfo);
-	//renderer->linkShader(shaderProgram);
 	shaderProgram->loadUniformLocations();
 	myTexture = new Texture((loadInfo->texturePath).c_str());
-	//myTexture->bind(0);
 	/**/
 
 	renderer->bindVertexArray(0);
@@ -256,4 +253,24 @@ ShaderProgram* MeshNode::getShaderProgram()
 const MeshLoadInfo::LoadInfo* MeshNode::getLoadInfo()
 {
 	return loadInfo;
+}
+
+void MeshNode::setDepthBiasMVP(glm::mat4 depthMVP)
+{
+	depthBiasMatrix = biasMatrix * depthMVP;
+}
+
+glm::mat4 MeshNode::getDepthBiasMatrix()
+{
+	return depthBiasMatrix;
+}
+
+void MeshNode::setShadowMap(Texture* shadowMap)
+{
+	this->shadowMap = shadowMap;
+}
+
+Texture* MeshNode::getShadowMap()
+{
+	return shadowMap;
 }

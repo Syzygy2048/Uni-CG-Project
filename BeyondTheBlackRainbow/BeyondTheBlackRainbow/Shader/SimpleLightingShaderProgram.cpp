@@ -27,36 +27,19 @@ void SimpleLightingShaderProgram::fillUniformLocation(MeshNode* node, std::vecto
 	this->useLights(lights);
 	glm::mat4 MVP = node->getModelViewProjectionMatrix();
 	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, &MVP[0][0]);
-	if (node->getLoadInfo() == MeshLoadInfo::DUCK) {
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, node->getTexture()->getTextureID());
-		glUniform1i(locationTexture, 0);
-	}
-	else if (node->getLoadInfo() == MeshLoadInfo::ROOM) {
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, node->getTexture()->getTextureID());
-		glUniform1i(locationTexture, 1);
-	}
-	else if (node->getLoadInfo() == MeshLoadInfo::TABLE) {
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, node->getTexture()->getTextureID());
-		glUniform1i(locationTexture, 2);
-	}
-	else if (node->getLoadInfo() == MeshLoadInfo::BED) {
-		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D, node->getTexture()->getTextureID());
-		glUniform1i(locationTexture, 3);
-	}
-	else if (node->getLoadInfo() == MeshLoadInfo::DOOR) {
-		glActiveTexture(GL_TEXTURE4);
-		glBindTexture(GL_TEXTURE_2D, node->getTexture()->getTextureID());
-		glUniform1i(locationTexture, 4);
-	}
+	this->bindTextures(node);
 	glm::mat4 M = node->getModelMatrix();
 	glUniformMatrix4fv(locationM, 1, GL_FALSE, &M[0][0]);
 	glm::mat4 V = node->getViewMatrix();
 	glUniformMatrix4fv(locationV, 1, GL_FALSE, &V[0][0]);
 
+}
+
+void SimpleLightingShaderProgram::bindTextures(MeshNode* node)
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, node->getTexture()->getTextureID());
+	glUniform1i(locationTexture, 0);
 }
 
 void SimpleLightingShaderProgram::useLights(std::vector<LightNode*> lights)
@@ -102,5 +85,9 @@ void SimpleLightingShaderProgram::useLights(std::vector<LightNode*> lights)
 }
 
 void SimpleLightingShaderProgram::fillUniformLocation(Text* text)
+{
+}
+
+void SimpleLightingShaderProgram::fillUniformLocation(Framebuffer* frameBuffer)
 {
 }

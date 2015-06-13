@@ -94,16 +94,47 @@ void Renderer::generateBufferObject(GLuint* bufferID)
 	glGenBuffers(1, bufferID);
 }
 
+void Renderer::generateFrameBuffer(GLuint* bufferID)
+{
+	glGenFramebuffers(1, bufferID);
+}
 
 void Renderer::bindBuffer(GLenum bufferType, GLuint bufferID)
 {
 	glBindBuffer(bufferType, bufferID);
 }
 
+void Renderer::bindFrameBuffer(GLenum bufferType, GLuint bufferID)
+{
+	glBindFramebuffer(bufferType, bufferID);
+	glViewport(0, 0, 1024, 1024);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Renderer::unbindFrameBuffer(GLenum bufferType)
+{
+	glBindFramebuffer(bufferType, 0);
+	glViewport(0, 0, 1024, 768);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void Renderer::fillBuffer(GLuint bufferID, GLenum bufferType, int bufferSize, GLvoid* bufferData, GLenum bufferUsage)
 {
 	bindBuffer(bufferType, bufferID);
 	glBufferData(bufferType, bufferSize, bufferData, bufferUsage);
+}
+
+void Renderer::fillFrameBuffer(GLuint bufferID, GLenum bufferType, GLenum attachment, GLuint texture, GLuint level)
+{
+	bindFrameBuffer(bufferType, bufferID);
+	glFramebufferTexture(bufferType, attachment, texture, level);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
 }
 
 void Renderer::generateVertexArray(GLuint* vertexArrayID)
@@ -118,11 +149,13 @@ void Renderer::bindVertexArray(GLuint vertexArrayId)
 
 void Renderer::draw(MeshNode* node)
 {
-		this->useShader(node, this->getLights(node));
+	std::vector<LightNode*> lights = this->getLights(node);
 
-		bindVertexArray(node->getVao());
+	this->useShader(node, lights);
 
-		glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);	
+	bindVertexArray(node->getVao());
+
+	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);	
 	
 	bindVertexArray(0);
 	glUseProgram(0);
@@ -144,23 +177,17 @@ void Renderer::useShader(MeshNode* node, std::vector<LightNode*> lights)
 
 std::vector<LightNode*> Renderer::getLights(MeshNode* node)
 {
-	std::vector<LightNode*> lights;
-	SceneNode* parentNode = node->parent;
-	bool find = true;
-	while (find) {
-		if (parentNode != nullptr) {			
-			std::vector<SceneNode*> children = parentNode->getChildren();
-			for (int i = 0; i < children.size(); i++) {
-				if (children.at(i)->getType() == LIGHT_NODE) {
-					lights.push_back(dynamic_cast<LightNode*>(children.at(i)));
-				}
-			}
-			parentNode = parentNode->parent;
+	glm::vec3 playerPosition = glm::vec3(node->getViewMatrix()[3][0], node->getViewMatrix()[3][1], node->getViewMatrix()[3][2]);
+	int numDirLights = 0;		
+	for (int i = 0; i < lights.size(); i++) {
+		if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) {
+			glm::vec3 lightInvDir = (lights.at(i)->getDirection());
+			glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir + playerPosition, glm::vec3(0, 0, 0) + playerPosition, glm::vec3(0, 1, 0));			
+			node->setDepthBiasMVP(depthProjectionMatrix * depthViewMatrix * depthModelMatrix);
+			node->setShadowMap(frameBuffers.at(numDirLights)->getTexture());
+			numDirLights++;
 		}
-		else {
-			find = false;
-		}
-	}
+	}		
 	//std::cout << "Sum of lights: " << lights.size() << std::endl;
 	return lights;
 }
@@ -173,10 +200,7 @@ void Renderer::drawText(Text* text)
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDrawArrays(GL_TRIANGLES, 0, text->getVerticesSize());
-	//glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	
+	glDrawArrays(GL_TRIANGLES, 0, text->getVerticesSize());	
 	glDisable(GL_BLEND);
 	bindVertexArray(0);
 	glUseProgram(0);
@@ -189,4 +213,43 @@ void Renderer::useShader(Text* text)
 	glUseProgram(shaderProgram->getShaderId());
 
 	shaderProgram->fillUniformLocation(text);
+}
+
+void Renderer::drawShadow(MeshNode* node, Framebuffer* framebuffer)
+{
+	this->useShader(framebuffer);
+	bindVertexArray(node->getVao());
+	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);
+	bindVertexArray(0);
+	glUseProgram(0);
+	//this->unbindFrameBuffer(GL_FRAMEBUFFER);
+}
+
+void Renderer::useShader(Framebuffer* framebuffer)
+{
+	ShaderProgram* shaderProgram = framebuffer->getShaderProgram();
+	glUseProgram(shaderProgram->getShaderId());
+
+	shaderProgram->fillUniformLocation(framebuffer);
+}
+
+
+void Renderer::setFrameBuffers(std::vector<Framebuffer*> framebuffers)
+{
+	this->frameBuffers = framebuffers;
+}
+
+void Renderer::setLights(std::vector<LightNode*> lights)
+{
+	this->lights = lights;
+}
+
+void Renderer::setDepthProjectionMatrix(glm::mat4 depthProjectionMatrix)
+{
+	this->depthProjectionMatrix = depthProjectionMatrix;
+}
+
+void Renderer::setDepthModelMatrix(glm::mat4 depthModelMatrix)
+{
+	this->depthModelMatrix = depthModelMatrix;
 }

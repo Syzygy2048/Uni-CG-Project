@@ -20,6 +20,8 @@
 #include "Physics\PhysicsHandler.h"
 #include "Text\Text.h"
 #include "Event\EventFactory.h"
+#include "Framebuffer.h"
+
 
 
 
@@ -81,10 +83,16 @@ int main() {
 	cameraList.insert(std::pair<std::string, CameraNode*>(std::string("player camera"), activeCamera));
 	
 	//glm::vec3 lightPos = glm::vec3(2, 1.5, -2.5);
+	std::vector<LightNode*> lights;
 	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2, 1.5, -4), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
 	LightNode* secondLight = new PointLightNode(generateUuid(), glm::vec3(2, 1.5, -1), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
 	LightNode* thirdLight = new DirectionalLightNode(generateUuid(), glm::vec3(0, 0, 0), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, 0, 3), LightType::DIRECTIONAL_LIGHT);
 	LightNode* fourthLight = new DirectionalLightNode(generateUuid(), glm::vec3(0, 2, 0), 1.0f, glm::vec3(0, 0, 1), glm::vec3(1, 1, 1), LightType::DIRECTIONAL_LIGHT);
+	lights.push_back(firstLight);
+	lights.push_back(secondLight);
+	lights.push_back(thirdLight);
+	lights.push_back(fourthLight);
+	renderer->setLights(lights);
 
 	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TABLE);
 	MeshNode* duckMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
@@ -188,6 +196,22 @@ int main() {
 	
 	//end of part that should be in a scene loader
 
+
+	//Framebuffer stuff
+	Framebuffer* frameBuffer1 = new Framebuffer(MeshLoadInfo::DEPTH);
+	frameBuffer1->prepareFrameBuffer();
+	Framebuffer* frameBuffer2 = new Framebuffer(MeshLoadInfo::DEPTH);
+	frameBuffer2->prepareFrameBuffer();
+	std::vector<Framebuffer*> framebuffers;
+	framebuffers.push_back(frameBuffer1);
+	framebuffers.push_back(frameBuffer2);
+	renderer->setFrameBuffers(framebuffers);
+
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+	glm::mat4 depthModelMatrix = glm::mat4(1.0);
+	renderer->setDepthProjectionMatrix(depthProjectionMatrix);
+	renderer->setDepthModelMatrix(depthModelMatrix);
+
 	physics->createPhysicsFloor();
 	
 	double time = glfwGetTime();
@@ -203,7 +227,7 @@ int main() {
 	double timeOld = 0;
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
 		// Clear the screen
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		time = glfwGetTime();
 		double deltaTime = time - oldTime;
@@ -274,11 +298,27 @@ int main() {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 
-
-
 		glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 		glm::mat4 viewMatrix = activeCamera->getViewMatrix();
 		glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
+		glm::vec3 playerPosition = glm::vec3(glm::inverse(viewMatrix)[3][0], glm::inverse(viewMatrix)[3][1], glm::inverse(viewMatrix)[3][2]);
+		//draw shadows
+		for (LightNode* light : lights) {
+			int numDirLight = 0;
+			if (light->getLightType() == DIRECTIONAL_LIGHT) {
+				glm::vec3 lightInvDir = (light->getDirection());
+				glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir + playerPosition, glm::vec3(0, 0, 0) + playerPosition, glm::vec3(0, 1, 0));
+				framebuffers.at(numDirLight)->setDepthMVP(depthProjectionMatrix*depthViewMatrix*depthModelMatrix);
+				//shadow of meshes
+				renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.at(numDirLight)->getFramebufferID());
+				for (MeshNode* node : drawArray) {
+					renderer->drawShadow(node, framebuffers.at(numDirLight));
+				}
+				renderer->unbindFrameBuffer(GL_FRAMEBUFFER);
+				numDirLight++;
+			}
+		}
+		//draw meshes
 		for (MeshNode* node : drawArray){
 
 			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix);
@@ -287,9 +327,6 @@ int main() {
 		for (Text* text : textArray){
 			text->draw();
 		}
-
-		//text->draw();
-		//text2->draw();
 
 		glLoadMatrixf(&viewProjectionMatrix[0][0]);
 

@@ -79,6 +79,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Framebuffer.cpp" />
+    <ClCompile Include="Shader\DepthShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\DirectionalLightNode.cpp" />
     <ClCompile Include="Event\EventFactory.cpp" />
     <ClCompile Include="Event\Event.cpp" />
@@ -102,11 +104,14 @@
     <ClCompile Include="Shader\SimpleLightingShaderProgram.cpp" />
     <ClCompile Include="Shader\TextShaderProgram.cpp" />
     <ClCompile Include="Shader\TextureShaderProgram.cpp" />
+    <ClCompile Include="Shader\ShadowMappingShaderProgram.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="SceneGraph\TransformNode.cpp" />
     <ClCompile Include="Text\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Framebuffer.h" />
+    <ClInclude Include="Shader\DepthShaderProgram.h" />
     <ClInclude Include="SceneGraph\DirectionalLightNode.h" />
     <ClInclude Include="Event\EventFactory.h" />
     <ClInclude Include="Event\Event.h" />
@@ -133,6 +138,7 @@
     <ClInclude Include="Shader\SimpleLightingShaderProgram.h" />
     <ClInclude Include="Shader\TextShaderProgram.h" />
     <ClInclude Include="Shader\TextureShaderProgram.h" />
+    <ClInclude Include="Shader\ShadowMappingShaderProgram.h" />
     <ClInclude Include="Text\Text.h" />
     <ClInclude Include="Util\FileChecker.h" />
     <ClInclude Include="Util\UuidHelper.h" />

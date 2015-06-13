@@ -8,6 +8,8 @@
 #include "..\Shader\TextureShaderProgram.h"
 #include "..\Shader\SimpleLightingShaderProgram.h"
 #include "..\Shader\TextShaderProgram.h"
+#include "..\Shader\DepthShaderProgram.h"
+#include "..\Shader\ShadowMappingShaderProgram.h"
 
 
 
@@ -104,6 +106,14 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	else if (shader == MeshLoadInfo::TEXT_SHADER)
 	{
 		result = new TextShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::DEPTH_SHADER)
+	{
+		result = new DepthShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::SHADOWMAP_SHADER)
+	{
+		result = new ShadowMappingShaderProgram(shaderProgramID);
 	}
 	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;

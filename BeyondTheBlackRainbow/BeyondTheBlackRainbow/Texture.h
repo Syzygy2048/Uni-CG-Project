@@ -10,9 +10,8 @@ class Texture
 public:
 
 	Texture(const char* path);
+	Texture();
 	~Texture();
-
-	void bind(int unit);
 
 	GLuint getTextureID();
 

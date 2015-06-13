@@ -45,3 +45,8 @@ void LightingShaderProgram::fillUniformLocation(Text* text)
 {
 
 }
+
+void LightingShaderProgram::fillUniformLocation(Framebuffer* frameBuffer)
+{
+
+}

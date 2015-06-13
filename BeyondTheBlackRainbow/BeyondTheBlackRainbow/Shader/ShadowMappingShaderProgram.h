@@ -1,30 +1,33 @@
 #pragma once
 
 #include "..\Shader\ShaderProgram.h"
+#include "..\Texture.h"
 
-class LightingShaderProgram : public ShaderProgram
+class ShadowMappingShaderProgram : public ShaderProgram
 {
 public:
-	LightingShaderProgram(GLuint shaderProgramID);
-	~LightingShaderProgram();
+	ShadowMappingShaderProgram(GLuint shaderProgramID);
+	~ShadowMappingShaderProgram();
 
 	virtual void loadUniformLocations();
 	virtual void fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights);
 	virtual void fillUniformLocation(Text* text);
 	virtual void fillUniformLocation(Framebuffer* frameBuffer);
 
-	GLuint getLocationMVP();
-	GLuint getLocationTexture();
-	
+
 private:
-	GLuint shaderID;
 
 	GLuint locationMVP;
+	GLuint locationMV;
 	GLuint locationV;
 	GLuint locationM;
-	GLuint locationLightInvDirection_worldspace;
+	GLuint locationLightDirection;
+	GLuint locationLightPosition;
 	GLuint locationDepthBiasMVP;
-	
+	GLuint locationTexture;
+	GLuint locationShadowMap;
 
+	LightNode* useLights(std::vector<LightNode*> lights);
+	void bindTextures(MeshNode* node);
 };
 
