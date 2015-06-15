@@ -107,8 +107,10 @@ void Renderer::bindBuffer(GLenum bufferType, GLuint bufferID)
 void Renderer::bindFrameBuffer(GLenum bufferType, GLuint bufferID)
 {
 	glBindFramebuffer(bufferType, bufferID);
-	glViewport(0, 0, 1024, 1024);
+	glViewport(0, 0, 512, 512);
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -180,12 +182,15 @@ std::vector<LightNode*> Renderer::getLights(MeshNode* node)
 	glm::vec3 playerPosition = glm::vec3(glm::inverse(node->getViewMatrix())[0][3], glm::inverse(node->getViewMatrix())[1][3], glm::inverse(node->getViewMatrix())[2][3]);
 	int numDirLights = 0;		
 	for (int i = 0; i < lights.size(); i++) {
-		if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) {
+		if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) { //this do not work currently
 			glm::vec3 lightInvDir = (lights.at(i)->getDirection());
 			glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir + playerPosition, glm::vec3(0, 0, 0) + playerPosition, glm::vec3(0, 1, 0));			
 			node->setDepthBiasMVP(depthProjectionMatrix * depthViewMatrix * depthModelMatrix);
 			node->setShadowMap(frameBuffers.at(numDirLights)->getTexture());
 			numDirLights++;
+		}
+		else if (lights.at(i)->getLightType() == POINT_LIGHT) {
+			node->setFramebuffer(frameBuffers.at(i));
 		}
 	}		
 	//std::cout << "Sum of lights: " << lights.size() << std::endl;

@@ -18,14 +18,14 @@ public:
 private:
 
 	GLuint locationMVP;
-	GLuint locationMV;
-	GLuint locationV;
 	GLuint locationM;
-	GLuint locationLightDirection;
 	GLuint locationLightPosition;
-	GLuint locationDepthBiasMVP;
-	GLuint locationTexture;
-	GLuint locationShadowMap;
+	GLuint locationDiffuseTexture;
+	GLuint locationDepthMap;
+	GLuint locationViewPos;
+	GLuint locationFarPlane;
+	GLuint locationShadows;
+	GLuint locationReverseNormals;
 
 	void useLights(std::vector<LightNode*> lights);
 	void bindTextures(MeshNode* node);

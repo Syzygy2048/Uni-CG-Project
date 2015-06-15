@@ -15,6 +15,12 @@ public:
 
 private:
 	GLuint locationDepthMVP;
-	GLuint locationMVP;
+	GLuint locationMV;
+	GLuint locationFarPlane;
+	GLuint locationLightPos;
+	GLuint locationModel;
+
+	void useLights(std::vector<LightNode*> lights);
+	void useGeometry(std::vector<glm::mat4> depthTransforms);
 };
 

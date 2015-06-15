@@ -19,7 +19,9 @@ public:
 	struct ShaderLoadInfo {
 		const std::string vertexShaderPath;
 		const std::string fragmentShaderPath;
+		const std::string geometryShaderPath;
 		ShaderLoadInfo(const std::string& vShaderPath, const std::string& fShaderPath) : fragmentShaderPath(fShaderPath), vertexShaderPath(vShaderPath){}
+		ShaderLoadInfo(const std::string& vShaderPath, const std::string& gShaderPath,const std::string& fShaderPath) : fragmentShaderPath(fShaderPath), geometryShaderPath(gShaderPath), vertexShaderPath(vShaderPath){}
 	};
 	static const ShaderLoadInfo* LIGHTING_SHADER;
 	static const ShaderLoadInfo* TEXTURE_SHADER;

@@ -71,8 +71,15 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	}
 	GLuint vertexShaderID = loadShader(shader->vertexShaderPath);
 	GLuint fragmentShaderID = loadShader(shader->fragmentShaderPath);
+	GLuint geometryShaderID = 100;
+	if (!shader->geometryShaderPath.empty()) {
+		geometryShaderID = loadShader(shader->geometryShaderPath);
+	}
 	GLuint shaderProgramID = glCreateProgram();
 	glAttachShader(shaderProgramID, vertexShaderID);
+	if (geometryShaderID != 100) {
+		glAttachShader(shaderProgramID, geometryShaderID);
+	}
 	glAttachShader(shaderProgramID, fragmentShaderID);
 	glLinkProgram(shaderProgramID);
 	

@@ -9,8 +9,10 @@
 #include "../Importers/MeshLoadInfo.h"
 #include "../Shader/ShaderProgram.h"
 #include "../Physics/PhysicsHandler.h"
+#include "../Framebuffer.h"
 
 class ShaderProgram;
+class Framebuffer;
 
 class MeshNode :
 	public SceneNode
@@ -29,7 +31,7 @@ public:
 
 	virtual void update(double timeStep, InputHandler* input);
 	//this takes both the viewprojection matrix as well as the individual matrices so that they don't have to be multiplied per object per frame.
-	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix);
+	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix, glm::vec3 playerPosition);
 
 	GLuint getVao();
 	int getDrawSize();
@@ -49,6 +51,9 @@ public:
 	Texture* getTexture();
 	void setShadowMap(Texture* shadowMap);
 	Texture* getShadowMap();
+	void setFramebuffer(Framebuffer* framebuffer);
+	Framebuffer* getFramebuffer();
+	glm::vec3 getPlayerPosition();
 
 	GLuint getMVPLocation();
 	GLuint getTextureLocation();
@@ -84,6 +89,7 @@ private:
 	glm::mat4 projectionMatrix;
 	glm::mat4 viewProjectionMatrix;
 	
+	Framebuffer* myFramebuffer;
 	GLuint myShaderID;
 	Texture* myTexture;
 	Texture* shadowMap;
@@ -93,6 +99,8 @@ private:
 	ShaderProgram* shaderProgram;
 
 	physx::PxRigidActor* physicsActor;
+
+	glm::vec3 playerPosition;
 
 	glm::mat4 biasMatrix = glm::mat4(
 		0.5, 0.0, 0.0, 0.0,

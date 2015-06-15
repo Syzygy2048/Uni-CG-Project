@@ -3,7 +3,7 @@ const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::LIGHTING_SHADER = new ShaderLo
 const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::TEXTURE_SHADER = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/texture_vertex_shader.glsl"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/texture_fragment_shader.glsl"));
 const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::SIMPLE_LIGHTING_SHADER = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/SimpleVertexShader.vertexshader"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/SimpleFragmentShader.fragmentshader"));
 const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::TEXT_SHADER = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/TextVertexShader.vertexshader"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/TextFragmentShader.fragmentshader"));
-const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::DEPTH_SHADER = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/DepthVertexShader.vertexshader"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/DepthFragmentShader.fragmentshader"));
+const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::DEPTH_SHADER = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/DepthVertexShader.vertexshader"), std::string("../BeyondTheBlackRainbow/Shader/Geometry/DepthGeometryShader.geometryshader"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/DepthFragmentShader.fragmentshader"));
 const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::SHADOWMAP_SHADER = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/ShadowMappingVertexShader.vertexshader"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/ShadowMappingFragmentShader.fragmentshader"));
 
 

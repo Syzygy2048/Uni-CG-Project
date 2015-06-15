@@ -3,9 +3,11 @@
 #include "Render\Renderer.h"
 #include "Importers\ShaderImporter.h"
 
-Framebuffer::Framebuffer(const MeshLoadInfo::LoadInfo* meshLoadInfo)
+Framebuffer::Framebuffer(const MeshLoadInfo::LoadInfo* meshLoadInfo, int width, int height)
 {
 	loadInfo = meshLoadInfo;
+	this->width = width;
+	this->height = height;
 }
 
 
@@ -13,19 +15,24 @@ Framebuffer::~Framebuffer()
 {
 }
 
-void Framebuffer::prepareFrameBuffer() 
+void Framebuffer::prepareFrameBuffer(LightType type) 
 {
 	Renderer* renderer = Renderer::getInstance();
 	renderer->generateFrameBuffer(&frameBufferID);
-	texture = new Texture();
-	renderer->fillFrameBuffer(frameBufferID, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getTextureID(), 0);
+	texture = new Texture(width, height);
+	if (type == DIRECTIONAL_LIGHT) {
+		renderer->fillFrameBuffer(frameBufferID, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getTextureID(), 0);
+	}
+	else if (type == POINT_LIGHT) {
+		renderer->fillFrameBuffer(frameBufferID, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getCubeMapID(), 0);
+	}
 	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->shaderInfo);
 	shaderProgram->loadUniformLocations();
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		std::cout << "Framebuffer is not complete, repair me pls!" << std::endl;
 	}
-	renderer->bindFrameBuffer(GL_FRAMEBUFFER, frameBufferID);
+	renderer->bindFrameBuffer(GL_FRAMEBUFFER, 0);
 }
 
 ShaderProgram* Framebuffer::getShaderProgram()
@@ -51,5 +58,34 @@ void Framebuffer::setDepthMVP(glm::mat4 depthMVP)
 glm::mat4 Framebuffer::getDepthMVP()
 {
 	return depthMVP;
+}
+
+void Framebuffer::setDepthTransforms(std::vector<glm::mat4> depthTransforms)
+{
+	this->depthTransforms = depthTransforms;
+}
+
+std::vector<glm::mat4> Framebuffer::getDepthTransfomrs()
+{
+	return depthTransforms;
+}
+
+void Framebuffer::setFarPlane(float farPlane)
+{
+	this->farPlane = farPlane;
+}
+
+float Framebuffer::getFarPlane()
+{
+	return farPlane;
+}
+void Framebuffer::setNearPlane(float nearPlane)
+{
+	this->nearPlane = nearPlane;
+}
+
+float Framebuffer::getNearPlane()
+{
+	return nearPlane;
 }
 

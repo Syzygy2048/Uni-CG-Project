@@ -1,7 +1,16 @@
-#version 330 core 
+#version 330 core
+in vec4 FragPos;
 
-layout(location = 0) out float fragmentDepth;
+uniform vec3 lightPos;
+uniform float farPlane;
 
-void main() {
-	fragmentDepth = gl_FragCoord.z;
+void main()
+{
+    float lightDistance = length(FragPos.xyz - lightPos);
+    
+    // map to [0;1] range by dividing by farPlane
+    lightDistance = lightDistance / farPlane;
+    
+    // Write this as modified depth
+    gl_FragDepth = lightDistance;
 }

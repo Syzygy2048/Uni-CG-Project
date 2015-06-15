@@ -1,179 +1,111 @@
 #version 330 core
+out vec4 FragColor;
 
-struct LightSource {
-	vec3 position;
-	float intensity;
-	vec3 color;
-	float type;
-	vec3 direction;
-};
+in VS_OUT {
+    vec3 FragPos;
+    vec3 Normal;
+    vec2 TexCoords;
+} fs_in;
 
-#define NR_LIGHTS 3
+uniform sampler2D diffuseTexture;
+uniform samplerCube depthMap;
 
-// Interpolated values from the vertex shaders
-in vec2 UV;
-in vec3 Position_worldspace;
-in vec3 Normal_cameraspace;
-in vec3 EyeDirection_cameraspace;
-in vec4 ShadowCoord;
-in vec3 vertexPosition_cameraspace;
-in vec3 lightDirection[NR_LIGHTS];
+uniform vec3 lightPos;
+uniform vec3 viewPos;
+
+uniform float far_plane;
+uniform bool shadows;
 
 
-//fog variables
-const vec3 fog_colour = vec3 (0.2,0.2,0.2);
-const float min_fog = 3.0;
-const float max_fog = 60.0;
-
-// Ouput data
-out vec4 color;
-
-// Values that stay constant for the whole mesh.
-uniform mat4 V;
-uniform mat4 MV;
-uniform sampler2D myTextureSampler;
-uniform sampler2D shadowMap;
-uniform LightSource lights[NR_LIGHTS];
-
-vec2 poissonDisk[16] = vec2[]( 
-   vec2( -0.94201624, -0.39906216 ), 
-   vec2( 0.94558609, -0.76890725 ), 
-   vec2( -0.094184101, -0.92938870 ), 
-   vec2( 0.34495938, 0.29387760 ), 
-   vec2( -0.91588581, 0.45771432 ), 
-   vec2( -0.81544232, -0.87912464 ), 
-   vec2( -0.38277543, 0.27676845 ), 
-   vec2( 0.97484398, 0.75648379 ), 
-   vec2( 0.44323325, -0.97511554 ), 
-   vec2( 0.53742981, -0.47373420 ), 
-   vec2( -0.26496911, -0.41893023 ), 
-   vec2( 0.79197514, 0.19090188 ), 
-   vec2( -0.24188840, 0.99706507 ), 
-   vec2( -0.81409955, 0.91437590 ), 
-   vec2( 0.19984126, 0.78641367 ), 
-   vec2( 0.14383161, -0.14100790 ) 
+// array of offset direction for sampling
+vec3 gridSamplingDisk[20] = vec3[]
+(
+   vec3(1, 1, 1), vec3(1, -1, 1), vec3(-1, -1, 1), vec3(-1, 1, 1), 
+   vec3(1, 1, -1), vec3(1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
+   vec3(1, 1, 0), vec3(1, -1, 0), vec3(-1, -1, 0), vec3(-1, 1, 0),
+   vec3(1, 0, 1), vec3(-1, 0, 1), vec3(1, 0, -1), vec3(-1, 0, -1),
+   vec3(0, 1, 1), vec3(0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1)
 );
 
-// Returns a random number based on a vec3 and an int.
-float random(vec3 seed, int i){
-	vec4 seed4 = vec4(seed,i);
-	float dot_product = dot(seed4, vec4(12.9898,78.233,45.164,94.673));
-	return fract(sin(dot_product) * 43758.5453);
+float ShadowCalculation(vec3 fragPos)
+{
+    // Get vector between fragment position and light position
+    vec3 fragToLight = fragPos - lightPos;
+    // Use the fragment to light vector to sample from the depth map    
+    // float closestDepth = texture(depthMap, fragToLight).r;
+    // It is currently in linear range between [0,1]. Let's re-transform it back to original depth value
+    // closestDepth *= far_plane;
+    // Now get current linear depth as the length between the fragment and light position
+    float currentDepth = length(fragToLight);
+
+    // Now test for shadows
+    // float bias = 0.05; // We use a much larger bias since depth is now in [near_plane, far_plane] range
+    // float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+    // PCF
+    // float shadow = 0.0;
+    // float bias = 0.05; 
+    // float samples = 4.0;
+    // float offset = 0.1;
+    // for(float x = -offset; x < offset; x += offset / (samples * 0.5))
+    // {
+        // for(float y = -offset; y < offset; y += offset / (samples * 0.5))
+        // {
+            // for(float z = -offset; z < offset; z += offset / (samples * 0.5))
+            // {
+                // float closestDepth = texture(depthMap, fragToLight + vec3(x, y, z)).r; // Use lightdir to lookup cubemap
+                // closestDepth *= far_plane;   // Undo mapping [0;1]
+                // if(currentDepth - bias > closestDepth)
+                    // shadow += 1.0;
+            // }
+        // }
+    // }
+    // shadow /= (samples * samples * samples);
+
+    float shadow = 0.0;
+    float bias = 0.15;
+    int samples = 20;
+    float viewDistance = length(viewPos - fragPos);
+    float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
+    for(int i = 0; i < samples; ++i)
+	{
+        float closestDepth = texture(depthMap, fragToLight + gridSamplingDisk[i] * diskRadius).r;
+        closestDepth *= far_plane;   // Undo mapping [0;1]
+		//FragColor = vec4(vec3(closestDepth / far_plane), 1.0); 
+        if(currentDepth - bias > closestDepth)
+            shadow += 1.0;
+    }
+    shadow /= float(samples);
+        
+    // Display closestDepth as debug (to visualize depth cubemap)
+    // FragColor = vec4(vec3(closestDepth / far_plane), 1.0);    
+        
+    // return shadow;
+    return shadow;
 }
 
-void main(){
-
-	// Material properties
-	vec3 MaterialDiffuseColor = texture2D( myTextureSampler, UV ).rgb;
-	vec3 MaterialAmbientColor = vec3(0.05,0.05,0.05) * MaterialDiffuseColor;
-	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);
-
-	for (int i = 0; i < NR_LIGHTS; i++) {
-	LightSource light = lights[i];
-
-	// Light emission properties
-	vec3 LightColor = light.color;
-	float LightPower = light.intensity;
-	
-	if (light.type == 2) {
-
-	
-			// Distance to the light
-	float distance = length( light.position - Position_worldspace );
-	float dist = length(-EyeDirection_cameraspace);
-
-
-	
-	// Normal of the computed fragment, in camera space
-	float fog_fac = (dist-min_fog)/(max_fog - min_fog);
-	fog_fac = clamp(fog_fac,0.0,1.0);
-
-	vec3 n = normalize( Normal_cameraspace );
-	// Direction of the light (from the fragment to the light)
-	vec3 l = normalize( lightDirection[i] );
-	// Cosine of the angle between the normal and the light direction, 
-	// clamped above 0
-	//  - light is at the vertical of the triangle -> 1
-	//  - light is perpendiular to the triangle -> 0
-	//  - light is behind the triangle -> 0
-	float cosTheta = clamp( dot( n,l ), 0,1 );
-	
-	// Eye vector (towards the camera)
-	vec3 E = normalize(EyeDirection_cameraspace);
-	// Direction in which the triangle reflects the light
-	vec3 R = reflect(-l,n);
-	// Cosine of the angle between the Eye vector and the Reflect vector,
-	// clamped to 0
-	//  - Looking into the reflection -> 1
-	//  - Looking elsewhere -> < 1
-	float cosAlpha = clamp( dot( E,R ), 0,1 );
-	
-	float visibility=1.0;
-
-	// Fixed bias, or...
-	//float bias = 0.005;
-	
-	// ...variable bias
-	float bias = 0.005*tan(acos(cosTheta));
-	bias = clamp(bias, 0,0.01);
-	
-	if( ShadowCoord.x <= 1 && ShadowCoord.x >= 0 && ShadowCoord.y <= 1 && ShadowCoord.y >= 0 ){
-		if ( texture( shadowMap, ShadowCoord.xy).x   <  ShadowCoord.z - bias){
-			visibility = 0.2;
-		}
-	}
-
-	vec3 help =
-			// Ambient : simulates indirect lighting
-	MaterialAmbientColor +
-			// Diffuse : "color" of the object
-	visibility * MaterialDiffuseColor * LightColor * LightPower * cosTheta +
-			// Specular : reflective highlight, like a mirror
-	visibility * MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,5);
-	color.rgb += mix(help,fog_colour,fog_fac);
-	
-	} else if ( light.type == 1) {
-
-		vec3 LightPosition_cameraspace = ( V * vec4(light.position,1)).xyz;
-		vec3 LightDirection_cameraspace = LightPosition_cameraspace - vertexPosition_cameraspace;
-	
-	// Distance to the light
-		float distance = length( light.position - Position_worldspace );
-
-		// Normal of the computed fragment, in camera space
-		vec3 n = normalize( Normal_cameraspace );
-
-		// Eye vector (towards the camera)
-		vec3 E = normalize(EyeDirection_cameraspace);
-
-		// Direction of the light (from the fragment to the light)
-		vec3 l = normalize(  LightDirection_cameraspace );
-		// Cosine of the angle between the normal and the light direction, 
-		// clamped above 0
-		//  - light is at the vertical of the triangle -> 1
-		//  - light is perpendicular to the triangle -> 0
-		//  - light is behind the triangle -> 0
-		float cosTheta = clamp( dot( n,l ), 0,1 );
-	
-	
-		// Direction in which the triangle reflects the light
-		vec3 R = reflect(l,n);
-		// Cosine of the angle between the Eye vector and the Reflect vector,
-		// clamped to 0
-		//  - Looking into the reflection -> 1
-		//  - Looking elsewhere -> < 1
-		float cosAlpha = clamp( dot( E,R ), 0,1 );	
-
-		color += 
-			// Ambient : simulates indirect lighting
-			MaterialAmbientColor +
-			// Diffuse : "color" of the object
-			MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
-			// Specular : reflective highlight, like a mirror
-			MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,50) / (distance*distance);		
-		
-	
-	}
-	color.a = 0.5;
-	}
+void main()
+{           
+    vec3 color = texture(diffuseTexture, fs_in.TexCoords).rgb;
+    vec3 normal = normalize(fs_in.Normal);
+    vec3 lightColor = vec3(0.3);
+    // Ambient
+    vec3 ambient = 0.3 * color;
+    // Diffuse
+    vec3 lightDir = normalize(lightPos - fs_in.FragPos);
+    float diff = max(dot(lightDir, normal), 0.0);
+    vec3 diffuse = diff * lightColor;
+    // Specular
+    vec3 viewDir = normalize(viewPos - fs_in.FragPos);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = 0.0;
+    vec3 halfwayDir = normalize(lightDir + viewDir);  
+    spec = pow(max(dot(normal, halfwayDir), -10.0), 64.0);
+    vec3 specular = spec * lightColor;    
+    // Calculate shadow
+    float shadow = shadows ? ShadowCalculation(fs_in.FragPos) : 0.0;                      
+   // vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;   
+	vec3 lighting = (ambient + (diffuse + specular)) * color * (1.0 - shadow);   
+    //vec3 lighting = ambient + diffuse + specular;   
+    
+    FragColor = vec4(lighting, 1.0f);
 }
