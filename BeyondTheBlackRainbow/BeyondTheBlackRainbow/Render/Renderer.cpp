@@ -107,7 +107,7 @@ void Renderer::bindBuffer(GLenum bufferType, GLuint bufferID)
 void Renderer::bindFrameBuffer(GLenum bufferType, GLuint bufferID)
 {
 	glBindFramebuffer(bufferType, bufferID);
-	glViewport(0, 0, 512, 512);
+	glViewport(0, 0, 128, 128);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);

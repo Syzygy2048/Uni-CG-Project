@@ -198,8 +198,8 @@ int main() {
 
 
 	//Framebuffer stuff (for one pointlight)
-	int framebufferWidth = 512;
-	int framebufferHeight = 512;
+	int framebufferWidth = 128;
+	int framebufferHeight = 128;
 	float framebufferNear = 0.1f;
 	float framebufferFar = 100.0f;
 	Framebuffer* frameBuffer1 = new Framebuffer(MeshLoadInfo::DEPTH, framebufferWidth, framebufferHeight);
