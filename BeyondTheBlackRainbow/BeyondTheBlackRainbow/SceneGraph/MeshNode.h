@@ -31,7 +31,7 @@ public:
 
 	virtual void update(double timeStep, InputHandler* input);
 	//this takes both the viewprojection matrix as well as the individual matrices so that they don't have to be multiplied per object per frame.
-	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix, glm::vec3 playerPosition);
+	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix, glm::vec3 playerPosition, std::vector<Framebuffer*> framebuffers);
 
 	GLuint getVao();
 	int getDrawSize();
@@ -51,8 +51,6 @@ public:
 	Texture* getTexture();
 	void setShadowMap(Texture* shadowMap);
 	Texture* getShadowMap();
-	void setFramebuffer(Framebuffer* framebuffer);
-	Framebuffer* getFramebuffer();
 	glm::vec3 getPlayerPosition();
 
 	GLuint getMVPLocation();
@@ -65,7 +63,7 @@ public:
 
 	void removeCollisionShape();
 
-
+	std::vector<Framebuffer*> getFramebuffers();
 
 	bool SUBMISSION1_ANIMATION_HACK = false;
 	glm::highp_float SUBMISSION1_ANIMATION_HACK_DOOR_ROTATION_AMOUNT = 90;
@@ -89,7 +87,6 @@ private:
 	glm::mat4 projectionMatrix;
 	glm::mat4 viewProjectionMatrix;
 	
-	Framebuffer* myFramebuffer;
 	GLuint myShaderID;
 	Texture* myTexture;
 	Texture* shadowMap;
@@ -109,6 +106,8 @@ private:
 		0.5, 0.5, 0.5, 1.0
 		);
 	glm::mat4 depthBiasMatrix;
+
+	std::vector<Framebuffer*> framebuffers;
 
 };
 
