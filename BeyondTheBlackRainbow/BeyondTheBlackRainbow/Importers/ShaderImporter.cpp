@@ -9,6 +9,7 @@
 #include "..\Shader\SimpleLightingShaderProgram.h"
 #include "..\Shader\TextShaderProgram.h"
 #include "..\Shader\DepthShaderProgram.h"
+#include "..\Shader\DepthDirShaderProgram.h"
 #include "..\Shader\ShadowMappingShaderProgram.h"
 
 
@@ -117,6 +118,10 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	else if (shader == MeshLoadInfo::DEPTH_SHADER)
 	{
 		result = new DepthShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::DEPTHDIR_SHADER)
+	{
+		result = new DepthDirShaderProgram(shaderProgramID);
 	}
 	else if (shader == MeshLoadInfo::SHADOWMAP_SHADER)
 	{

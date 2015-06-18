@@ -28,6 +28,7 @@ public:
 	static const ShaderLoadInfo* SIMPLE_LIGHTING_SHADER;
 	static const ShaderLoadInfo* TEXT_SHADER;
 	static const ShaderLoadInfo* DEPTH_SHADER;
+	static const ShaderLoadInfo* DEPTHDIR_SHADER;
 	static const ShaderLoadInfo* SHADOWMAP_SHADER;
 
 	struct LoadInfo {
@@ -45,5 +46,6 @@ public:
 	static const LoadInfo* DOOR;
 	static const LoadInfo* TEXT;
 	static const LoadInfo* DEPTH;
+	static const LoadInfo* DEPTHDIR;
 
 };

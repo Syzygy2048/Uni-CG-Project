@@ -178,16 +178,13 @@ void Renderer::useShader(MeshNode* node, std::vector<LightNode*> lights)
 }
 
 std::vector<LightNode*> Renderer::getLights(MeshNode* node)
-{
-	glm::vec3 playerPosition = glm::vec3(glm::inverse(node->getViewMatrix())[0][3], glm::inverse(node->getViewMatrix())[1][3], glm::inverse(node->getViewMatrix())[2][3]);
-	int numDirLights = 0;		
+{	
 	for (int i = 0; i < lights.size(); i++) {
 		if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) { //this do not work currently
 			glm::vec3 lightInvDir = (lights.at(i)->getDirection());
-			glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir + playerPosition, glm::vec3(0, 0, 0) + playerPosition, glm::vec3(0, 1, 0));			
+			glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir + node->getPlayerPosition(), glm::vec3(0, 0, 0) + node->getPlayerPosition(), glm::vec3(0, 1, 0));			
 			node->setDepthBiasMVP(depthProjectionMatrix * depthViewMatrix * depthModelMatrix);
-			node->setShadowMap(frameBuffers.at(numDirLights)->getTexture());
-			numDirLights++;
+			node->setShadowMap(frameBuffers.at(i)->getTexture());
 		}
 		else if (lights.at(i)->getLightType() == POINT_LIGHT) {
 			//node->setFramebuffer(frameBuffers.at(i));

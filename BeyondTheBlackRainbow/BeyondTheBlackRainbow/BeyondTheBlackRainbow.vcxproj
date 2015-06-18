@@ -80,6 +80,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Framebuffer.cpp" />
+    <ClCompile Include="Shader\DepthDirShaderProgram.cpp" />
     <ClCompile Include="Shader\DepthShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\DirectionalLightNode.cpp" />
     <ClCompile Include="Event\EventFactory.cpp" />
@@ -111,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framebuffer.h" />
+    <ClInclude Include="Shader\DepthDirShaderProgram.h" />
     <ClInclude Include="Shader\DepthShaderProgram.h" />
     <ClInclude Include="SceneGraph\DirectionalLightNode.h" />
     <ClInclude Include="Event\EventFactory.h" />

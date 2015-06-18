@@ -17,10 +17,13 @@ void ShadowMappingShaderProgram::loadUniformLocations()
 {
 	locationMVP = glGetUniformLocation(programId, "MVP");
 	locationM = glGetUniformLocation(programId, "model");
+	locationV = glGetUniformLocation(programId, "V");
+	locationDepthBias = glGetUniformLocation(programId, "DepthBiasMVP");
 	locationReverseNormals = glGetUniformLocation(programId, "reverse_normals");
 	locationViewPos = glGetUniformLocation(programId, "viewPos");
 	locationDiffuseTexture = glGetUniformLocation(programId, "diffuseTexture");
 	locationShadows = glGetUniformLocation(programId, "needShadows");
+	locationDirDepthMap = glGetUniformLocation(programId, "dirDepthMap");
 }
 
 void ShadowMappingShaderProgram::fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights)
@@ -29,6 +32,10 @@ void ShadowMappingShaderProgram::fillUniformLocation(MeshNode* node, std::vector
 	glUniformMatrix4fv(locationMVP, 1, GL_FALSE, &MVP[0][0]);
 	glm::mat4 M = node->getModelMatrix();
 	glUniformMatrix4fv(locationM, 1, GL_FALSE, &M[0][0]);
+	glm::mat4 V = node->getViewMatrix();
+	glUniformMatrix4fv(locationV, 1, GL_FALSE, &V[0][0]);
+	glm::mat4 bias = node->getDepthBiasMatrix();
+	glUniformMatrix4fv(locationDepthBias, 1, GL_FALSE, &bias[0][0]);
 	glm::vec3 viewPos = node->getPlayerPosition();
 	glUniform3fv(locationViewPos, 1, &viewPos[0]);
 
@@ -46,7 +53,8 @@ void ShadowMappingShaderProgram::bindTextures(MeshNode* node)
 	glUniform1i(locationDiffuseTexture, 0);
 	
 	std::vector<Framebuffer*> framebuffers = node->getFramebuffers();
-	for (int i = 0; i < framebuffers.size(); i++) {
+	for (int i = 0; i < framebuffers.size()-1; i++) {
+		
 		std::stringstream shadowMap;
 		shadowMap << "shadows[";
 		shadowMap << i;
@@ -73,6 +81,9 @@ void ShadowMappingShaderProgram::bindTextures(MeshNode* node)
 		farPlane << "].farPlane";
 		glUniform1f(glGetUniformLocation(programId, farPlane.str().c_str()), framebuffers.at(i)->getFarPlane());
 	}
+	glActiveTexture(GL_TEXTURE25);
+	glBindTexture(GL_TEXTURE_2D, framebuffers.at(framebuffers.size() - 1)->getTexture()->getTextureID());
+	glUniform1i(locationDirDepthMap, 25);
 }
 
 void ShadowMappingShaderProgram::useLights(std::vector<LightNode*> lights)

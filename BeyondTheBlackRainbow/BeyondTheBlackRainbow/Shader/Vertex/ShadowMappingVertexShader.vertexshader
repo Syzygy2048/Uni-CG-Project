@@ -1,4 +1,7 @@
 #version 330 core
+
+#define NR_LIGHTS 2
+
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec3 normal;
 layout (location = 2) in vec2 texCoords;
@@ -11,8 +14,15 @@ out VS_OUT {
     vec2 TexCoords;
 } vs_out;
 
+
+out vec3 EyeDirection_cameraspace; //
+out vec4 dirShadowCoord; //
+
 uniform mat4 MVP;
 uniform mat4 model;
+uniform mat4 V;
+uniform mat4 DepthBiasMVP;
+
 
 uniform bool reverse_normals;
 
@@ -25,4 +35,7 @@ void main()
     else
         vs_out.Normal = transpose(inverse(mat3(model))) * normal;
     vs_out.TexCoords = texCoords;
+
+	EyeDirection_cameraspace = vec3(0,0,0) - ( V * model * vec4(position,1)).xyz;
+	dirShadowCoord = DepthBiasMVP * vec4(position,1);
 }
