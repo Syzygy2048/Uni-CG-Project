@@ -20,8 +20,10 @@
 #include "Physics\PhysicsHandler.h"
 #include "Text\Text.h"
 #include "Event\EventFactory.h"
+#include "Texture\SamplerStateEnum.h"
+#include "Texture\MipmapStateEnum.h"
 
-
+std::map < std::string, Text* > text;
 
 void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::vector<MeshNode*>* drawArray)
 {
@@ -44,7 +46,100 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 	}
 }
 
+void initializeText() {
+	Text* fpsText = new Text("FPS: 999", MeshLoadInfo::TEXT);
+	fpsText->prepareText(50, 100, 25);
+	text.insert(std::pair<std::string, Text*>("fpsText", fpsText));
+	Text* someText = new Text("Escape the room!", MeshLoadInfo::TEXT);
+	someText->prepareText(50, 50, 30);
+	someText->setValid(true);
+	text.insert(std::pair<std::string, Text*>("helpText", someText));
+	Text* nearestSampler = new Text("Sampling: Nearest Neighbour", MeshLoadInfo::TEXT);
+	nearestSampler->prepareText(50, 550, 20);
+	text.insert(std::pair<std::string, Text*>("nearestSampler", nearestSampler));
+	Text* linearSampler = new Text("Sampling: Linear", MeshLoadInfo::TEXT);
+	linearSampler->prepareText(50, 550, 20);
+	linearSampler->setValid(true);
+	text.insert(std::pair<std::string, Text*>("linearSampler", linearSampler));
+	Text* nearestMipmap = new Text("Mipmap: Nearest Neighbour", MeshLoadInfo::TEXT);
+	nearestMipmap->prepareText(50, 500, 20);
+	text.insert(std::pair<std::string, Text*>("nearestMipmap", nearestMipmap));
+	Text* bilinearMipmap = new Text("Mipmap: Bilinear", MeshLoadInfo::TEXT);
+	bilinearMipmap->prepareText(50, 500, 20);
+	text.insert(std::pair<std::string, Text*>("bilinearMipmap", bilinearMipmap));
+	Text* trilinearMipmap = new Text("Mipmap: Trilinear", MeshLoadInfo::TEXT);
+	trilinearMipmap->prepareText(50, 500, 20);
+	trilinearMipmap->setValid(true);
+	text.insert(std::pair<std::string, Text*>("trilinearMipmap", trilinearMipmap));
+	Text* blendOn = new Text("Transparency On", MeshLoadInfo::TEXT);
+	blendOn->prepareText(50, 450, 20);
+	blendOn->setValid(true);
+	text.insert(std::pair<std::string, Text*>("blendOn", blendOn));
+	Text* blendOff = new Text("Transparency Off", MeshLoadInfo::TEXT);
+	blendOff->prepareText(50, 450, 20);
+	text.insert(std::pair<std::string, Text*>("blendOff", blendOff));
+}
 
+void setSamplerText(SamplerState state)
+{
+	switch (state)
+	{
+	case NEAREST_N :
+		text.find("nearestSampler")->second->setValid(true);
+		break;
+	case LINEAR:
+		text.find("linearSampler")->second->setValid(true);
+		break;
+	}
+}
+
+void blendSamplerText() 
+{
+	text.find("nearestSampler")->second->setValid(false);
+	text.find("linearSampler")->second->setValid(false);
+}
+
+void setMipmapText(MipmapState state)
+{
+	switch (state)
+	{
+	case NEAREST :
+		text.find("nearestMipmap")->second->setValid(true);
+		break;
+	case BILINEAR:
+		text.find("bilinearMipmap")->second->setValid(true);
+		break;
+	case TRILINEAR:
+		text.find("trilinearMipmap")->second->setValid(true);
+		break;
+	}
+}
+
+void blendMipmapText()
+{
+	text.find("nearestMipmap")->second->setValid(false);
+	text.find("bilinearMipmap")->second->setValid(false);
+	text.find("trilinearMipmap")->second->setValid(false);
+}
+
+void setTransparencyText(bool blend)
+{
+	switch (blend)
+	{
+	case true :
+		text.find("blendOn")->second->setValid(true);
+		break;
+	case false :
+		text.find("blendOff")->second->setValid(true);
+	}
+}
+
+void blendTransparencyText()
+{
+	text.find("blendOn")->second->setValid(false);
+	text.find("blendOff")->second->setValid(false);
+
+}
 
 int main() {
 
@@ -57,19 +152,10 @@ int main() {
 	
 	InputHandler* input = new InputHandler();
 
+	initializeText();
+
 	PhysicsHandler* physics = new PhysicsHandler();
-	physics->initPhysics();
-
-	std::vector<Text*> textArray;	//should probably be a key value pair for easier manipulation
-
-	Text* fpsText = new Text("FPS: 999", MeshLoadInfo::TEXT);
-	fpsText->prepareText(100, 100, 25);
-	Text* someText = new Text("stuff", MeshLoadInfo::TEXT);
-	someText->prepareText(50, 50, 50);
-
-	textArray.push_back(fpsText);
-	textArray.push_back(someText);
-	
+	physics->initPhysics();	
 
 	std::map<std::string, CameraNode*> cameraList;
 
@@ -193,11 +279,21 @@ int main() {
 	double time = glfwGetTime();
 	double oldTime = glfwGetTime();
 	double timeStep = 1.0 / 60.0;
+	double mipmapTime = 0.1;
+	double samplerTime = 0.1;
+	double blendTime = 0.1;
 	
+	bool helpEnable = true;
+	bool blendEnable = true;
 	bool wireframeEnabled = false;
 	bool fpsEnabled = false;
+	bool oldF1State = false;
 	bool oldF3State = false;
 	bool oldF2State = false;
+	bool oldF4State = false;
+	bool oldF5State = false;
+	bool oldF8State = false;
+	bool oldF9State = false;
 
 	//gameloop
 	double timeOld = 0;
@@ -215,12 +311,35 @@ int main() {
 		}
 		oldTime = time - deltaTime;
 		
+		//setTextTime oldtime+5
+		if (samplerTime != 0.0 && (oldTime - samplerTime) > 5)
+		{
+			blendSamplerText();
+			samplerTime = 0.0;
+		}
+		if (mipmapTime != 0.0 && (oldTime - mipmapTime) > 5)
+		{
+			blendMipmapText();
+			mipmapTime = 0.0;
+		}
+		if (blendTime != 0.0 && (oldTime - blendTime) > 5)
+		{
+			blendTransparencyText();
+			blendTime = 0.0;
+		}
+
 		input->update(renderer->getWindow());
 		
+		//help
+		if (input->f1 && !oldF1State)
+		{
+			helpEnable = !helpEnable;
+			text.find("helpText")->second->setValid(helpEnable);
+		}
 
+		//FPS
 		if (input->f2 && !oldF2State)
 			fpsEnabled = !fpsEnabled;
-		oldF2State = input->f2;
 		if (fpsEnabled)
 		{
 			char str[10];
@@ -230,42 +349,18 @@ int main() {
 			_itoa_s(fps, str, 10);
 
 			strcat_s(fpsString, 20, str);
-			fpsText->setText(fpsString);
-
-			std::vector<Text*> tempTextArray = textArray;
-			for (std::vector<Text*>::iterator iter = textArray.begin(); iter != textArray.end(); iter++)
-			{
-				bool alreadyAdded = false;
-				if (*iter == fpsText)
-				{
-					alreadyAdded = true;
-				}
-				if (!alreadyAdded)
-				{
-					tempTextArray.push_back(fpsText);
-				}
-			}
-			textArray = tempTextArray;
+			text.find("fpsText")->second->setValid(true);
+			text.find("fpsText")->second->setText(fpsString);
 		}
 		else
 		{
-			std::vector<Text*> tempTextArray;
-			for (std::vector<Text*>::iterator iter = textArray.begin(); iter != textArray.end(); iter++)
-			{				
-				if (*iter != fpsText)
-				{
-					tempTextArray.push_back(*iter);
-				}
-			}
-			textArray = tempTextArray;
+			text.find("fpsText")->second->setValid(false);
 		}
-
-
-
+		
+		//wireframe
 		if (input->f3 && !oldF3State)
 			wireframeEnabled = !wireframeEnabled;
-		oldF3State = input->f3;
-		
+		//wir wollten alle glMethoden in Renderer haben...
 		if (wireframeEnabled)
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -274,22 +369,52 @@ int main() {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 
-
+		//transparency
+		if (input->f9 && !oldF9State)
+		{
+			blendTransparencyText();
+			blendEnable = !blendEnable;
+			setTransparencyText(blendEnable);
+			blendTime = oldTime;
+		}
 
 		glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 		glm::mat4 viewMatrix = activeCamera->getViewMatrix();
 		glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 		for (MeshNode* node : drawArray){
-
+			//setSampler
+			if (input->f4 && !oldF4State) 
+			{
+				blendSamplerText();
+				node->getTexture()->setSamplerState();
+				setSamplerText(node->getTexture()->getSamplerState());
+				samplerTime = oldTime;
+			}
+			//setMipmap
+			if (input->f5 && !oldF5State)
+			{
+				blendMipmapText();
+				node->getTexture()->setMipmapState();
+				setMipmapText(node->getTexture()->getMipmapState());
+				mipmapTime = oldTime;
+			}
+			//draw meshes
 			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix);
 
 		}
-		for (Text* text : textArray){
-			text->draw();
+		for (auto const &it : text) {
+			if (it.second->getValid()) {
+				it.second->draw(blendEnable);
+			}
 		}
 
-		//text->draw();
-		//text2->draw();
+		oldF1State = input->f1;
+		oldF2State = input->f2;
+		oldF3State = input->f3;
+		oldF4State = input->f4;
+		oldF5State = input->f5;
+		oldF8State = input->f8;
+		oldF9State = input->f9;
 
 		glLoadMatrixf(&viewProjectionMatrix[0][0]);
 

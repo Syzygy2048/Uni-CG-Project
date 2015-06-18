@@ -4,7 +4,7 @@
 #include <GL\glew.h>
 
 #include "SceneNode.h"
-#include "../Texture.h"
+#include "../Texture/Texture.h"
 #include "../InputHandler.h"
 #include "../Importers/MeshLoadInfo.h"
 #include "../Shader/ShaderProgram.h"

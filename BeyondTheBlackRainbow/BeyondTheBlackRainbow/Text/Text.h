@@ -6,7 +6,7 @@
 #include <iostream>
 
 #include "../Shader/ShaderProgram.h"
-#include "../Texture.h"
+#include "../Texture/Texture.h"
 
 class ShaderProgram;
 
@@ -17,7 +17,7 @@ public:
 	~Text();
 
 	void prepareText(GLfloat x, GLfloat y, GLfloat scale);
-	void draw();
+	void draw(bool enableBlend);
 
 	GLuint getVAO();
 	int getVerticesSize();
@@ -26,7 +26,8 @@ public:
 	void setText(char* text);
 	std::string getText();
 
-	
+	void setValid(bool valid);
+	bool getValid();
 
 private:
 
@@ -48,5 +49,7 @@ private:
 	GLuint UVBufferID;
 
 	int verticesSize;
+
+	bool valid;
 };
 

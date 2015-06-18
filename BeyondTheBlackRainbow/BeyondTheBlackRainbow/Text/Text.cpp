@@ -11,6 +11,7 @@ Text::Text(const char* text, const MeshLoadInfo::LoadInfo* meshLoadInfo)
 {
 	loadInfo = meshLoadInfo;
 	this->text = text;
+	valid = false;
 }
 
 
@@ -83,9 +84,9 @@ void Text::prepareText(GLfloat x, GLfloat y, GLfloat scale)
 
 }
 
-void Text::draw()
+void Text::draw(bool enableBlend)
 {
-	Renderer::getInstance()->drawText(this);
+	Renderer::getInstance()->drawText(this, enableBlend);
 }
 
 GLuint Text::getVAO()
@@ -158,5 +159,17 @@ void Text::setText(char* text){
 	renderer->fillBuffer(UVBufferID, GL_ARRAY_BUFFER, UV.size() * sizeof(glm::vec2), &UV[0], GL_STATIC_DRAW);
 	renderer->setVertexAttribPointer(textureAttribPointer, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
+}
+
+void Text::setValid(bool valid)
+{
+	if (this->valid != valid) {
+		this->valid = valid;
+	}
+}
+
+bool Text::getValid()
+{
+	return valid;
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "..\Shader\ShaderProgram.h"
-#include "..\Texture.h"
+#include "..\Texture\Texture.h"
 
 class SimpleLightingShaderProgram : public ShaderProgram
 {

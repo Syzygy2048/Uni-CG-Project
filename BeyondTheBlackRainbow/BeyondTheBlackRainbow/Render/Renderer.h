@@ -4,7 +4,7 @@
 #include <GLFW\glfw3.h>
 
 #include "../InputHandler.h"
-#include "../Texture.h"
+#include "../Texture/Texture.h"
 #include "../SceneGraph/PlayerNode.h"
 #include "../SceneGraph/SceneGraphEnum.h"
 #include "../SceneGraph/SceneNode.h"
@@ -37,7 +37,7 @@ public:
 	void linkShader(ShaderProgram* shader);
 
 	void draw(MeshNode* node);
-	void drawText(Text* text);
+	void drawText(Text* text, bool enableBlend);
 
 	GLFWwindow* getWindow();
 

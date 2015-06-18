@@ -102,7 +102,7 @@
     <ClCompile Include="Shader\SimpleLightingShaderProgram.cpp" />
     <ClCompile Include="Shader\TextShaderProgram.cpp" />
     <ClCompile Include="Shader\TextureShaderProgram.cpp" />
-    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Texture\Texture.cpp" />
     <ClCompile Include="SceneGraph\TransformNode.cpp" />
     <ClCompile Include="Text\Text.cpp" />
   </ItemGroup>
@@ -133,10 +133,12 @@
     <ClInclude Include="Shader\SimpleLightingShaderProgram.h" />
     <ClInclude Include="Shader\TextShaderProgram.h" />
     <ClInclude Include="Shader\TextureShaderProgram.h" />
+    <ClInclude Include="Texture\MipmapStateEnum.h" />
+    <ClInclude Include="Texture\SamplerStateEnum.h" />
     <ClInclude Include="Text\Text.h" />
     <ClInclude Include="Util\FileChecker.h" />
     <ClInclude Include="Util\UuidHelper.h" />
-    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Texture\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
