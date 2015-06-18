@@ -46,13 +46,13 @@ public:
 	void genDepthBuffer(GLuint* id);
 	void bindDepthBuffer(GLuint id, int viewPortResX, int viewPortResY);
 
-	void configureFramebufferForPostProcessing(GLuint framebufferId, GLuint textureId);
+	void configureFramebufferForPostProcessing(GLuint framebufferId, int viewPortResX, int viewPortResY);
 
 	void genrateShadowMapTexture(GLuint* id);
 	void glBindShadowMapTexture(GLuint id, int viewPortResX, int viewPortRexY);
 
-	void createRenderSurface();
-	void renderToScreen(GLuint textureId, int viewPortResX, int viewPortResY);
+	void createRenderSurface(int viewPortResX, int viewPortResY);
+	void renderToScreen(int viewPortResX, int viewPortResY);
 
 	void draw(MeshNode* node);
 	void drawText(Text* text);
@@ -68,6 +68,7 @@ private:
 
 	GLuint renderSurfaceVAO;
 	GLuint renderSurfaceVBO;
+	GLuint renderTexture;
 	
 	ShaderProgram* postProcessingShader;
 	

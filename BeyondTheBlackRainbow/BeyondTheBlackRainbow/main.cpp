@@ -203,26 +203,22 @@ int main() {
 	bool oldF3State = false;
 	bool oldF2State = false;
 
-	renderer->createRenderSurface();
+	renderer->createRenderSurface(viewPortResX, viewPortResY);
 
 	GLuint frameBuffer;
 	renderer->generateFramebuffer(&frameBuffer);
 	renderer->bindFramebuffer(frameBuffer, viewPortResX, viewPortResY);
-	GLuint renderTexture;
-	renderer->genRenderTexture(&renderTexture);
-	renderer->bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
+	
 	GLuint depthRenderBuffer;
 	renderer->genDepthBuffer(&depthRenderBuffer);
 	renderer->bindDepthBuffer(depthRenderBuffer, viewPortResX, viewPortResY);
-
-
 	
 	//gameloop
 	double timeOld = 0;
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
 		// Clear the screen
 		renderer->bindFramebuffer(frameBuffer, viewPortResX, viewPortResY);
-		renderer->configureFramebufferForPostProcessing(frameBuffer, renderTexture);
+		renderer->configureFramebufferForPostProcessing(frameBuffer, viewPortResX, viewPortResY);
 
 		time = glfwGetTime();
 		double deltaTime = time - oldTime;
@@ -308,12 +304,13 @@ int main() {
 		//text->draw();
 		//text2->draw();
 
+#ifdef _DEBUG
 		glLoadMatrixf(&viewProjectionMatrix[0][0]);
-
+#endif
 		physics->renderCollisionShapes();
 		
 		
-		renderer->renderToScreen(renderTexture, viewPortResX, viewPortResY);
+		renderer->renderToScreen(viewPortResX, viewPortResY);
 
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();

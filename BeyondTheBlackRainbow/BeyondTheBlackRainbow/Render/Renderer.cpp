@@ -35,6 +35,7 @@ int Renderer::init(int viewPortResX, int viewPortResY)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // We want OpenGL 3.3
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 #endif
 	
@@ -119,11 +120,10 @@ void Renderer::bindVertexArray(GLuint vertexArrayId)
 
 void Renderer::draw(MeshNode* node)
 {
-		this->useShader(node, this->getLights(node));
+	this->useShader(node, this->getLights(node));
+	bindVertexArray(node->getVao());
 
-		bindVertexArray(node->getVao());
-
-		glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);	
+	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);	
 	
 	bindVertexArray(0);
 	glUseProgram(0);
@@ -233,9 +233,10 @@ void Renderer::bindDepthBuffer(GLuint id, int viewPortResX, int viewPortResY)
 
 }
 
-void Renderer::configureFramebufferForPostProcessing(GLuint framebufferId, GLuint textureId)
+void Renderer::configureFramebufferForPostProcessing(GLuint framebufferId, int viewPortResX, int viewPortResY)
 {
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureId, 0);
+	bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, 0);
 
 	const int numberOfDrawbuffers = 1;
 	GLenum drawBuffers[numberOfDrawbuffers] = { GL_COLOR_ATTACHMENT0 };
@@ -248,10 +249,13 @@ void Renderer::configureFramebufferForPostProcessing(GLuint framebufferId, GLuin
 	}
 }
 
-void Renderer::createRenderSurface()
+void Renderer::createRenderSurface(int viewPortResX, int viewPortResY)
 {
 	generateVertexArray(&renderSurfaceVAO);
 	generateBufferObject(&renderSurfaceVBO);
+
+	genRenderTexture(&renderTexture);
+	bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
 
 	bindVertexArray(renderSurfaceVAO);
 	
@@ -265,31 +269,7 @@ void Renderer::createRenderSurface()
 	};
 
 	fillBuffer(renderSurfaceVBO, GL_ARRAY_BUFFER, sizeof(renderSurfaceVertices), &renderSurfaceVertices, GL_STATIC_DRAW);
-	
-	postProcessingShader = ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLOOM_SHADER);
-	postProcessingShader->loadUniformLocations();
-	
-	bindVertexArray(0);
-	bindBuffer(GL_ARRAY_BUFFER, 0);
-	bindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-void Renderer::renderToScreen(GLuint renderTextureId, int viewPortResX, int viewPortResY)
-{
-	bindFramebuffer(0, viewPortResX, viewPortResY);
-	
-	glUseProgram(postProcessingShader->getShaderId());
-
-	// Bind our texture in Texture Unit 0
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, renderTextureId);
-	// Set our "renderedTexture" sampler to user Texture Unit 0
-
-	postProcessingShader->fillUniformLocation(GL_TEXTURE0);
-
-	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, renderSurfaceVBO);
 	glVertexAttribPointer(
 		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 		3,                  // size
@@ -299,11 +279,37 @@ void Renderer::renderToScreen(GLuint renderTextureId, int viewPortResX, int view
 		(void*)0            // array buffer offset
 		);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, renderTexture);
+	
+	postProcessingShader = ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLOOM_SHADER);
+	postProcessingShader->loadUniformLocations();
+	
+	bindVertexArray(0);
+	bindBuffer(GL_ARRAY_BUFFER, 0);
+	bindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
+{
+	bindFramebuffer(0, viewPortResX, viewPortResY);
+	bindVertexArray(renderSurfaceVAO);
+	glUseProgram(postProcessingShader->getShaderId());
+	glActiveTexture(GL_TEXTURE0);
+	bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
+	// Bind our texture in Texture Unit 0
+	
+	// Set our "renderedTexture" sampler to user Texture Unit 0
+
+	postProcessingShader->fillUniformLocation(GL_TEXTURE0);
+
+	// 1rst attribute buffer : vertices
+
+
 	// Draw the triangles !
 	glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
 
-	glDisableVertexAttribArray(0);
-
+	bindVertexArray(0);
 
 
 }

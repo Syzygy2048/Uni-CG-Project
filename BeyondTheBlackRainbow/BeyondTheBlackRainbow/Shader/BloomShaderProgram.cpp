@@ -18,5 +18,5 @@ void BloomShaderProgram::loadUniformLocations()
 
 void BloomShaderProgram::fillUniformLocation(GLuint textureUnit)
 {
-	glUniform1i(programId, textureUnit);
+	glUniform1i(locationTexture, 0);
 }
