@@ -26,3 +26,7 @@ void TextShaderProgram::fillUniformLocation(Text* text)
 	glBindTexture(GL_TEXTURE_2D, text->getTexture()->getTextureID());
 	glUniform1i(locationTexture, 30);
 }
+
+void TextShaderProgram::fillUniformLocation(GLuint textureUnit)
+{
+}

@@ -12,12 +12,12 @@ LightingShaderProgram::~LightingShaderProgram()
 
 void LightingShaderProgram::loadUniformLocations()
 {
-	locationMVP = glGetUniformLocation(shaderID, "MVP");
-	locationMVP = glGetUniformLocation(shaderID, "MV");
-	locationV = glGetUniformLocation(shaderID, "V");
-	locationM = glGetUniformLocation(shaderID, "M");
-	locationLightInvDirection_worldspace = glGetUniformLocation(shaderID, "LightInvDirection_worldspace");
-	locationDepthBiasMVP = glGetUniformLocation(shaderID, "DepthBiasMVP");
+	locationMVP = glGetUniformLocation(programId, "MVP");
+	locationMVP = glGetUniformLocation(programId, "MV");
+	locationV = glGetUniformLocation(programId, "V");
+	locationM = glGetUniformLocation(programId, "M");
+	locationLightInvDirection_worldspace = glGetUniformLocation(programId, "LightInvDirection_worldspace");
+	locationDepthBiasMVP = glGetUniformLocation(programId, "DepthBiasMVP");
 
 }
 
@@ -45,3 +45,7 @@ void LightingShaderProgram::fillUniformLocation(Text* text)
 {
 
 }
+
+void LightingShaderProgram::fillUniformLocation(GLuint textureUnit)
+{
+} 

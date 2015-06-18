@@ -1,6 +1,7 @@
 #include "Renderer.h"
 
 #include <iostream>
+#include "../Importers/ShaderImporter.h"
 
 
 Renderer::Renderer()
@@ -206,15 +207,115 @@ void Renderer::bindFramebuffer(GLuint id, int viewPortResX, int viewPortRexY)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		//clear previous image after binding to prevent stuff from drawing on itself
 }
 
+void Renderer::genRenderTexture(GLuint* id)
+{
+	glGenTextures(1, id);
+}
+
+void Renderer::bindRenderTexture(GLuint id, int viewPortResX, int viewPortResY)
+{
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewPortResX, viewPortResY, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+}
+
+void Renderer::genDepthBuffer(GLuint* id)
+{
+	glGenRenderbuffers(1, id);
+}
+
+void Renderer::bindDepthBuffer(GLuint id, int viewPortResX, int viewPortResY)
+{
+	glBindRenderbuffer(GL_RENDERBUFFER, id);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, viewPortResX, viewPortResY);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, id);
+
+}
+
+void Renderer::configureFramebufferForPostProcessing(GLuint framebufferId, GLuint textureId)
+{
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureId, 0);
+
+	const int numberOfDrawbuffers = 1;
+	GLenum drawBuffers[numberOfDrawbuffers] = { GL_COLOR_ATTACHMENT0 };
+	glDrawBuffers(numberOfDrawbuffers, drawBuffers);
+
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+	if (status != GL_FRAMEBUFFER_COMPLETE){
+		std::cerr << "error binding framebuffer: " << status << std::endl;
+	}
+}
+
+void Renderer::createRenderSurface()
+{
+	generateVertexArray(&renderSurfaceVAO);
+	generateBufferObject(&renderSurfaceVBO);
+
+	bindVertexArray(renderSurfaceVAO);
+	
+	GLfloat renderSurfaceVertices[] = {
+		-1.0f, -1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+	};
+
+	fillBuffer(renderSurfaceVBO, GL_ARRAY_BUFFER, sizeof(renderSurfaceVertices), &renderSurfaceVertices, GL_STATIC_DRAW);
+	
+	postProcessingShader = ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLOOM_SHADER);
+	postProcessingShader->loadUniformLocations();
+	
+	bindVertexArray(0);
+	bindBuffer(GL_ARRAY_BUFFER, 0);
+	bindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void Renderer::renderToScreen(GLuint renderTextureId, int viewPortResX, int viewPortResY)
+{
+	bindFramebuffer(0, viewPortResX, viewPortResY);
+	
+	glUseProgram(postProcessingShader->getShaderId());
+
+	// Bind our texture in Texture Unit 0
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, renderTextureId);
+	// Set our "renderedTexture" sampler to user Texture Unit 0
+
+	postProcessingShader->fillUniformLocation(GL_TEXTURE0);
+
+	// 1rst attribute buffer : vertices
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, renderSurfaceVBO);
+	glVertexAttribPointer(
+		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+		3,                  // size
+		GL_FLOAT,           // type
+		GL_FALSE,           // normalized?
+		0,                  // stride
+		(void*)0            // array buffer offset
+		);
+
+	// Draw the triangles !
+	glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
+
+	glDisableVertexAttribArray(0);
+
+
+
+}
 void Renderer::genrateShadowMapTexture(GLuint* id)
 {
 	glGenTextures(1, id);
 }
 
-void Renderer::glBindShadowMapTexture(GLuint id, int viewPortResX, int viewPortRexY)
+void Renderer::glBindShadowMapTexture(GLuint id, int viewPortResX, int viewPortResY)
 {
 	glBindTexture(GL_TEXTURE_2D, id);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, viewPortResX, viewPortRexY, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, viewPortResX, viewPortResY, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);

@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Shader\BloomShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\DirectionalLightNode.cpp" />
     <ClCompile Include="Event\EventFactory.cpp" />
     <ClCompile Include="Event\Event.cpp" />
@@ -107,6 +108,7 @@
     <ClCompile Include="Text\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Shader\BloomShaderProgram.h" />
     <ClInclude Include="SceneGraph\DirectionalLightNode.h" />
     <ClInclude Include="Event\EventFactory.h" />
     <ClInclude Include="Event\Event.h" />
@@ -133,6 +135,7 @@
     <ClInclude Include="Shader\SimpleLightingShaderProgram.h" />
     <ClInclude Include="Shader\TextShaderProgram.h" />
     <ClInclude Include="Shader\TextureShaderProgram.h" />
+    <ClInclude Include="Shader\Vertex\BloomVertexShader.glsl" />
     <ClInclude Include="Text\Text.h" />
     <ClInclude Include="Util\FileChecker.h" />
     <ClInclude Include="Util\UuidHelper.h" />

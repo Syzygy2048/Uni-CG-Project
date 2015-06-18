@@ -26,7 +26,7 @@
 void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::vector<MeshNode*>* drawArray)
 {
 	
-	for (int i = 0; i < 1000; i++){
+	for (int i = 0; i < 1; i++){
 		float randomX = ((std::rand() % 100) - 50) / 100.f;
 		float randomY = ((std::rand() % 100) - 50) / 100.f;
 		float randomZ = ((std::rand() % 100) - 50) / 100.f;
@@ -56,7 +56,7 @@ int main() {
 	if (renderer->init(viewPortResX, viewPortResY) == -1){
 		return -1;
 	}
-	
+
 	GLDebug::registerDebugCallbacks();
 	
 	InputHandler* input = new InputHandler();
@@ -203,16 +203,26 @@ int main() {
 	bool oldF3State = false;
 	bool oldF2State = false;
 
+	renderer->createRenderSurface();
+
 	GLuint frameBuffer;
 	renderer->generateFramebuffer(&frameBuffer);
-	//renderer->bindFramebuffer(frameBuffer, viewPortResX, viewPortResY);
+	renderer->bindFramebuffer(frameBuffer, viewPortResX, viewPortResY);
+	GLuint renderTexture;
+	renderer->genRenderTexture(&renderTexture);
+	renderer->bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
+	GLuint depthRenderBuffer;
+	renderer->genDepthBuffer(&depthRenderBuffer);
+	renderer->bindDepthBuffer(depthRenderBuffer, viewPortResX, viewPortResY);
+
 
 	
 	//gameloop
 	double timeOld = 0;
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
 		// Clear the screen
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		renderer->bindFramebuffer(frameBuffer, viewPortResX, viewPortResY);
+		renderer->configureFramebufferForPostProcessing(frameBuffer, renderTexture);
 
 		time = glfwGetTime();
 		double deltaTime = time - oldTime;
@@ -298,11 +308,13 @@ int main() {
 		//text->draw();
 		//text2->draw();
 
-		//glLoadMatrixf(&viewProjectionMatrix[0][0]);
+		glLoadMatrixf(&viewProjectionMatrix[0][0]);
 
 		physics->renderCollisionShapes();
 		
 		
+		renderer->renderToScreen(renderTexture, viewPortResX, viewPortResY);
+
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();
 	}
