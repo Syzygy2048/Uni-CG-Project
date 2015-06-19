@@ -40,5 +40,6 @@ public:
 	static const LoadInfo* ROOM;
 	static const LoadInfo* DOOR;
 	static const LoadInfo* TEXT;
+	static const LoadInfo* CHAIR;
 
 };

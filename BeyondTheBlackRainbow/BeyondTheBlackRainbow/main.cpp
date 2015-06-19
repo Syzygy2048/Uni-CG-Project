@@ -177,11 +177,13 @@ int main() {
 	MeshNode* bedMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::BED);
 	MeshNode* roomMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::ROOM);
 	MeshNode* doorMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR);
+	MeshNode* chairMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::CHAIR);
 	tableMesh->prepareForRendering();
 	duckMesh->prepareForRendering();
 	bedMesh->prepareForRendering();
 	roomMesh->prepareForRendering();
 	doorMesh->prepareForRendering();
+	chairMesh->prepareForRendering();
 
 	std::vector<MeshNode*> drawArray;
 	drawArray.push_back(tableMesh);
@@ -189,6 +191,7 @@ int main() {
 	drawArray.push_back(bedMesh);
 	drawArray.push_back(roomMesh);
 	drawArray.push_back(doorMesh);
+	drawArray.push_back(chairMesh);
 
 	SceneNode* sceneGraph = new SceneNode(generateUuid(), NodeType::ROOT_NODE);
 	sceneGraph->setParent(nullptr);
@@ -200,6 +203,7 @@ int main() {
 	bedMesh->setEventManager(eventManager);
 	roomMesh->setEventManager(eventManager);
 	doorMesh->setEventManager(eventManager);
+	chairMesh->setEventManager(eventManager);
 	
 	
 	SceneNode* transformNodeRoom = new TransformNode(generateUuid(), glm::mat4(
@@ -228,10 +232,16 @@ int main() {
 		0, 1, 0, 0,
 		0, 0, 1, 0,
 		2, 0, -5.1, 1));
+	SceneNode* transformNodeChair = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		2, 0, -3, 1));
 	transformNodeRoom->attachChild(roomMesh);
 	transformNodeRoom->attachChild(transformNodeDuck);
 	transformNodeRoom->attachChild(transformNodeBed);
 	transformNodeRoom->attachChild(transformNodeTable);
+	transformNodeRoom->attachChild(transformNodeChair);
 	transformNodeRoom->attachChild(firstLight);
 	transformNodeRoom->attachChild(secondLight);
 	transformNodeRoom->attachChild(thirdLight);
@@ -240,6 +250,7 @@ int main() {
 	transformNodeBed->attachChild(bedMesh);
 	transformNodeTable->attachChild(tableMesh);
 	transformNodeDoor->attachChild(doorMesh);
+	transformNodeChair->attachChild(chairMesh);
 	
 	sceneGraph->attachChild(transformNodeRoom);
 	sceneGraph->attachChild(transformNodeDoor);
@@ -262,6 +273,7 @@ int main() {
 	duckMesh->createCollisionShape(physics);
 	bedMesh->createCollisionShape(physics);
 	doorMesh->createCollisionShape(physics);
+	chairMesh->createCollisionShape(physics);
 
 	bedMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER));
 	doorMesh->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR));
