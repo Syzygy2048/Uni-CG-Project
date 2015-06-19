@@ -210,7 +210,9 @@ int main() {
 	double timeOld = 0;
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
 		// Clear the screen
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		renderer->configureFramebufferForPostProcessing(viewPortResX, viewPortResY);
+		
 
 		time = glfwGetTime();
 		double deltaTime = time - oldTime;
