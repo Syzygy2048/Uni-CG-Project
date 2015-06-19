@@ -11,6 +11,7 @@
 #include "..\Shader\DepthShaderProgram.h"
 #include "..\Shader\DepthDirShaderProgram.h"
 #include "..\Shader\ShadowMappingShaderProgram.h"
+#include "..\Shader\DirShadowMappingShaderProgram.h"
 
 
 
@@ -126,6 +127,10 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	else if (shader == MeshLoadInfo::SHADOWMAP_SHADER)
 	{
 		result = new ShadowMappingShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::DIR_SHADOWMAP_SHADER)
+	{
+		result = new DirShadowMappingShaderProgram(shaderProgramID);
 	}
 	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;

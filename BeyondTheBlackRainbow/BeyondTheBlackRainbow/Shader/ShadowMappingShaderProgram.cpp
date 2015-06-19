@@ -47,12 +47,12 @@ void ShadowMappingShaderProgram::fillUniformLocation(MeshNode* node, std::vector
 }
 
 void ShadowMappingShaderProgram::bindTextures(MeshNode* node)
-{
+{//this works for ONE light (key)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, node->getTexture()->getTextureID());
 	glUniform1i(locationDiffuseTexture, 0);
 	
-	std::vector<Framebuffer*> framebuffers = node->getFramebuffers();
+	std::map<std::string, Framebuffer*> framebuffers = node->getFramebuffers();
 	for (int i = 0; i < framebuffers.size()-1; i++) {
 		
 		std::stringstream shadowMap;
@@ -71,7 +71,7 @@ void ShadowMappingShaderProgram::bindTextures(MeshNode* node)
 		else if (i == 3) {
 			glActiveTexture(GL_TEXTURE26);
 		}
-		glBindTexture(GL_TEXTURE_CUBE_MAP, framebuffers.at(i)->getTexture()->getCubeMapID());
+		glBindTexture(GL_TEXTURE_CUBE_MAP, framebuffers.find("pointLight")->second->getTexture()->getCubeMapID());
 		auto loc = glGetUniformLocation(programId, shadowMap.str().c_str());
 		glUniform1i(glGetUniformLocation(programId, shadowMap.str().c_str()), (29 - i));
 		
@@ -79,10 +79,10 @@ void ShadowMappingShaderProgram::bindTextures(MeshNode* node)
 		farPlane << "shadows[";
 		farPlane << i;
 		farPlane << "].farPlane";
-		glUniform1f(glGetUniformLocation(programId, farPlane.str().c_str()), framebuffers.at(i)->getFarPlane());
+		glUniform1f(glGetUniformLocation(programId, farPlane.str().c_str()), framebuffers.find("pointLight")->second->getFarPlane());
 	}
 	glActiveTexture(GL_TEXTURE25);
-	glBindTexture(GL_TEXTURE_2D, framebuffers.at(framebuffers.size() - 1)->getTexture()->getTextureID());
+	glBindTexture(GL_TEXTURE_2D, framebuffers.find("pointLight")->second->getTexture()->getTextureID());
 	glUniform1i(locationDirDepthMap, 25);
 }
 

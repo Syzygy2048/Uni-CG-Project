@@ -30,6 +30,7 @@ public:
 	static const ShaderLoadInfo* DEPTH_SHADER;
 	static const ShaderLoadInfo* DEPTHDIR_SHADER;
 	static const ShaderLoadInfo* SHADOWMAP_SHADER;
+	static const ShaderLoadInfo* DIR_SHADOWMAP_SHADER;
 
 	struct LoadInfo {
 		const std::string meshPath;

@@ -193,7 +193,7 @@ void MeshNode::update(double timeStep, InputHandler* input)
 	}
 }
 
-void MeshNode::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix, glm::vec3 playerPosition, std::vector<Framebuffer*> framebuffers)
+void MeshNode::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix, glm::vec3 playerPosition, std::map<std::string, Framebuffer*> framebuffers)
 {
 	this->viewMatrix = viewMatrix;
 	this->projectionMatrix = projectionMatrix;
@@ -282,7 +282,7 @@ glm::vec3 MeshNode::getPlayerPosition()
 	return playerPosition;
 }
 
-std::vector<Framebuffer*> MeshNode::getFramebuffers()
+std::map<std::string, Framebuffer*> MeshNode::getFramebuffers()
 {
 	return framebuffers;
 }

@@ -46,9 +46,9 @@ public:
 	void drawShadow(MeshNode* node, Framebuffer* framebuffer);
 
 	GLFWwindow* getWindow();
-	void setFrameBuffers(std::vector<Framebuffer*> framebuffers);
 	void setLights(std::vector<LightNode*> lights);
 
+	void setFrameBuffers(std::map<std::string, Framebuffer*> framebuffers);
 	void setDepthProjectionMatrix(glm::mat4 depthProjectionMatrix);
 	void setDepthModelMatrix(glm::mat4 depthModelMatrix);
 
@@ -59,14 +59,15 @@ private:
 	void operator=(Renderer const&);
 	
 	GLFWwindow* window;
-	std::vector<Framebuffer*> frameBuffers;
+	std::map<std::string, Framebuffer*> framebuffers;
 	std::vector<LightNode*> lights;
 
 	void useShader(MeshNode* node, std::vector<LightNode*> lights);
 	void useShader(Text* text);
 	void useShader(Framebuffer* framebuffer, MeshNode* node);
+	
+	//shadowmap for directional light
 	std::vector<LightNode*> getLights(MeshNode* node);
-
 	glm::mat4 depthProjectionMatrix;
 	glm::mat4 depthModelMatrix;
 };

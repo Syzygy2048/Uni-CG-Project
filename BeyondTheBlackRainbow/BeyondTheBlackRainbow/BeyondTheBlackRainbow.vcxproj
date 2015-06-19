@@ -91,6 +91,7 @@
     <ClCompile Include="SceneGraph\PointLightNode.cpp" />
     <ClCompile Include="SceneGraph\PlayerNode.cpp" />
     <ClCompile Include="SceneGraph\LightNode.cpp" />
+    <ClCompile Include="Shader\DirShadowMappingShaderProgram.cpp" />
     <ClCompile Include="Shader\LightingShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\CameraNode.cpp" />
     <ClCompile Include="GLDebug.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="SceneGraph\LightsEnum.h" />
     <ClInclude Include="SceneGraph\PlayerNode.h" />
     <ClInclude Include="SceneGraph\LightNode.h" />
+    <ClInclude Include="Shader\DirShadowMappingShaderProgram.h" />
     <ClInclude Include="Shader\LightingShaderProgram.h" />
     <ClInclude Include="SceneGraph\CameraNode.h" />
     <ClInclude Include="GLDebug.h" />

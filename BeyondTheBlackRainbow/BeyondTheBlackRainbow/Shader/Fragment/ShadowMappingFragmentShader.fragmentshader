@@ -23,9 +23,6 @@ in VS_OUT {
     vec2 TexCoords; //UV
 } fs_in;
 
-in vec3 EyeDirection_cameraspace;
-in vec4 dirShadowCoord; //ShadowCoord
-
 uniform sampler2D diffuseTexture; //myTextureSampler
 uniform	sampler2D dirDepthMap; //shadowMap
 uniform ShadowMap shadows[NR_LIGHTS];
@@ -86,6 +83,7 @@ void main()
 	for (int i = 0; i < NR_LIGHTS; i++) {
 		//i = 1;
 		LightSource currLight = lights[i];
+		if (currLight.type == 1) {  
 		vec3 color = texture(diffuseTexture, fs_in.TexCoords).rgb;
 		vec3 normal = normalize(fs_in.Normal);
 		vec3 lightColor = currLight.color;
@@ -100,31 +98,11 @@ void main()
 		vec3 reflectDir = reflect(-lightDir, normal);
 	    float spec = 0.0;
 		vec3 halfwayDir = normalize(lightDir + viewDir);   
-	    spec = pow(max(dot(normal, halfwayDir), -10.0), 64.0);
+	    spec = pow(max(dot(normal, halfwayDir), -1), 64.0);
 	    vec3 specular = spec * lightColor;  
-		if (currLight.type == 1) {  
 		// Calculate shadow
 		float shadow = needShadows ? ShadowCalculation(fs_in.FragPos, i) : 0.0;                      
-		lighting += (ambient + (diffuse + specular) * currLight.intensity  * color )* (1.0 - shadow);  
-		}
-		else if (currLight.type == 2) {
-		// Normal of the computed fragment, in camera space
-		float dist = length(-EyeDirection_cameraspace);
-		float fog_fac = (dist-min_fog)/(max_fog - min_fog);
-		fog_fac = clamp(fog_fac,0.0,1.0);
-		float visibility=1.0;
-	
-		float bias = 0.005;
-		
-		if( dirShadowCoord.x <= 1 && dirShadowCoord.x >= 0 && dirShadowCoord.y <= 1 && dirShadowCoord.y >= 0 ){
-			if ( texture( dirDepthMap, dirShadowCoord.xy).x   <  dirShadowCoord.z - bias){
-				visibility = 0.2;
-			}
-		}
-		//float visibility = texture( dirDepthMap, vec3(dirShadowCoord.xy, (dirShadowCoord.z)/dirShadowCoord.w) );
-
-		vec3 help = (ambient + (diffuse + specular) * currLight.intensity  * color ) * visibility;
-		lighting += mix(help, fog_colour, fog_fac);
+		lighting += (ambient + (diffuse + specular)* currLight.intensity  * color )  * (1.0 - shadow);  
 		}
 	} 
 	 

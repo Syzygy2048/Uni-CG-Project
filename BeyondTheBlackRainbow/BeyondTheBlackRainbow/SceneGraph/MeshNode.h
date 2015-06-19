@@ -2,6 +2,7 @@
 
 #include <assimp\scene.h>
 #include <GL\glew.h>
+#include <map>
 
 #include "SceneNode.h"
 #include "../Texture.h"
@@ -31,7 +32,7 @@ public:
 
 	virtual void update(double timeStep, InputHandler* input);
 	//this takes both the viewprojection matrix as well as the individual matrices so that they don't have to be multiplied per object per frame.
-	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix, glm::vec3 playerPosition, std::vector<Framebuffer*> framebuffers);
+	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix, glm::vec3 playerPosition, std::map<std::string, Framebuffer*> framebuffers);
 
 	GLuint getVao();
 	int getDrawSize();
@@ -63,7 +64,7 @@ public:
 
 	void removeCollisionShape();
 
-	std::vector<Framebuffer*> getFramebuffers();
+	std::map<std::string, Framebuffer*> getFramebuffers();
 
 	bool SUBMISSION1_ANIMATION_HACK = false;
 	glm::highp_float SUBMISSION1_ANIMATION_HACK_DOOR_ROTATION_AMOUNT = 90;
@@ -107,7 +108,6 @@ private:
 		);
 	glm::mat4 depthBiasMatrix;
 
-	std::vector<Framebuffer*> framebuffers;
-
+	std::map<std::string, Framebuffer*> framebuffers;
 };
 

@@ -107,7 +107,7 @@ void Renderer::bindBuffer(GLenum bufferType, GLuint bufferID)
 void Renderer::bindFrameBuffer(GLenum bufferType, GLuint bufferID)
 {
 	glBindFramebuffer(bufferType, bufferID);
-	glViewport(0, 0, 1024, 1024);
+	glViewport(0, 0, 2048, 2048);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -151,7 +151,8 @@ void Renderer::bindVertexArray(GLuint vertexArrayId)
 
 void Renderer::draw(MeshNode* node)
 {
-	//std::vector<LightNode*> lights = this->getLights(node);
+	//getShadows (dirLight)
+	std::vector<LightNode*> lights = this->getLights(node);
 
 	this->useShader(node, lights);
 
@@ -179,18 +180,16 @@ void Renderer::useShader(MeshNode* node, std::vector<LightNode*> lights)
 
 std::vector<LightNode*> Renderer::getLights(MeshNode* node)
 {	
+	glm::vec3 playerPosition = glm::vec3(glm::inverse(node->getViewMatrix())[0][3], glm::inverse(node->getViewMatrix())[1][3], glm::inverse(node->getViewMatrix())[2][3]);
 	for (int i = 0; i < lights.size(); i++) {
-		if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) { //this do not work currently
+		if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) { 
 			glm::vec3 lightInvDir = (lights.at(i)->getDirection());
-			glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir + node->getPlayerPosition(), glm::vec3(0, 0, 0) + node->getPlayerPosition(), glm::vec3(0, 1, 0));			
+			glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir + playerPosition, glm::vec3(0, 0, 0) + playerPosition, glm::vec3(0, 1, 0));
+
 			node->setDepthBiasMVP(depthProjectionMatrix * depthViewMatrix * depthModelMatrix);
-			node->setShadowMap(frameBuffers.at(i)->getTexture());
+			node->setShadowMap(framebuffers.find("dirLight")->second->getTexture());
 		}
-		else if (lights.at(i)->getLightType() == POINT_LIGHT) {
-			//node->setFramebuffer(frameBuffers.at(i));
-		}
-	}		
-	//std::cout << "Sum of lights: " << lights.size() << std::endl;
+	}
 	return lights;
 }
 
@@ -224,7 +223,6 @@ void Renderer::drawShadow(MeshNode* node, Framebuffer* framebuffer)
 	glDrawElements(GL_TRIANGLES, node->getDrawSize(), GL_UNSIGNED_INT, (void*)0);
 	bindVertexArray(0);
 	glUseProgram(0);
-	//this->unbindFrameBuffer(GL_FRAMEBUFFER);
 }
 
 void Renderer::useShader(Framebuffer* framebuffer, MeshNode* node)
@@ -237,9 +235,9 @@ void Renderer::useShader(Framebuffer* framebuffer, MeshNode* node)
 }
 
 
-void Renderer::setFrameBuffers(std::vector<Framebuffer*> framebuffers)
+void Renderer::setFrameBuffers(std::map<std::string, Framebuffer*> framebuffers)
 {
-	this->frameBuffers = framebuffers;
+	this->framebuffers = framebuffers;
 }
 
 void Renderer::setLights(std::vector<LightNode*> lights)
