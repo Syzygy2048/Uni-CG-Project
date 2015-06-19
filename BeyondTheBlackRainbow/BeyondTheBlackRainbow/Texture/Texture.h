@@ -10,11 +10,13 @@ class Texture
 public:
 
 	Texture(const char* path);
+	Texture(int width, int height);
 	~Texture();
 
 	void bind(int unit);
 
 	GLuint getTextureID();
+	GLuint getCubeMapID();
 
 	void setSamplerState();
 	SamplerState getSamplerState();
@@ -25,6 +27,7 @@ private:
 
 	GLubyte* texture;
 	GLuint textureID;
+	GLuint cubeMapID;
 
 	SamplerState samplerState;
 	MipmapState mipmapState;

@@ -8,6 +8,10 @@
 #include "..\Shader\TextureShaderProgram.h"
 #include "..\Shader\SimpleLightingShaderProgram.h"
 #include "..\Shader\TextShaderProgram.h"
+#include "..\Shader\DepthShaderProgram.h"
+#include "..\Shader\DepthDirShaderProgram.h"
+#include "..\Shader\ShadowMappingShaderProgram.h"
+#include "..\Shader\DirShadowMappingShaderProgram.h"
 
 
 
@@ -69,8 +73,15 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	}
 	GLuint vertexShaderID = loadShader(shader->vertexShaderPath);
 	GLuint fragmentShaderID = loadShader(shader->fragmentShaderPath);
+	GLuint geometryShaderID = 100;
+	if (!shader->geometryShaderPath.empty()) {
+		geometryShaderID = loadShader(shader->geometryShaderPath);
+	}
 	GLuint shaderProgramID = glCreateProgram();
 	glAttachShader(shaderProgramID, vertexShaderID);
+	if (geometryShaderID != 100) {
+		glAttachShader(shaderProgramID, geometryShaderID);
+	}
 	glAttachShader(shaderProgramID, fragmentShaderID);
 	glLinkProgram(shaderProgramID);
 	
@@ -104,6 +115,22 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	else if (shader == MeshLoadInfo::TEXT_SHADER)
 	{
 		result = new TextShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::DEPTH_SHADER)
+	{
+		result = new DepthShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::DEPTHDIR_SHADER)
+	{
+		result = new DepthDirShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::SHADOWMAP_SHADER)
+	{
+		result = new ShadowMappingShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::DIR_SHADOWMAP_SHADER)
+	{
+		result = new DirShadowMappingShaderProgram(shaderProgramID);
 	}
 	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;

@@ -3,11 +3,11 @@
 #include "..\Shader\ShaderProgram.h"
 #include "..\Texture\Texture.h"
 
-class SimpleLightingShaderProgram : public ShaderProgram
+class DirShadowMappingShaderProgram : public ShaderProgram
 {
 public:
-	SimpleLightingShaderProgram(GLuint shaderProgramID);
-	~SimpleLightingShaderProgram();
+	DirShadowMappingShaderProgram(GLuint shaderProgramID);
+	~DirShadowMappingShaderProgram();
 
 	virtual void loadUniformLocations();
 	virtual void fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights);
@@ -16,12 +16,17 @@ public:
 
 
 private:
+
 	GLuint locationMVP;
+	GLuint locationMV;
 	GLuint locationV;
 	GLuint locationM;
+	GLuint locationLightDirection;
+	GLuint locationLightPosition;
+	GLuint locationDepthBiasMVP;
 	GLuint locationTexture;
-	GLuint locationLight;
-	
+	GLuint locationShadowMap;
+
 	void useLights(std::vector<LightNode*> lights);
 	void bindTextures(MeshNode* node);
 };

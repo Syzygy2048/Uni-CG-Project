@@ -1,28 +1,26 @@
 #pragma once
 
 #include "..\Shader\ShaderProgram.h"
-#include "..\Texture\Texture.h"
 
-class SimpleLightingShaderProgram : public ShaderProgram
+class DepthShaderProgram : public ShaderProgram
 {
 public:
-	SimpleLightingShaderProgram(GLuint shaderProgramID);
-	~SimpleLightingShaderProgram();
+	DepthShaderProgram(GLuint shaderProgramID);
+	~DepthShaderProgram();
 
 	virtual void loadUniformLocations();
 	virtual void fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights);
 	virtual void fillUniformLocation(Text* text);
 	virtual void fillUniformLocation(Framebuffer* frameBuffer);
 
-
 private:
-	GLuint locationMVP;
-	GLuint locationV;
-	GLuint locationM;
-	GLuint locationTexture;
-	GLuint locationLight;
-	
+	GLuint locationDepthMVP;
+	GLuint locationMV;
+	GLuint locationFarPlane;
+	GLuint locationLightPos;
+	GLuint locationModel;
+
 	void useLights(std::vector<LightNode*> lights);
-	void bindTextures(MeshNode* node);
+	void useGeometry(std::vector<glm::mat4> depthTransforms);
 };
 

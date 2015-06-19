@@ -22,6 +22,8 @@
 #include "Event\EventFactory.h"
 #include "Texture\SamplerStateEnum.h"
 #include "Texture\MipmapStateEnum.h"
+#include "Framebuffer.h"
+
 
 std::map < std::string, Text* > text;
 
@@ -166,11 +168,10 @@ int main() {
 	//this way we have a list of cameras and can switch between them as we want just by doing activeCamera = cameraList.find("whichever camera we want")->second;
 	cameraList.insert(std::pair<std::string, CameraNode*>(std::string("player camera"), activeCamera));
 	
-	//glm::vec3 lightPos = glm::vec3(2, 1.5, -2.5);
-	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2, 1.5, -4), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
-	LightNode* secondLight = new PointLightNode(generateUuid(), glm::vec3(2, 1.5, -1), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
-	LightNode* thirdLight = new DirectionalLightNode(generateUuid(), glm::vec3(0, 0, 0), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, 0, 3), LightType::DIRECTIONAL_LIGHT);
-	LightNode* fourthLight = new DirectionalLightNode(generateUuid(), glm::vec3(0, 2, 0), 1.0f, glm::vec3(0, 0, 1), glm::vec3(1, 1, 1), LightType::DIRECTIONAL_LIGHT);
+	std::vector<LightNode*> lights;
+	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2.0, 1.0, -4.5), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	lights.push_back(firstLight);
+	renderer->setLights(lights);
 
 	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TABLE);
 	MeshNode* duckMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
@@ -233,9 +234,6 @@ int main() {
 	transformNodeRoom->attachChild(transformNodeBed);
 	transformNodeRoom->attachChild(transformNodeTable);
 	transformNodeRoom->attachChild(firstLight);
-	transformNodeRoom->attachChild(secondLight);
-	transformNodeRoom->attachChild(thirdLight);
-	transformNodeRoom->attachChild(fourthLight);
 	transformNodeDuck->attachChild(duckMesh);
 	transformNodeBed->attachChild(bedMesh);
 	transformNodeTable->attachChild(tableMesh);
@@ -274,6 +272,38 @@ int main() {
 	
 	//end of part that should be in a scene loader
 
+
+	//Framebuffer stuff (for one pointlight)
+	std::map<std::string, Framebuffer*> framebuffers;
+	int framebufferWidth = 2048;
+	int framebufferHeight = 2048;
+	float framebufferNear = 0.1f;
+	float framebufferFar = 100.0f;
+	Framebuffer* frameBufferPoint = new Framebuffer(MeshLoadInfo::DEPTH, framebufferWidth, framebufferHeight);
+	Framebuffer* frameBufferDir = new Framebuffer(MeshLoadInfo::DEPTHDIR, framebufferWidth, framebufferHeight);
+	frameBufferPoint->prepareFrameBuffer(POINT_LIGHT);
+	frameBufferDir->prepareFrameBuffer(DIRECTIONAL_LIGHT);
+	frameBufferPoint->setNearPlane(framebufferNear);
+	frameBufferPoint->setFarPlane(framebufferFar);
+
+	framebuffers.insert(std::pair<std::string, Framebuffer*>("pointLight", frameBufferPoint));
+	framebuffers.insert(std::pair<std::string, Framebuffer*>("dirLight", frameBufferDir));
+	
+	//pointlight
+	GLfloat aspect = (GLfloat)framebufferWidth / (GLfloat)framebufferHeight;
+	glm::mat4 depthProjectionMatrixPOINT = glm::perspective(90.0f, aspect, framebufferNear, framebufferFar);
+	glm::mat4 depthModelMatrix = glm::mat4(1.0);
+	std::vector<glm::mat4> depthTransforms;
+
+	//directional light
+	glm::mat4 depthProjectionMatrixDIR = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+	//for renderer, directional light is constant
+	renderer->setDepthProjectionMatrix(depthProjectionMatrixDIR);
+	renderer->setDepthModelMatrix(depthModelMatrix);
+	renderer->setFrameBuffers(framebuffers);
+
+
+
 	physics->createPhysicsFloor();
 	
 	double time = glfwGetTime();
@@ -299,7 +329,7 @@ int main() {
 	double timeOld = 0;
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
 		// Clear the screen
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		time = glfwGetTime();
 		double deltaTime = time - oldTime;
@@ -381,9 +411,43 @@ int main() {
 		glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 		glm::mat4 viewMatrix = activeCamera->getViewMatrix();
 		glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
+		glm::vec3 playerPosition = glm::vec3(glm::inverse(viewMatrix)[0][3], glm::inverse(viewMatrix)[1][3], glm::inverse(viewMatrix)[2][3]);
+		
+		//draw shadows
+		for (int i = 0; i < lights.size(); i++) {
+			if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) { // do not work currently
+				glm::vec3 lightInvDir = (lights.at(i)->getDirection());
+				glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir + playerPosition, glm::vec3(0, 0, 0) + playerPosition, glm::vec3(0, 1, 0));
+				framebuffers.find("dirLight")->second->setDepthMVP(depthProjectionMatrixDIR*depthViewMatrix*depthModelMatrix);
+				//shadow of meshes
+				renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find("dirLight")->second->getFramebufferID());
+				for (MeshNode* node : drawArray) {
+					renderer->drawShadow(node, framebuffers.find("dirLight")->second);
+				}
+				renderer->unbindFrameBuffer(GL_FRAMEBUFFER);
+			}
+			else if (lights.at(i)->getLightType() == POINT_LIGHT) {
+				glm::vec3 lightPos = lights.at(i)->getPosition();
+				depthTransforms.clear();
+				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
+				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
+				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
+				framebuffers.find("pointLight")->second->setDepthTransforms(depthTransforms);
+				//shadow of meshes
+				renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find("pointLight")->second->getFramebufferID());
+				for (MeshNode* node : drawArray) {
+					renderer->drawShadow(node, framebuffers.find("pointLight")->second);
+				}
+				renderer->unbindFrameBuffer(GL_FRAMEBUFFER);
+
+			}
+		}		
+		//draw meshes
 		for (MeshNode* node : drawArray){
-			//setSampler
-			if (input->f4 && !oldF4State) 
+			if (input->f4 && !oldF4State)
 			{
 				blendSamplerText();
 				node->getTexture()->setSamplerState();
@@ -398,9 +462,7 @@ int main() {
 				setMipmapText(node->getTexture()->getMipmapState());
 				mipmapTime = oldTime;
 			}
-			//draw meshes
-			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix);
-
+			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix, player->getPosition(), framebuffers);
 		}
 		for (auto const &it : text) {
 			if (it.second->getValid()) {

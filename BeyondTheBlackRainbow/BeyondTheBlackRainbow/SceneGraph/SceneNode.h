@@ -44,6 +44,7 @@ public:
 	
 	EventManager* getEventManager();
 	SceneNode* parent;
+		
 
 
 protected:
@@ -57,5 +58,6 @@ private:
 	const NodeType nodeType;
 
 	virtual void triggerEvent(EventTrigger eventTrigger, SceneNode* caller);
+
 };
 

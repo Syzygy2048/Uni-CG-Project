@@ -55,3 +55,7 @@ void TextureShaderProgram::fillUniformLocation(Text* text)
 
 }
 
+void TextureShaderProgram::fillUniformLocation(Framebuffer* frameBuffer)
+{
+
+}

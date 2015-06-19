@@ -150,3 +150,9 @@ void PlayerNode::updateDirection(double dT, float rotateX, float rotateY)
 
 }
 
+glm::vec3 PlayerNode::getPosition()
+{
+	return position;
+}
+
+

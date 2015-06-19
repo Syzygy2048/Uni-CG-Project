@@ -79,12 +79,9 @@ void MeshNode::prepareForRendering()
 	}
 
 	/**/
-	
 	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->shaderInfo);
-	//renderer->linkShader(shaderProgram);
 	shaderProgram->loadUniformLocations();
 	myTexture = new Texture((loadInfo->texturePath).c_str());
-	//myTexture->bind(0);
 	/**/
 
 	renderer->bindVertexArray(0);
@@ -196,11 +193,13 @@ void MeshNode::update(double timeStep, InputHandler* input)
 	}
 }
 
-void MeshNode::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix)
+void MeshNode::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::mat4 viewProjectionMatrix, glm::vec3 playerPosition, std::map<std::string, Framebuffer*> framebuffers)
 {
 	this->viewMatrix = viewMatrix;
 	this->projectionMatrix = projectionMatrix;
 	this->viewProjectionMatrix = viewProjectionMatrix;
+	this->playerPosition = playerPosition;
+	this->framebuffers = framebuffers;
 	Renderer::getInstance()->draw(this);
 }
 
@@ -256,4 +255,34 @@ ShaderProgram* MeshNode::getShaderProgram()
 const MeshLoadInfo::LoadInfo* MeshNode::getLoadInfo()
 {
 	return loadInfo;
+}
+
+void MeshNode::setDepthBiasMVP(glm::mat4 depthMVP)
+{
+	depthBiasMatrix = biasMatrix * depthMVP;
+}
+
+glm::mat4 MeshNode::getDepthBiasMatrix()
+{
+	return depthBiasMatrix;
+}
+
+void MeshNode::setShadowMap(Texture* shadowMap)
+{
+	this->shadowMap = shadowMap;
+}
+
+Texture* MeshNode::getShadowMap()
+{
+	return shadowMap;
+}
+
+glm::vec3 MeshNode::getPlayerPosition()
+{
+	return playerPosition;
+}
+
+std::map<std::string, Framebuffer*> MeshNode::getFramebuffers()
+{
+	return framebuffers;
 }

@@ -19,12 +19,18 @@ public:
 	struct ShaderLoadInfo {
 		const std::string vertexShaderPath;
 		const std::string fragmentShaderPath;
+		const std::string geometryShaderPath;
 		ShaderLoadInfo(const std::string& vShaderPath, const std::string& fShaderPath) : fragmentShaderPath(fShaderPath), vertexShaderPath(vShaderPath){}
+		ShaderLoadInfo(const std::string& vShaderPath, const std::string& gShaderPath,const std::string& fShaderPath) : fragmentShaderPath(fShaderPath), geometryShaderPath(gShaderPath), vertexShaderPath(vShaderPath){}
 	};
 	static const ShaderLoadInfo* LIGHTING_SHADER;
 	static const ShaderLoadInfo* TEXTURE_SHADER;
 	static const ShaderLoadInfo* SIMPLE_LIGHTING_SHADER;
 	static const ShaderLoadInfo* TEXT_SHADER;
+	static const ShaderLoadInfo* DEPTH_SHADER;
+	static const ShaderLoadInfo* DEPTHDIR_SHADER;
+	static const ShaderLoadInfo* SHADOWMAP_SHADER;
+	static const ShaderLoadInfo* DIR_SHADOWMAP_SHADER;
 
 	struct LoadInfo {
 		const std::string meshPath;
@@ -40,5 +46,7 @@ public:
 	static const LoadInfo* ROOM;
 	static const LoadInfo* DOOR;
 	static const LoadInfo* TEXT;
+	static const LoadInfo* DEPTH;
+	static const LoadInfo* DEPTHDIR;
 
 };

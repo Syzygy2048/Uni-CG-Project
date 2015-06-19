@@ -1,13 +1,12 @@
 #pragma once
 
 #include "..\Shader\ShaderProgram.h"
-#include "..\Texture\Texture.h"
 
-class TextureShaderProgram : public ShaderProgram
+class DepthDirShaderProgram : public ShaderProgram
 {
 public:
-	TextureShaderProgram(GLuint shaderProgramID);
-	~TextureShaderProgram();
+	DepthDirShaderProgram(GLuint shaderProgramID);
+	~DepthDirShaderProgram();
 
 	virtual void loadUniformLocations();
 	virtual void fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights);
@@ -15,7 +14,7 @@ public:
 	virtual void fillUniformLocation(Framebuffer* frameBuffer);
 
 private:
+	GLuint locationDepthMVP;
 	GLuint locationMVP;
-	GLuint locationTexture;
 };
 

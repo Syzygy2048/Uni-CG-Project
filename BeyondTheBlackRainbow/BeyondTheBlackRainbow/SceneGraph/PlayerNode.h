@@ -16,6 +16,8 @@ public:
 
 	virtual glm::highp_mat4 propagateMatrix();
 
+	glm::vec3 getPosition();
+
 private:
 	physx::PxController* playerController = nullptr;
 	

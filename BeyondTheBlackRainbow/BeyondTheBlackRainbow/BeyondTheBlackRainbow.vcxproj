@@ -79,6 +79,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Framebuffer.cpp" />
+    <ClCompile Include="Shader\DepthDirShaderProgram.cpp" />
+    <ClCompile Include="Shader\DepthShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\DirectionalLightNode.cpp" />
     <ClCompile Include="Event\EventFactory.cpp" />
     <ClCompile Include="Event\Event.cpp" />
@@ -88,6 +91,7 @@
     <ClCompile Include="SceneGraph\PointLightNode.cpp" />
     <ClCompile Include="SceneGraph\PlayerNode.cpp" />
     <ClCompile Include="SceneGraph\LightNode.cpp" />
+    <ClCompile Include="Shader\DirShadowMappingShaderProgram.cpp" />
     <ClCompile Include="Shader\LightingShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\CameraNode.cpp" />
     <ClCompile Include="GLDebug.cpp" />
@@ -103,10 +107,14 @@
     <ClCompile Include="Shader\TextShaderProgram.cpp" />
     <ClCompile Include="Shader\TextureShaderProgram.cpp" />
     <ClCompile Include="Texture\Texture.cpp" />
+    <ClCompile Include="Shader\ShadowMappingShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\TransformNode.cpp" />
     <ClCompile Include="Text\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Framebuffer.h" />
+    <ClInclude Include="Shader\DepthDirShaderProgram.h" />
+    <ClInclude Include="Shader\DepthShaderProgram.h" />
     <ClInclude Include="SceneGraph\DirectionalLightNode.h" />
     <ClInclude Include="Event\EventFactory.h" />
     <ClInclude Include="Event\Event.h" />
@@ -118,6 +126,7 @@
     <ClInclude Include="SceneGraph\LightsEnum.h" />
     <ClInclude Include="SceneGraph\PlayerNode.h" />
     <ClInclude Include="SceneGraph\LightNode.h" />
+    <ClInclude Include="Shader\DirShadowMappingShaderProgram.h" />
     <ClInclude Include="Shader\LightingShaderProgram.h" />
     <ClInclude Include="SceneGraph\CameraNode.h" />
     <ClInclude Include="GLDebug.h" />
@@ -135,6 +144,7 @@
     <ClInclude Include="Shader\TextureShaderProgram.h" />
     <ClInclude Include="Texture\MipmapStateEnum.h" />
     <ClInclude Include="Texture\SamplerStateEnum.h" />
+    <ClInclude Include="Shader\ShadowMappingShaderProgram.h" />
     <ClInclude Include="Text\Text.h" />
     <ClInclude Include="Util\FileChecker.h" />
     <ClInclude Include="Util\UuidHelper.h" />
