@@ -9,6 +9,7 @@
 #include "..\Shader\SimpleLightingShaderProgram.h"
 #include "..\Shader\TextShaderProgram.h"
 #include "..\Shader\BloomShaderProgram.h"
+#include "..\Shader\RenderSurfaceShaderProgram.h"
 
 ShaderImporter::ShaderImporter()
 {
@@ -107,6 +108,9 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	else if (shader == MeshLoadInfo::BLOOM_SHADER)
 	{
 		result = new BloomShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::RENDER_SURFACE){
+		result = new RenderSurfaceShaderProgram(shaderProgramID);
 	}
 	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;

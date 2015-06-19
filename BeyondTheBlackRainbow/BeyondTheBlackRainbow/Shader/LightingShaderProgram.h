@@ -11,7 +11,6 @@ public:
 	void loadUniformLocations();
 	void fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights);
 	void fillUniformLocation(Text* text);
-	void fillUniformLocation(GLuint textureUnit);
 
 	GLuint getLocationMVP();
 	GLuint getLocationTexture();

@@ -34,13 +34,14 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		2 + randomX, 2 + randomY, -3.5 + randomZ, 1));
+		2, 1.5, -3.5, 1));
+		//2 + randomX, 2 + randomY, -3.5 + randomZ, 1));
 		MeshNode* debugMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
 		debugTransform->attachChild(debugMesh);
 		sceneGraph->attachChild(debugTransform);
 		drawArray->push_back(debugMesh);
 		debugMesh->prepareForRendering();
-		debugMesh->createCollisionShape(physicsHandler);
+		//debugMesh->createCollisionShape(physicsHandler);
 	}
 }
 
@@ -86,7 +87,7 @@ int main() {
 	
 	//glm::vec3 lightPos = glm::vec3(2, 1.5, -2.5);
 	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2, 1.5, -4), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
-	LightNode* secondLight = new PointLightNode(generateUuid(), glm::vec3(2, 1.5, -1), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* secondLight = new PointLightNode(generateUuid(), glm::vec3(2, 0.5, -1), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
 	LightNode* thirdLight = new DirectionalLightNode(generateUuid(), glm::vec3(0, 0, 0), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, 0, 3), LightType::DIRECTIONAL_LIGHT);
 	LightNode* fourthLight = new DirectionalLightNode(generateUuid(), glm::vec3(0, 2, 0), 1.0f, glm::vec3(0, 0, 1), glm::vec3(1, 1, 1), LightType::DIRECTIONAL_LIGHT);
 
@@ -204,21 +205,12 @@ int main() {
 	bool oldF2State = false;
 
 	renderer->createRenderSurface(viewPortResX, viewPortResY);
-
-	GLuint frameBuffer;
-	renderer->generateFramebuffer(&frameBuffer);
-	renderer->bindFramebuffer(frameBuffer, viewPortResX, viewPortResY);
-	
-	GLuint depthRenderBuffer;
-	renderer->genDepthBuffer(&depthRenderBuffer);
-	renderer->bindDepthBuffer(depthRenderBuffer, viewPortResX, viewPortResY);
 	
 	//gameloop
 	double timeOld = 0;
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
 		// Clear the screen
-		renderer->bindFramebuffer(frameBuffer, viewPortResX, viewPortResY);
-		renderer->configureFramebufferForPostProcessing(frameBuffer, viewPortResX, viewPortResY);
+		renderer->configureFramebufferForPostProcessing(viewPortResX, viewPortResY);
 
 		time = glfwGetTime();
 		double deltaTime = time - oldTime;
@@ -241,7 +233,7 @@ int main() {
 			char str[10];
 			char fpsString[20] = "FPS: ";
 
-			int fps = (1 / deltaTime);
+			int fps = (1000 / deltaTime);
 			_itoa_s(fps, str, 10);
 
 			strcat_s(fpsString, 20, str);

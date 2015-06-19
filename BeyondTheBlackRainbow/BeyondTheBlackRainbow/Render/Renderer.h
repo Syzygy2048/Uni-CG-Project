@@ -13,6 +13,9 @@
 #include "../SceneGraph/CameraNode.h"
 #include "../SceneGraph/LightNode.h"
 #include "../Text/Text.h"
+#include "../Shader/BloomShaderProgram.h"
+#include "../Shader/RenderSurfaceShaderProgram.h"
+
 
 class Renderer
 {
@@ -37,7 +40,7 @@ public:
 	void linkShader(ShaderProgram* shader);
 
 	void generateFramebuffer(GLuint* id);
-	void bindFramebuffer(GLuint id, int viewPortResX, int viewPortRexY);
+	void bindFramebuffer(GLuint id, int viewPortResX, int viewPortRexY, GLenum frameBufferTarget);
 
 
 	void genRenderTexture(GLuint* id);
@@ -46,7 +49,7 @@ public:
 	void genDepthBuffer(GLuint* id);
 	void bindDepthBuffer(GLuint id, int viewPortResX, int viewPortResY);
 
-	void configureFramebufferForPostProcessing(GLuint framebufferId, int viewPortResX, int viewPortResY);
+	void configureFramebufferForPostProcessing(int viewPortResX, int viewPortResY);
 
 	void genrateShadowMapTexture(GLuint* id);
 	void glBindShadowMapTexture(GLuint id, int viewPortResX, int viewPortRexY);
@@ -66,11 +69,16 @@ private:
 	Renderer(Renderer const&);
 	void operator=(Renderer const&);
 
+	
+	GLuint renderFrameBuffer;
+	GLuint renderDepthBuffer;
 	GLuint renderSurfaceVAO;
 	GLuint renderSurfaceVBO;
 	GLuint renderTexture;
+	GLuint renderTexture2;
 	
-	ShaderProgram* postProcessingShader;
+	RenderSurfaceShaderProgram* renderSurfaceShader;
+	BloomShaderProgram* postProcessingShader;
 	
 	GLFWwindow* window;
 	

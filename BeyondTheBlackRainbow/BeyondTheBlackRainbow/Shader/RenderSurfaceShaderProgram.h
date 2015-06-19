@@ -2,17 +2,16 @@
 
 #include "ShaderProgram.h"
 
-class BloomShaderProgram : public ShaderProgram
+class RenderSurfaceShaderProgram : public ShaderProgram
 {
 public:
-	BloomShaderProgram(GLuint shaderProgramId);
-	~BloomShaderProgram();
+	RenderSurfaceShaderProgram(GLuint shaderProgramId);
+	~RenderSurfaceShaderProgram();
 
 	virtual void loadUniformLocations();
 	virtual void fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights){};
 	virtual void fillUniformLocation(Text* text){};
-	virtual void fillUniformLocation(bool horizontal);
+	virtual void fillUniformLocation(GLuint renderTexture);
 private:
 	GLuint locationTexture;
-	GLuint locationHorizontal;
 };

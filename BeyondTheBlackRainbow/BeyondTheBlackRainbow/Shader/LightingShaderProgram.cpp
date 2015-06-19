@@ -45,7 +45,3 @@ void LightingShaderProgram::fillUniformLocation(Text* text)
 {
 
 }
-
-void LightingShaderProgram::fillUniformLocation(GLuint textureUnit)
-{
-} 

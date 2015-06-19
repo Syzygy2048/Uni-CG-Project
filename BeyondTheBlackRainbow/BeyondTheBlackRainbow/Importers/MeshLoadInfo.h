@@ -26,6 +26,7 @@ public:
 	static const ShaderLoadInfo* SIMPLE_LIGHTING_SHADER;
 	static const ShaderLoadInfo* TEXT_SHADER;
 	static const ShaderLoadInfo* BLOOM_SHADER;
+	static const ShaderLoadInfo* RENDER_SURFACE;
 
 	struct LoadInfo {
 		const std::string meshPath;

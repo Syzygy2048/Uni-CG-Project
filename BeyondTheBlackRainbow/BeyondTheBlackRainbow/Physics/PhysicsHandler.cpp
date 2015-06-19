@@ -51,7 +51,7 @@ void PhysicsHandler::initPhysics()
 
 void PhysicsHandler::updatePhysics()
 {
-	physicsScene->simulate(physicsTimeStep/50);
+	physicsScene->simulate(physicsTimeStep);
 	physicsScene->fetchResults(true);
 }
 

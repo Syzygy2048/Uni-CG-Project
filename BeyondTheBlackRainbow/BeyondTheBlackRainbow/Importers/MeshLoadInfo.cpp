@@ -4,6 +4,7 @@ const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::TEXTURE_SHADER = new ShaderLoa
 const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::SIMPLE_LIGHTING_SHADER = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/SimpleVertexShader.vertexshader"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/SimpleFragmentShader.fragmentshader"));
 const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::TEXT_SHADER = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/TextVertexShader.vertexshader"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/TextFragmentShader.fragmentshader"));
 const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::BLOOM_SHADER = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/BloomVertexShader.glsl"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/BloomFragmentShader.glsl"));
+const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::RENDER_SURFACE = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/RenderSurfaceVertexShader.glsl"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/RenderSurfaceFragmentShader.glsl"));
 
 
 const MeshLoadInfo::LoadInfo* MeshLoadInfo::TABLE = new LoadInfo(std::string("../BeyondTheBlackRainbow/Assets/Models/Table.obj"), std::string("../BeyondTheBlackRainbow/Assets/Models/duck_textures/wood _texture.jpg"), SIMPLE_LIGHTING_SHADER, MeshLoadInfo::CollisionType::DYNAMIC, MeshLoadInfo::CollisionShapeType::CONVEX);

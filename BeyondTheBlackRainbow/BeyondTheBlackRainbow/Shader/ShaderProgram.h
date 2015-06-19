@@ -25,8 +25,6 @@ public:
 	virtual void loadUniformLocations() = 0;
 	virtual void fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights) = 0;
 	virtual void fillUniformLocation(Text* text) = 0;
-	virtual void fillUniformLocation(GLuint textureUnit) = 0;
-
 
 protected:
 	GLuint programId;
