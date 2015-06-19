@@ -312,6 +312,10 @@ int main() {
 	double mipmapTime = 0.1;
 	double samplerTime = 0.1;
 	double blendTime = 0.1;
+	int frame = 0;
+	double fpsTime = glfwGetTime();
+	double fpsTimebase = 0;
+	int fps = 0;
 	
 	bool helpEnable = true;
 	bool blendEnable = true;
@@ -375,7 +379,15 @@ int main() {
 			char str[10];
 			char fpsString[20] = "FPS: ";
 
-			int fps = (1 / deltaTime);
+			frame++;
+			fpsTime = glfwGetTime();
+			if (fpsTime - fpsTimebase > 1) {
+				fps = frame / (fpsTime - fpsTimebase);
+				fpsTimebase = fpsTime;
+				frame = 0;
+			}
+
+			//int fps = (1 / deltaTime);
 			_itoa_s(fps, str, 10);
 
 			strcat_s(fpsString, 20, str);
