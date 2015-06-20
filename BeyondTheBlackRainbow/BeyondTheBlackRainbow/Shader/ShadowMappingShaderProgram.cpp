@@ -53,37 +53,39 @@ void ShadowMappingShaderProgram::bindTextures(MeshNode* node)
 	glUniform1i(locationDiffuseTexture, 0);
 	
 	std::map<std::string, Framebuffer*> framebuffers = node->getFramebuffers();
-	for (int i = 0; i < framebuffers.size()-1; i++) {
-		
+	int count = 0;
+	for (int i = 0; i < framebuffers.size(); i++) {
 		std::stringstream shadowMap;
 		shadowMap << "shadows[";
-		shadowMap << i;
+		shadowMap << count;
 		shadowMap << "].depthMap";
-		if (i == 0) {
+		if (count == 0) {
 			glActiveTexture(GL_TEXTURE29);
 		}
-		else if (i == 1) {
+		else if (count == 1) {
 			glActiveTexture(GL_TEXTURE28);
 		}
-		else if (i == 2) {
+		else if (count == 2) {
 			glActiveTexture(GL_TEXTURE27);
 		}
-		else if (i == 3) {
+		else if (count == 3) {
 			glActiveTexture(GL_TEXTURE26);
 		}
-		glBindTexture(GL_TEXTURE_CUBE_MAP, framebuffers.find("pointLight")->second->getTexture()->getCubeMapID());
+		std::stringstream key;
+		key << "pointLight";
+		key << count;
+		glBindTexture(GL_TEXTURE_CUBE_MAP, framebuffers.find(key.str())->second->getTexture()->getCubeMapID());
 		auto loc = glGetUniformLocation(programId, shadowMap.str().c_str());
-		glUniform1i(glGetUniformLocation(programId, shadowMap.str().c_str()), (29 - i));
+		glUniform1i(glGetUniformLocation(programId, shadowMap.str().c_str()), (29 - count));
 		
 		std::stringstream farPlane;
 		farPlane << "shadows[";
-		farPlane << i;
+		farPlane << count;
 		farPlane << "].farPlane";
-		glUniform1f(glGetUniformLocation(programId, farPlane.str().c_str()), framebuffers.find("pointLight")->second->getFarPlane());
+		glUniform1f(glGetUniformLocation(programId, farPlane.str().c_str()), framebuffers.find(key.str())->second->getFarPlane());
+		
+		count++;
 	}
-	glActiveTexture(GL_TEXTURE25);
-	glBindTexture(GL_TEXTURE_2D, framebuffers.find("pointLight")->second->getTexture()->getTextureID());
-	glUniform1i(locationDirDepthMap, 25);
 }
 
 void ShadowMappingShaderProgram::useLights(std::vector<LightNode*> lights)
@@ -124,6 +126,20 @@ void ShadowMappingShaderProgram::useLights(std::vector<LightNode*> lights)
 			//auto loc5 = glGetUniformLocation(programId, direction.str().c_str());
 			glUniform3f(glGetUniformLocation(programId, direction.str().c_str()), lights.at(i)->getDirection().x, lights.at(i)->getDirection().y, lights.at(i)->getDirection().z);
 			//std::cout << lights.at(i)->getDirection().x << " " << lights.at(i)->getDirection().y << " " << lights.at(i)->getDirection().z << std::endl;
+		}
+		else if (lights.at(i)->getLightType() == SPOT_LIGHT) {
+			glUniform1f(glGetUniformLocation(programId, type.str().c_str()), 3.0f);
+			std::stringstream direction;
+			direction << "lights[";
+			direction << i;
+			direction << "].direction";
+			//auto loc5 = glGetUniformLocation(programId, direction.str().c_str());
+			glUniform3f(glGetUniformLocation(programId, direction.str().c_str()), lights.at(i)->getDirection().x, lights.at(i)->getDirection().y, lights.at(i)->getDirection().z);
+			std::stringstream cutOff;
+			cutOff << "lights[";
+			cutOff << i;
+			cutOff << "].cutOff";
+			glUniform2f(glGetUniformLocation(programId, cutOff.str().c_str()), lights.at(i)->getCutOff().x, lights.at(i)->getCutOff().y);
 		}
 	}
 }

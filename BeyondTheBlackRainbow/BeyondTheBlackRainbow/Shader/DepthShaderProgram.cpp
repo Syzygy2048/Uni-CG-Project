@@ -21,7 +21,6 @@ void DepthShaderProgram::fillUniformLocation(MeshNode* node, std::vector<LightNo
 {
 	glm::mat4 M = node->getModelMatrix();
 	glUniformMatrix4fv(locationModel, 1, GL_FALSE, &M[0][0]);
-	this->useLights(lights);
 }
 
 void DepthShaderProgram::fillUniformLocation(Text* text)
@@ -32,17 +31,12 @@ void DepthShaderProgram::fillUniformLocation(Framebuffer* frameBuffer)
 {
 	float farPlane = frameBuffer->getFarPlane();
 	glUniform1f(locationFarPlane, farPlane);
+	glUniform3fv(locationLightPos, 1, &frameBuffer->getMyLight()->getPosition()[0]);
 	this->useGeometry(frameBuffer->getDepthTransfomrs());
 }
 
 void DepthShaderProgram::useLights(std::vector<LightNode*> lights)
 {
-	for (LightNode* light : lights) {
-		if (light->getLightType() == POINT_LIGHT) {
-			glUniform3fv(locationLightPos, 1, &light->getPosition()[0]);
-			return;
-		}
-	}
 }
 
 void DepthShaderProgram::useGeometry(std::vector<glm::mat4> depthTransforms)

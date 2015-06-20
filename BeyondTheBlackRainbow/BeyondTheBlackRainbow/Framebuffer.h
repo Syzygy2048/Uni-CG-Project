@@ -7,6 +7,7 @@
 #include "Shader/ShaderProgram.h"
 #include "Texture\Texture.h"
 #include "SceneGraph\LightNode\LightsEnum.h"
+#include "SceneGraph\LightNode\LightNode.h"
 
 class ShaderProgram;
 class MeshNode;
@@ -18,7 +19,7 @@ public:
 	Framebuffer(const MeshLoadInfo::LoadInfo* meshLoadInfo, int width, int height);
 	~Framebuffer();
 
-	void prepareFrameBuffer(LightType type);
+	void prepareFrameBuffer(LightNode* myLight);
 	void useFrameBuffer();
 
 	ShaderProgram* getShaderProgram();
@@ -29,6 +30,7 @@ public:
 	void setDepthTransforms(std::vector<glm::mat4> depthTransforms);
 	glm::mat4 getDepthMVP();
 	std::vector<glm::mat4> getDepthTransfomrs();
+	LightNode* getMyLight();
 
 	void setFarPlane(float farPlane);
 	float getFarPlane();
@@ -40,6 +42,7 @@ private:
 	const MeshLoadInfo::LoadInfo* loadInfo;
 	Texture* texture;
 	ShaderProgram* shaderProgram;
+	LightNode* myLight;
 	glm::mat4 depthMVP;
 	std::vector<glm::mat4> depthTransforms;
 	int width;

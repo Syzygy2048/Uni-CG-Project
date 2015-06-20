@@ -15,15 +15,16 @@ Framebuffer::~Framebuffer()
 {
 }
 
-void Framebuffer::prepareFrameBuffer(LightType type) 
+void Framebuffer::prepareFrameBuffer(LightNode* myLight) 
 {
+	this->myLight = myLight;
 	Renderer* renderer = Renderer::getInstance();
 	renderer->generateFrameBuffer(&frameBufferID);
 	texture = new Texture(width, height);
-	if (type == DIRECTIONAL_LIGHT) {
+	if (myLight->getLightType() == DIRECTIONAL_LIGHT) {
 		renderer->fillFrameBuffer(frameBufferID, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getTextureID(), 0);
 	}
-	else if (type == POINT_LIGHT) {
+	else if (myLight->getLightType() == POINT_LIGHT) {
 		renderer->fillFrameBuffer(frameBufferID, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getCubeMapID(), 0);
 	}
 	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->shaderInfo);
@@ -87,5 +88,10 @@ void Framebuffer::setNearPlane(float nearPlane)
 float Framebuffer::getNearPlane()
 {
 	return nearPlane;
+}
+
+LightNode* Framebuffer::getMyLight()
+{
+	return myLight;
 }
 
