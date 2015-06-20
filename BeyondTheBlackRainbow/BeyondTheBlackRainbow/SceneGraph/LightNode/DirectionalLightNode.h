@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../SceneGraph/LightNode.h"
+#include "../SceneGraph/LightNode/LightNode.h"
 
 class DirectionalLightNode : public LightNode
 {
@@ -9,6 +9,7 @@ public:
 	~DirectionalLightNode();
 
 	glm::vec3 getDirection();
+	glm::vec2 getCutOff();
 
 private:
 

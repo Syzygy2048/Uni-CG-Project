@@ -2,5 +2,6 @@
 
 static enum LightType{
 	POINT_LIGHT,
-	DIRECTIONAL_LIGHT
+	DIRECTIONAL_LIGHT,
+	SPOT_LIGHT
 };

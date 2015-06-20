@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../SceneGraph/LightNode.h"
+#include "LightNode.h"
 
 class PointLightNode : public LightNode
 {
@@ -9,5 +9,6 @@ public:
 	~PointLightNode();
 
 	glm::vec3 getDirection();
+	glm::vec2 getCutOff();
 };
 

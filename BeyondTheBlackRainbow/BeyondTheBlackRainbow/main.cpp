@@ -12,11 +12,12 @@
 #include "Util\UuidHelper.h"
 #include "Importers\MeshImporter.h"
 #include "SceneGraph\TransformNode.h"
-#include "SceneGraph\LightsEnum.h"
+#include "SceneGraph\LightNode\LightsEnum.h"
 #include "SceneGraph\CameraNode.h"
 #include "SceneGraph\PlayerNode.h"
-#include "SceneGraph\PointLightNode.h"
-#include "SceneGraph\DirectionalLightNode.h"
+#include "SceneGraph\LightNode\PointLightNode.h"
+#include "SceneGraph\LightNode\DirectionalLightNode.h"
+#include "SceneGraph\LightNode\SpotLightNode.h"
 #include "Physics\PhysicsHandler.h"
 #include "Text\Text.h"
 #include "Event\EventFactory.h"
@@ -169,8 +170,12 @@ int main() {
 	cameraList.insert(std::pair<std::string, CameraNode*>(std::string("player camera"), activeCamera));
 	
 	std::vector<LightNode*> lights;
-	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2.0, 1.0, -4.5), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2.0, 1.5, -4.5), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* secondLight = new SpotLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 2.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
+	LightNode* thirdLight = new DirectionalLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), LightType::DIRECTIONAL_LIGHT);
 	lights.push_back(firstLight);
+	lights.push_back(secondLight);
+	lights.push_back(thirdLight);
 	renderer->setLights(lights);
 
 	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TABLE);
@@ -234,6 +239,8 @@ int main() {
 	transformNodeRoom->attachChild(transformNodeBed);
 	transformNodeRoom->attachChild(transformNodeTable);
 	transformNodeRoom->attachChild(firstLight);
+	transformNodeRoom->attachChild(secondLight);
+	transformNodeRoom->attachChild(thirdLight);
 	transformNodeDuck->attachChild(duckMesh);
 	transformNodeBed->attachChild(bedMesh);
 	transformNodeTable->attachChild(tableMesh);

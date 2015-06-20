@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <glm\glm.hpp>
-#include "..\SceneGraph\LightsEnum.h"
+#include "..\SceneGraph\LightNode\LightsEnum.h"
 
 SimpleLightingShaderProgram::SimpleLightingShaderProgram(GLuint shaderProgramID) : ShaderProgram(shaderProgramID)
 {
@@ -80,7 +80,21 @@ void SimpleLightingShaderProgram::useLights(std::vector<LightNode*> lights)
 			//auto loc5 = glGetUniformLocation(programId, direction.str().c_str());
 			glUniform3f(glGetUniformLocation(programId, direction.str().c_str()), lights.at(i)->getDirection().x, lights.at(i)->getDirection().y, lights.at(i)->getDirection().z);
 			//std::cout << lights.at(i)->getDirection().x << " " << lights.at(i)->getDirection().y << " " << lights.at(i)->getDirection().z << std::endl;
-		}		
+		}	
+		else if (lights.at(i)->getLightType() == SPOT_LIGHT) {
+			glUniform1f(glGetUniformLocation(programId, type.str().c_str()), 3.0f);
+			std::stringstream direction;
+			direction << "lights[";
+			direction << i;
+			direction << "].direction";
+			//auto loc5 = glGetUniformLocation(programId, direction.str().c_str());
+			glUniform3f(glGetUniformLocation(programId, direction.str().c_str()), lights.at(i)->getDirection().x, lights.at(i)->getDirection().y, lights.at(i)->getDirection().z);
+			std::stringstream cutOff;
+			cutOff << "lights[";
+			cutOff << i;
+			cutOff << "].cutOff";
+			glUniform2f(glGetUniformLocation(programId, cutOff.str().c_str()), lights.at(i)->getCutOff().x, lights.at(i)->getCutOff().y);
+		}
 	}
 }
 

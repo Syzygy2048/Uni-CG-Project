@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SceneNode.h"
+#include "../SceneNode.h"
 #include "LightsEnum.h"
 
 class LightNode : public SceneNode
@@ -16,6 +16,7 @@ public:
 	glm::vec3 getColor();
 	LightType getLightType();
 	virtual glm::vec3 getDirection() = 0;
+	virtual glm::vec2 getCutOff() = 0;
 
 private:
 	glm::vec3 position;

@@ -4,7 +4,7 @@
 
 //forward declaration
 #include "../SceneGraph/MeshNode.h"
-#include "../SceneGraph/LightNode.h"
+#include "../SceneGraph/LightNode/LightNode.h"
 #include "../Text/Text.h"
 #include "../Framebuffer.h"
 

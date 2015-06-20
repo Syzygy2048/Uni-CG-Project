@@ -11,7 +11,7 @@
 #include "../SceneGraph/TransformNode.h"
 #include "../SceneGraph/MeshNode.h"
 #include "../SceneGraph/CameraNode.h"
-#include "../SceneGraph/LightNode.h"
+#include "../SceneGraph/LightNode/LightNode.h"
 #include "../Text/Text.h"
 #include "../Framebuffer.h"
 

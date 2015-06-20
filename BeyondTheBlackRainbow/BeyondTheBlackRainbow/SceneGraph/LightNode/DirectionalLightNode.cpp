@@ -15,3 +15,8 @@ glm::vec3 DirectionalLightNode::getDirection()
 {
 	return direction;
 }
+
+glm::vec2 DirectionalLightNode::getCutOff()
+{
+	return glm::vec2();
+}

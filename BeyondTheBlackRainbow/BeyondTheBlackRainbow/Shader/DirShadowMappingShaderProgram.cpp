@@ -1,6 +1,6 @@
 #include "DirShadowMappingShaderProgram.h"
 #include "..\Util\UuidHelper.h"
-#include "..\SceneGraph\DirectionalLightNode.h"
+#include "..\SceneGraph\LightNode\DirectionalLightNode.h"
 #include <sstream>
 
 

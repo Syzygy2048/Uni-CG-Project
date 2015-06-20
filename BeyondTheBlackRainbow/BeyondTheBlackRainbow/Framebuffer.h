@@ -6,7 +6,7 @@
 
 #include "Shader/ShaderProgram.h"
 #include "Texture\Texture.h"
-#include "SceneGraph\LightsEnum.h"
+#include "SceneGraph\LightNode\LightsEnum.h"
 
 class ShaderProgram;
 class MeshNode;
