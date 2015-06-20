@@ -10,6 +10,7 @@
 #include "..\Shader\TextShaderProgram.h"
 #include "..\Shader\BloomShaderProgram.h"
 #include "..\Shader\RenderSurfaceShaderProgram.h"
+#include "..\Shader\HighPassShaderProgram.h"
 
 ShaderImporter::ShaderImporter()
 {
@@ -111,6 +112,9 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	}
 	else if (shader == MeshLoadInfo::RENDER_SURFACE){
 		result = new RenderSurfaceShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::HIGH_PASS){
+		result = new HighPassShaderProgram(shaderProgramID);
 	}
 	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;

@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Shader\HighPassShaderProgram.cpp" />
     <ClCompile Include="Shader\BloomShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\DirectionalLightNode.cpp" />
     <ClCompile Include="Event\EventFactory.cpp" />
@@ -109,6 +110,7 @@
     <ClCompile Include="Text\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Shader\HighPassShaderProgram.h" />
     <ClInclude Include="Shader\BloomShaderProgram.h" />
     <ClInclude Include="SceneGraph\DirectionalLightNode.h" />
     <ClInclude Include="Event\EventFactory.h" />
@@ -121,6 +123,7 @@
     <ClInclude Include="SceneGraph\LightsEnum.h" />
     <ClInclude Include="SceneGraph\PlayerNode.h" />
     <ClInclude Include="SceneGraph\LightNode.h" />
+    <ClInclude Include="Shader\Fragment\HighPassFragmentShader.glsl" />
     <ClInclude Include="Shader\LightingShaderProgram.h" />
     <ClInclude Include="SceneGraph\CameraNode.h" />
     <ClInclude Include="GLDebug.h" />
@@ -138,6 +141,7 @@
     <ClInclude Include="Shader\TextShaderProgram.h" />
     <ClInclude Include="Shader\TextureShaderProgram.h" />
     <ClInclude Include="Shader\Vertex\BloomVertexShader.glsl" />
+    <ClInclude Include="Shader\Vertex\HighPassVertexShader.glsl" />
     <ClInclude Include="Text\Text.h" />
     <ClInclude Include="Util\FileChecker.h" />
     <ClInclude Include="Util\UuidHelper.h" />

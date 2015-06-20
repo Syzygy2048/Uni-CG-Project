@@ -245,8 +245,9 @@ void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewP
 {
 	//bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
 	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_DRAW_FRAMEBUFFER);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	bindDepthBuffer(renderDepthBuffer, viewPortResX, viewPortResY);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 
 	//glActiveTexture(GL_TEXTURE0);
 	//bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
@@ -260,8 +261,11 @@ void Renderer::createRenderSurface(int viewPortResX, int viewPortResY)
 	generateFramebuffer(&renderFrameBuffer);
 	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
 
-	//genRenderTexture(&renderTexture2);
-	//bindRenderTexture(renderTexture2, viewPortResX, viewPortResY);
+	genRenderTexture(&renderTexture2);
+	bindRenderTexture(renderTexture2, viewPortResX, viewPortResY);
+
+	genRenderTexture(&highPassTexture);
+	bindRenderTexture(highPassTexture, viewPortResX, viewPortResY);
 
 	genRenderTexture(&renderTexture);
 	bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
@@ -309,6 +313,8 @@ void Renderer::createRenderSurface(int viewPortResX, int viewPortResY)
 	//glActiveTexture(GL_TEXTURE0);
 	//glBindTexture(GL_TEXTURE_2D, renderTexture);
 	
+	highPassShader = (HighPassShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::HIGH_PASS);
+	highPassShader->loadUniformLocations();
 	renderSurfaceShader = (RenderSurfaceShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::RENDER_SURFACE);
 	renderSurfaceShader->loadUniformLocations();
 	postProcessingShader = (BloomShaderProgram*) ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLOOM_SHADER);
@@ -319,51 +325,61 @@ void Renderer::createRenderSurface(int viewPortResX, int viewPortResY)
 	bindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+void Renderer::applyHighPassFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture)
+{
+	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, targetTexture, 0);
+	
+	glUseProgram(highPassShader->getShaderId());
+	highPassShader->fillUniformLocation(sourceTexture);
+
+	bindVertexArray(renderSurfaceVAO);
+	
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	bindVertexArray(0);
+
+}
+
 void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
 {
-	//bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
-	//bindFramebuffer(0, viewPortResX, viewPortResY, GL_DRAW_FRAMEBUFFER);
-	//glBindFramebuffer(GL_READ_FRAMEBUFFER, renderFrameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//glBlitFramebuffer(0, 0, viewPortResX, viewPortResY, 0, 0, viewPortResX, viewPortResY, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-	//bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
-	//bindFramebuffer(0, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
-	//for (int i = 0; i < 0; i++)
-	//{
-	//	//bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY);
-	//	glBindFramebuffer(GL_FRAMEBUFFER, renderFrameBuffer);
-	//	bindVertexArray(renderSurfaceVAO);
-	//	bool horizontal;
-	//	GLuint textureToRender;
-	//	if (i == 0)
-	//	{
-	//		bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
-	//		bindFramebuffer(0, viewPortResX, viewPortResY, GL_DRAW_FRAMEBUFFER);
-	//		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture2, renderTexture);
-	//		horizontal = false;
-	//		textureToRender = renderTexture;
-	//	}
-	//	else
-	//	{
-	//		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, renderTexture2);
-	//		horizontal = true;
-	//		textureToRender = renderTexture2;
-	//	}
-	//	glUseProgram(postProcessingShader->getShaderId());
-	//	glActiveTexture(GL_TEXTURE0);
-	//	bindRenderTexture(textureToRender, viewPortResX, viewPortResY);
-	//	
-	//	postProcessingShader->fillUniformLocation(horizontal);
-	//
-	//	glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
-	//
-	//	bindVertexArray(0);
-	//}
+	glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//applyHighPassFilter(viewPortResX, viewPortResY, renderTexture, highPassTexture);
 
-	glUseProgram(renderSurfaceShader->getShaderId());
+	for (int i = 0; i < 2; i++)
+	{
+		bool horizontal;
+		GLuint textureToRender;
+		if (i == 0)
+		{
+			bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture2, 0);	//render into texture2
+			horizontal = true;
+			textureToRender = renderTexture;		//render from texture1
+		}
+		else
+		{
+			bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, 0);		//render into texture
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			horizontal = false;
+			textureToRender = renderTexture2;	//render from texture2
+		}
+		
+		glUseProgram(postProcessingShader->getShaderId());
+		postProcessingShader->fillUniformLocation(textureToRender, horizontal, viewPortResX, viewPortResY);
 	
-	//bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
-	////glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewPortResX, viewPortResY, 0, GL_RGB, GL_UNSIGNED_BYTE, &renderTexture);
+		bindVertexArray(renderSurfaceVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
+	
+		bindVertexArray(0);
+	}
+	glDisable(GL_BLEND);
+	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
+	//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture2, 0);
+	bindFramebuffer(0, viewPortResX, viewPortResY, GL_DRAW_FRAMEBUFFER);
+	glUseProgram(renderSurfaceShader->getShaderId());
 	
 	renderSurfaceShader->fillUniformLocation(renderTexture);
 	bindVertexArray(renderSurfaceVAO);
@@ -371,10 +387,8 @@ void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
 	glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
 	
 	bindVertexArray(0);
-	
-	//glBindTexture(GL_TEXTURE_2D, 0);
-
 }
+
 void Renderer::genrateShadowMapTexture(GLuint* id)
 {
 	glGenTextures(1, id);

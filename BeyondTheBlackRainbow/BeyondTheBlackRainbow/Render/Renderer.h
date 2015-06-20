@@ -15,6 +15,7 @@
 #include "../Text/Text.h"
 #include "../Shader/BloomShaderProgram.h"
 #include "../Shader/RenderSurfaceShaderProgram.h"
+#include "../Shader/HighPassShaderProgram.h"
 
 
 class Renderer
@@ -54,6 +55,8 @@ public:
 	void genrateShadowMapTexture(GLuint* id);
 	void glBindShadowMapTexture(GLuint id, int viewPortResX, int viewPortRexY);
 
+	void applyHighPassFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
+
 	void createRenderSurface(int viewPortResX, int viewPortResY);
 	void renderToScreen(int viewPortResX, int viewPortResY);
 
@@ -76,7 +79,9 @@ private:
 	GLuint renderSurfaceVBO;
 	GLuint renderTexture;
 	GLuint renderTexture2;
+	GLuint highPassTexture;
 	
+	HighPassShaderProgram* highPassShader;
 	RenderSurfaceShaderProgram* renderSurfaceShader;
 	BloomShaderProgram* postProcessingShader;
 	

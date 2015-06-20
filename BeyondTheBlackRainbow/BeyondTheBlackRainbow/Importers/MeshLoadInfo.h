@@ -27,6 +27,7 @@ public:
 	static const ShaderLoadInfo* TEXT_SHADER;
 	static const ShaderLoadInfo* BLOOM_SHADER;
 	static const ShaderLoadInfo* RENDER_SURFACE;
+	static const ShaderLoadInfo* HIGH_PASS;
 
 	struct LoadInfo {
 		const std::string meshPath;
