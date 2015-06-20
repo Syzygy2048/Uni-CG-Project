@@ -245,9 +245,8 @@ void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewP
 {
 	//bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
 	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_DRAW_FRAMEBUFFER);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	bindDepthBuffer(renderDepthBuffer, viewPortResX, viewPortResY);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
 
 	//glActiveTexture(GL_TEXTURE0);
 	//bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
@@ -263,9 +262,6 @@ void Renderer::createRenderSurface(int viewPortResX, int viewPortResY)
 
 	genRenderTexture(&renderTexture2);
 	bindRenderTexture(renderTexture2, viewPortResX, viewPortResY);
-
-	genRenderTexture(&highPassTexture);
-	bindRenderTexture(highPassTexture, viewPortResX, viewPortResY);
 
 	genRenderTexture(&renderTexture);
 	bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
@@ -313,8 +309,6 @@ void Renderer::createRenderSurface(int viewPortResX, int viewPortResY)
 	//glActiveTexture(GL_TEXTURE0);
 	//glBindTexture(GL_TEXTURE_2D, renderTexture);
 	
-	highPassShader = (HighPassShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::HIGH_PASS);
-	highPassShader->loadUniformLocations();
 	renderSurfaceShader = (RenderSurfaceShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::RENDER_SURFACE);
 	renderSurfaceShader->loadUniformLocations();
 	postProcessingShader = (BloomShaderProgram*) ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLOOM_SHADER);
@@ -325,28 +319,8 @@ void Renderer::createRenderSurface(int viewPortResX, int viewPortResY)
 	bindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void Renderer::applyHighPassFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture)
-{
-	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, targetTexture, 0);
-	
-	glUseProgram(highPassShader->getShaderId());
-	highPassShader->fillUniformLocation(sourceTexture);
-
-	bindVertexArray(renderSurfaceVAO);
-	
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	bindVertexArray(0);
-
-}
-
 void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
 {
-	glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//applyHighPassFilter(viewPortResX, viewPortResY, renderTexture, highPassTexture);
-
 	for (int i = 0; i < 2; i++)
 	{
 		bool horizontal;
@@ -375,9 +349,8 @@ void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
 	
 		bindVertexArray(0);
 	}
-	glDisable(GL_BLEND);
 	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
-	//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture2, 0);
+//	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture2, 0);
 	bindFramebuffer(0, viewPortResX, viewPortResY, GL_DRAW_FRAMEBUFFER);
 	glUseProgram(renderSurfaceShader->getShaderId());
 	
