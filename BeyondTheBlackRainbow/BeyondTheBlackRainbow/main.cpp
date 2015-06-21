@@ -25,14 +25,13 @@
 #include "Texture\SamplerStateEnum.h"
 #include "Texture\MipmapStateEnum.h"
 #include "Framebuffer.h"
-
+#include "Util\FButtonHandler.h"
 
 std::map < std::string, Text* > text;
 
 void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::vector<MeshNode*>* drawArray)
-{
-	
-	for (int i = 0; i < 20; i++){
+{	
+	for (int i = 0; i < 1; i++){
 		float randomX = ((std::rand() % 100) - 50) / 100.f;
 		float randomY = ((std::rand() % 100) - 50) / 100.f;
 		float randomZ = ((std::rand() % 100) - 50) / 100.f;
@@ -40,13 +39,14 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		2 + randomX, 2 + randomY, -3.5 + randomZ, 1));
+		2, 1.5, -3.5, 1));
+		//2 + randomX, 2 + randomY, -3.5 + randomZ, 1));
 		MeshNode* debugMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
 		debugTransform->attachChild(debugMesh);
 		sceneGraph->attachChild(debugTransform);
 		drawArray->push_back(debugMesh);
 		debugMesh->prepareForRendering();
-		debugMesh->createCollisionShape(physicsHandler);
+		//debugMesh->createCollisionShape(physicsHandler);
 	}
 }
 
@@ -147,11 +147,13 @@ void blendTransparencyText()
 
 int main() {
 
+	int viewPortResX = 1280;
+	int viewPortResY = 720;
 	Renderer* renderer = Renderer::getInstance();
-	if (renderer->init() == -1){
+	if (renderer->init(viewPortResX, viewPortResY) == -1){
 		return -1;
 	}
-	
+
 	GLDebug::registerDebugCallbacks();
 	
 	InputHandler* input = new InputHandler();
@@ -164,7 +166,7 @@ int main() {
 	std::map<std::string, CameraNode*> cameraList;
 
 	//start of part that should be in a scene loader
-	CameraNode* activeCamera = new CameraNode(generateUuid());
+	CameraNode* activeCamera = new CameraNode(generateUuid(), viewPortResX, viewPortResY);
 	
 	
 	//this way we have a list of cameras and can switch between them as we want just by doing activeCamera = cameraList.find("whichever camera we want")->second;
@@ -274,9 +276,7 @@ int main() {
 	doorMesh->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR));
 
 	spawn20Ducks(sceneGraph, physics, &drawArray);
-	
-	
-	
+
 	//should probably done recursively in sceneNode		
 	
 	//end of part that should be in a scene loader
@@ -319,6 +319,7 @@ int main() {
 
 
 	physics->createPhysicsFloor();
+	//renderer->preparePostProcessing(viewPortResX, viewPortResY);
 	
 	double time = glfwGetTime();
 	double oldTime = glfwGetTime();
@@ -330,7 +331,7 @@ int main() {
 	double fpsTime = glfwGetTime();
 	double fpsTimebase = 0;
 	int fps = 0;
-	
+
 	bool helpEnable = true;
 	bool blendEnable = true;
 	bool wireframeEnabled = false;
@@ -346,9 +347,10 @@ int main() {
 	//gameloop
 	double timeOld = 0;
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
-		// Clear the screen
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		input->update(renderer->getWindow());
 
+		//renderer->configureFramebufferForPostProcessing(viewPortResX, viewPortResY);
+		
 		time = glfwGetTime();
 		double deltaTime = time - oldTime;
 		while (deltaTime > timeStep)
@@ -375,8 +377,6 @@ int main() {
 			blendTransparencyText();
 			blendTime = 0.0;
 		}
-
-		input->update(renderer->getWindow());
 		
 		//help
 		if (input->f1 && !oldF1State)
@@ -509,11 +509,14 @@ int main() {
 		oldF8State = input->f8;
 		oldF9State = input->f9;
 
+#ifdef _DEBUG
 		glLoadMatrixf(&viewProjectionMatrix[0][0]);
-
+#endif
 		physics->renderCollisionShapes();
 		
 		
+		//renderer->renderToScreen(viewPortResX, viewPortResY);
+
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();
 	}
@@ -522,3 +525,5 @@ int main() {
 
 	return 0;
 }
+
+

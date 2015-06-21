@@ -14,7 +14,6 @@ public:
 	virtual void fillUniformLocation(Text* text);
 	virtual void fillUniformLocation(Framebuffer* frameBuffer);
 
-
 private:
 	GLuint locationMVP;
 	GLuint locationV;

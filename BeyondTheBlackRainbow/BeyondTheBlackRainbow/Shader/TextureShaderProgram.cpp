@@ -30,24 +30,24 @@ void TextureShaderProgram::fillUniformLocation(MeshNode* node, std::vector<Light
 		glUniform1i(locationTexture, 0);
 	}
 	else if (node->getLoadInfo() == MeshLoadInfo::ROOM) {
-		glActiveTexture(GL_TEXTURE1);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, node->getTexture()->getTextureID());
-		glUniform1i(locationTexture, 1);
+		glUniform1i(locationTexture, 0);
 	}
 	else if (node->getLoadInfo() == MeshLoadInfo::TABLE) {
-		glActiveTexture(GL_TEXTURE2);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, node->getTexture()->getTextureID());
-		glUniform1i(locationTexture, 2);
+		glUniform1i(locationTexture, 0);
 	}
 	else if (node->getLoadInfo() == MeshLoadInfo::BED) {
-		glActiveTexture(GL_TEXTURE3);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, node->getTexture()->getTextureID());
-		glUniform1i(locationTexture, 3);
+		glUniform1i(locationTexture, 0);
 	}
 	else if (node->getLoadInfo() == MeshLoadInfo::DOOR) {
-		glActiveTexture(GL_TEXTURE4);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, node->getTexture()->getTextureID());
-		glUniform1i(locationTexture, 4);
+		glUniform1i(locationTexture, 0);
 	}
 }
 void TextureShaderProgram::fillUniformLocation(Text* text)

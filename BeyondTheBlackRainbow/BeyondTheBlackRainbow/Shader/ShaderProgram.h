@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GL\glew.h>
+#include <GL/glew.h>
 
 //forward declaration
 #include "../SceneGraph/MeshNode.h"
@@ -28,7 +28,6 @@ public:
 	virtual void fillUniformLocation(MeshNode* node, std::vector<LightNode*> lights) = 0;
 	virtual void fillUniformLocation(Text* text) = 0;
 	virtual void fillUniformLocation(Framebuffer* frameBuffer) = 0;
-
 
 protected:
 	GLuint programId;

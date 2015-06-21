@@ -83,6 +83,9 @@
     <ClCompile Include="Shader\DepthDirShaderProgram.cpp" />
     <ClCompile Include="Shader\DepthShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\LightNode\DirectionalLightNode.cpp" />
+    <ClCompile Include="Shader\BlurShaderProgram.cpp" />
+    <ClCompile Include="Shader\HighPassShaderProgram.cpp" />
+    <ClCompile Include="Shader\BloomShaderProgram.cpp" />
     <ClCompile Include="Event\EventFactory.cpp" />
     <ClCompile Include="Event\Event.cpp" />
     <ClCompile Include="Event\EventManager.cpp" />
@@ -102,6 +105,7 @@
     <ClCompile Include="SceneGraph\MeshNode.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
+    <ClCompile Include="Shader\RenderSurfaceShaderProgram.cpp" />
     <ClCompile Include="Shader\ShaderProgram.cpp" />
     <ClCompile Include="Shader\SimpleLightingShaderProgram.cpp" />
     <ClCompile Include="Shader\TextShaderProgram.cpp" />
@@ -117,6 +121,9 @@
     <ClInclude Include="Shader\DepthDirShaderProgram.h" />
     <ClInclude Include="Shader\DepthShaderProgram.h" />
     <ClInclude Include="SceneGraph\LightNode\DirectionalLightNode.h" />
+    <ClInclude Include="Shader\BlurShaderProgram.h" />
+    <ClInclude Include="Shader\HighPassShaderProgram.h" />
+    <ClInclude Include="Shader\BloomShaderProgram.h" />
     <ClInclude Include="Event\EventFactory.h" />
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="Event\EventManager.h" />
@@ -128,6 +135,8 @@
     <ClInclude Include="SceneGraph\PlayerNode.h" />
     <ClInclude Include="SceneGraph\LightNode\LightNode.h" />
     <ClInclude Include="Shader\DirShadowMappingShaderProgram.h" />
+    <ClInclude Include="SceneGraph\LightNode.h" />
+    <ClInclude Include="Shader\Fragment\HighPassFragmentShader.glsl" />
     <ClInclude Include="Shader\LightingShaderProgram.h" />
     <ClInclude Include="SceneGraph\CameraNode.h" />
     <ClInclude Include="GLDebug.h" />
@@ -139,6 +148,7 @@
     <ClInclude Include="SceneGraph\SceneGraphEnum.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />
     <ClInclude Include="SceneGraph\TransformNode.h" />
+    <ClInclude Include="Shader\RenderSurfaceShaderProgram.h" />
     <ClInclude Include="Shader\ShaderProgram.h" />
     <ClInclude Include="Shader\SimpleLightingShaderProgram.h" />
     <ClInclude Include="Shader\TextShaderProgram.h" />
@@ -147,15 +157,20 @@
     <ClInclude Include="Texture\MipmapStateEnum.h" />
     <ClInclude Include="Texture\SamplerStateEnum.h" />
     <ClInclude Include="Shader\ShadowMappingShaderProgram.h" />
+    <ClInclude Include="Shader\Vertex\BloomVertexShader.glsl" />
+    <ClInclude Include="Shader\Vertex\HighPassVertexShader.glsl" />
     <ClInclude Include="Text\Text.h" />
     <ClInclude Include="Util\FileChecker.h" />
+    <ClInclude Include="Util\FButtonHandler.h" />
     <ClInclude Include="Util\UuidHelper.h" />
     <ClInclude Include="Texture\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Shader\Fragment\BloomFragmentShader.glsl" />
+    <None Include="Shader\Fragment\BlurFragmentShader.glsl" />
     <None Include="Shader\Fragment\SimpleFragmentShader.fragmentshader" />
-    <None Include="Shader\Fragment\TextureShader.fragmentshader" />
+    <None Include="Shader\Vertex\BlurVertexShader.glsl" />
     <None Include="Shader\Vertex\SimpleVertexShader.vertexshader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

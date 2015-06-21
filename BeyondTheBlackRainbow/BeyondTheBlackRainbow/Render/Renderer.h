@@ -14,6 +14,11 @@
 #include "../SceneGraph/LightNode/LightNode.h"
 #include "../Text/Text.h"
 #include "../Framebuffer.h"
+#include "../Shader/BloomShaderProgram.h"
+#include "../Shader/RenderSurfaceShaderProgram.h"
+#include "../Shader/HighPassShaderProgram.h"
+#include "../Shader/BlurShaderProgram.h"
+
 
 class Renderer
 {
@@ -21,7 +26,7 @@ public:
 	static Renderer* getInstance();
 	~Renderer();
 
-	int init();
+	int init(int viewPortResX, int viewPortResY);
 
 	void generateBufferObject(GLuint* bufferID);
 	void generateFrameBuffer(GLuint* bufferID);
@@ -41,6 +46,24 @@ public:
 
 	void linkShader(ShaderProgram* shader);
 
+	void generateFramebuffer(GLuint* id);
+	void bindFramebuffer(GLuint id, int viewPortResX, int viewPortRexY, GLenum frameBufferTarget);
+	/*
+	void genRenderTexture(GLuint* id);
+	void bindRenderTexture(GLuint id, int viewPortResX, int viewPortResY);
+
+	void genDepthBuffer(GLuint* id);
+	void bindDepthBuffer(GLuint id, int viewPortResX, int viewPortResY);
+
+	void configureFramebufferForPostProcessing(int viewPortResX, int viewPortResY);
+
+	void applyHighPassFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
+	void applyBlurFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
+	void applyBloomFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
+
+	void preparePostProcessing(int viewPortResX, int viewPortResY);
+	void renderToScreen(int viewPortResX, int viewPortResY);
+	*/
 	void draw(MeshNode* node);
 	void drawText(Text* text, bool enableBlend);
 	void drawShadow(MeshNode* node, Framebuffer* framebuffer);
@@ -57,6 +80,20 @@ private:
 	Renderer();
 	Renderer(Renderer const&);
 	void operator=(Renderer const&);
+
+	
+	GLuint renderFrameBuffer;
+	GLuint renderDepthBuffer;
+	GLuint renderSurfaceVAO;
+	GLuint renderSurfaceVBO;
+	GLuint renderTexture;
+	GLuint renderTexture2;
+	GLuint highPassTexture;
+	
+	HighPassShaderProgram* highPassShader;
+	RenderSurfaceShaderProgram* renderSurfaceShader;
+	BloomShaderProgram* bloomShader;
+	BlurShaderProgram* blurShader;
 	
 	GLFWwindow* window;
 	std::map<std::string, Framebuffer*> framebuffers;

@@ -25,6 +25,7 @@ void Framebuffer::prepareFrameBuffer(LightNode* myLight)
 		renderer->fillFrameBuffer(frameBufferID, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getTextureID(), 0);
 	}
 	else if (myLight->getLightType() == POINT_LIGHT) {
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID);
 		renderer->fillFrameBuffer(frameBufferID, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getCubeMapID(), 0);
 	}
 	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->shaderInfo);

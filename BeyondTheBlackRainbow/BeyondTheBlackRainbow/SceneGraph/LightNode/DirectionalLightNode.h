@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../SceneGraph/LightNode/LightNode.h"
+#include "LightNode.h"
 
 class DirectionalLightNode : public LightNode
 {
