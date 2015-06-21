@@ -153,10 +153,12 @@ void Text::setText(char* text){
 		UV.push_back(uv_down_left);
 	}
 	verticesSize = vertices.size();
+	renderer->bindVertexArray(vao);
 	renderer->fillBuffer(vertexBufferID, GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_STATIC_DRAW);
 	renderer->setVertexAttribPointer(vertexAttribPointer, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	renderer->fillBuffer(UVBufferID, GL_ARRAY_BUFFER, UV.size() * sizeof(glm::vec2), &UV[0], GL_STATIC_DRAW);
 	renderer->setVertexAttribPointer(textureAttribPointer, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
+	renderer->bindVertexArray(0);
+	renderer->bindBuffer(GL_ARRAY_BUFFER, 0);
 }
 

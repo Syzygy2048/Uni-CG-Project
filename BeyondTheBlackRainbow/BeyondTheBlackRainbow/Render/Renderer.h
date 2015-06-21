@@ -56,8 +56,9 @@ public:
 	void glBindShadowMapTexture(GLuint id, int viewPortResX, int viewPortRexY);
 
 	void applyHighPassFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
+	void applyBloomFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
 
-	void createRenderSurface(int viewPortResX, int viewPortResY);
+	void preparePostProcessing(int viewPortResX, int viewPortResY);
 	void renderToScreen(int viewPortResX, int viewPortResY);
 
 	void draw(MeshNode* node);

@@ -64,8 +64,9 @@ int Renderer::init(int viewPortResX, int viewPortResY)
 	glClearColor(0.8f, 0.9f, 1.0f, 0.0f);
 
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-
+	glDepthFunc(GL_LEQUAL);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_FRONT);
 }
 
 GLFWwindow* Renderer::getWindow()
@@ -204,7 +205,7 @@ void Renderer::bindFramebuffer(GLuint id, int viewPortResX, int viewPortRexY, GL
 	glViewport(0, 0, viewPortResX, viewPortRexY);
 
 	
-	//createRenderSurface(viewPortResX, viewPortRexY);
+	//preparePostProcessing(viewPortResX, viewPortRexY);
 
 	GLenum status = glCheckFramebufferStatus(frameBufferTarget);
 
@@ -222,11 +223,6 @@ void Renderer::genRenderTexture(GLuint* id)
 void Renderer::bindRenderTexture(GLuint id, int viewPortResX, int viewPortResY)
 {
 	glBindTexture(GL_TEXTURE_2D, id);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewPortResX, viewPortResY, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 void Renderer::genDepthBuffer(GLuint* id)
@@ -236,56 +232,55 @@ void Renderer::genDepthBuffer(GLuint* id)
 
 void Renderer::bindDepthBuffer(GLuint id, int viewPortResX, int viewPortResY)
 {
-	glBindRenderbuffer(GL_RENDERBUFFER, id);
-	
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, id);
+	glBindRenderbuffer(GL_RENDERBUFFER, id);	
 }
 
-void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewPortResY)
+void Renderer::preparePostProcessing(int viewPortResX, int viewPortResY)
 {
-	//bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
-	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_DRAW_FRAMEBUFFER);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	bindDepthBuffer(renderDepthBuffer, viewPortResX, viewPortResY);
-
-	//glActiveTexture(GL_TEXTURE0);
-	//bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
-	
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, 0);
-}
-
-void Renderer::createRenderSurface(int viewPortResX, int viewPortResY)
-{
-
 	generateFramebuffer(&renderFrameBuffer);
 	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
 
 	genRenderTexture(&renderTexture2);
 	bindRenderTexture(renderTexture2, viewPortResX, viewPortResY);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewPortResX, viewPortResY, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	genRenderTexture(&renderTexture);
 	bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
-
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewPortResX, viewPortResY, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	GLfloat renderSurfaceVertices[] = {
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		-1.0f, 1.0f, 0.0f,
-		-1.0f, 1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
+		//-1.0f, -1.0f, 0.0f,
+		//1.0f, -1.0f, 0.0f,
+		//-1.0f, 1.0f, 0.0f,
+		//-1.0f, 1.0f, 0.0f,
+		//1.0f, -1.0f, 0.0f,
+		//1.0f, 1.0f, 0.0f,
+
+		-1.f, 1.0f, 0.0f, 1.0f,
+		-1.f, -1.0f, 0.0f, 0.0f,
+		1.f, -1.0f, 1.0f, 0.0f,
+
+		-1.f, 1.0f, 0.0f, 1.0f,
+		1.f, -1.f, 1.0f, 0.0f,
+		1.f, 1.0f, 1.0f, 1.0f
 	};
-	
-
-
 
 	genDepthBuffer(&renderDepthBuffer);
 	bindDepthBuffer(renderDepthBuffer, viewPortResX, viewPortResY);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, viewPortResX, viewPortResY);
-		
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, 0);
+	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, viewPortResX, viewPortResY);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, viewPortResX, viewPortResY);
+	bindDepthBuffer(0, viewPortResX, viewPortResY);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderDepthBuffer);
 
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTexture, 0);
 	
 	const int numberOfDrawbuffers = 1;
 	GLenum drawBuffers[numberOfDrawbuffers] = { GL_COLOR_ATTACHMENT0 };
@@ -294,32 +289,74 @@ void Renderer::createRenderSurface(int viewPortResX, int viewPortResY)
 	generateVertexArray(&renderSurfaceVAO);
 	generateBufferObject(&renderSurfaceVBO);
 
-	bindVertexArray(renderSurfaceVAO);
-	fillBuffer(renderSurfaceVBO, GL_ARRAY_BUFFER, sizeof(renderSurfaceVertices), &renderSurfaceVertices, GL_STATIC_DRAW);
+	glBindVertexArray(renderSurfaceVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, renderSurfaceVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(renderSurfaceVertices), &renderSurfaceVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(
-		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride
-		(void*)0            // array buffer offset
-		);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	glBindVertexArray(0);
+
+
+	//bindVertexArray(renderSurfaceVAO);
+	//fillBuffer(renderSurfaceVBO, GL_ARRAY_BUFFER, sizeof(renderSurfaceVertices), &renderSurfaceVertices, GL_STATIC_DRAW);
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(
+	//	0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+	//	3,                  // size
+	//	GL_FLOAT,           // type
+	//	GL_FALSE,           // normalized?
+	//	0,                  // stride
+	//	(void*)0            // array buffer offset
+	//	);
 
 	//glActiveTexture(GL_TEXTURE0);
 	//glBindTexture(GL_TEXTURE_2D, renderTexture);
 	
+	highPassShader = (HighPassShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::HIGH_PASS);
+	highPassShader->loadUniformLocations();
 	renderSurfaceShader = (RenderSurfaceShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::RENDER_SURFACE);
 	renderSurfaceShader->loadUniformLocations();
 	postProcessingShader = (BloomShaderProgram*) ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLOOM_SHADER);
 	postProcessingShader->loadUniformLocations();
 	
-	bindVertexArray(0);
-	bindBuffer(GL_ARRAY_BUFFER, 0);
-	bindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewPortResY)
+{
+	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_DRAW_FRAMEBUFFER);
+	glClearColor(0.7f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glEnable(GL_DEPTH_TEST);
+	//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, 0);
+	//bindDepthBuffer(renderDepthBuffer, viewPortResX, viewPortResY);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
+{
+	
+	//bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
+	bindFramebuffer(0, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
+	glClearColor(0.1f, 0.1f, 0.7f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	
+	glDisable(GL_DEPTH_TEST);
+
+	glUseProgram(renderSurfaceShader->getShaderId());
+	renderSurfaceShader->fillUniformLocation(renderTexture);
+	
+	bindVertexArray(renderSurfaceVAO);
+
+	glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
+	
+	bindVertexArray(0);
+}
+
+void Renderer::applyBloomFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture)
 {
 	for (int i = 0; i < 2; i++)
 	{
@@ -328,9 +365,9 @@ void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
 		if (i == 0)
 		{
 			bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture2, 0);	//render into texture2
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, targetTexture, 0);	//render into texture2
 			horizontal = true;
-			textureToRender = renderTexture;		//render from texture1
+			textureToRender = sourceTexture;		//render from texture1
 		}
 		else
 		{
@@ -340,27 +377,31 @@ void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
 			horizontal = false;
 			textureToRender = renderTexture2;	//render from texture2
 		}
-		
+
 		glUseProgram(postProcessingShader->getShaderId());
 		postProcessingShader->fillUniformLocation(textureToRender, horizontal, viewPortResX, viewPortResY);
-	
+
 		bindVertexArray(renderSurfaceVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
-	
+
 		bindVertexArray(0);
 	}
-	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
-//	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture2, 0);
-	bindFramebuffer(0, viewPortResX, viewPortResY, GL_DRAW_FRAMEBUFFER);
-	glUseProgram(renderSurfaceShader->getShaderId());
-	
-	renderSurfaceShader->fillUniformLocation(renderTexture);
+}
+
+void Renderer::applyHighPassFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture)
+{
+	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, targetTexture, 0);
+
+	glUseProgram(highPassShader->getShaderId());
+	highPassShader->fillUniformLocation(sourceTexture);
+
 	bindVertexArray(renderSurfaceVAO);
 
-	glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
-	
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 	bindVertexArray(0);
 }
+
 
 void Renderer::genrateShadowMapTexture(GLuint* id)
 {

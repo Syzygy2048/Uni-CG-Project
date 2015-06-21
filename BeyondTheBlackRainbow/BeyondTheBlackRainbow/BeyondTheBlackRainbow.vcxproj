@@ -144,6 +144,7 @@
     <ClInclude Include="Shader\Vertex\HighPassVertexShader.glsl" />
     <ClInclude Include="Text\Text.h" />
     <ClInclude Include="Util\FileChecker.h" />
+    <ClInclude Include="Util\FButtonHandler.h" />
     <ClInclude Include="Util\UuidHelper.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
