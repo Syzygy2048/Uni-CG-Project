@@ -1,6 +1,7 @@
 #include "PlayerNode.h"
 
 #include "TransformNode.h"
+#include "../Util/DoFHelper.h"
 
 PlayerNode::PlayerNode(UUID uuid) : SceneNode(uuid, NodeType::PLAYER_NODE)
 {
@@ -101,19 +102,21 @@ void PlayerNode::update(double deltaTime, InputHandler* input)
 		node->setNewTransform(glm::highp_mat4(glm::lookAt(positionViewHack, positionViewHack + direction, up)));
 	}
 	
+	physx::PxVec3 origin = physx::PxVec3(positionViewHack.x, positionViewHack.y, positionViewHack.z);                 // [in] Ray origin
+	glm::vec3 normDir = glm::normalize(direction);
+	physx::PxVec3 unitDir = physx::PxVec3(normDir.x, normDir.y, normDir.z);                // [in] Normalized ray direction
+	physx::PxReal maxDistance = 300;            // [in] Raycast max distance
+	physx::PxRaycastBuffer hit;                 // [out] Raycast results
 
-	if (input->e)
-	{		
-		physx::PxVec3 origin = physx::PxVec3(positionViewHack.x, positionViewHack.y, positionViewHack.z);                 // [in] Ray origin
-		glm::vec3 normDir = glm::normalize(direction);
-		physx::PxVec3 unitDir = physx::PxVec3(normDir.x, normDir.y, normDir.z);                // [in] Normalized ray direction
-		physx::PxReal maxDistance = 3;            // [in] Raycast max distance
-		physx::PxRaycastBuffer hit;                 // [out] Raycast results
-
-		// Raycast against all static & dynamic objects (no filtering)
-		// The main result from this call is the closest hit, stored in the 'hit.block' structure
-		bool status = playerController->getScene()->raycast(origin, unitDir, maxDistance, hit);
-		if (status){
+	// Raycast against all static & dynamic objects (no filtering)
+	// The main result from this call is the closest hit, stored in the 'hit.block' structure
+	bool status = playerController->getScene()->raycast(origin, unitDir, maxDistance, hit);
+	if (status){
+		//std::cerr << origin.x << " " << origin.y << " ";
+		DoFHelper::getInstance()->setDistanceToFocusedObject((origin - hit.block.position).magnitude());
+		DoFHelper::getInstance()->update();
+		if (input->e && hit.block.distance < 3)
+		{
 			if (!hit.block.actor->getName()){
 				std::cerr << "object name wasn't set" << std::endl;
 				//std::cerr << "userdata " << hit.block.actor->userData << std::endl;
@@ -123,16 +126,16 @@ void PlayerNode::update(double deltaTime, InputHandler* input)
 				UUID id;
 				/*if (std::string("player").compare(std::string(hit.block.actor->getName())))
 				{
-					std::cerr << "raytrace hit the player, this is a bug, please aim more up or down to hit the actual object" << std::endl;
+				std::cerr << "raytrace hit the player, this is a bug, please aim more up or down to hit the actual object" << std::endl;
 				} */
 				UuidFromString((RPC_CSTR)hit.block.actor->getName(), &id);
 				eventManager->eventTriggered(id, EventTrigger::RAYTRACE_HIT, this);
 			}
 		}
-
-
 	}
-	if (position.y >= 3.6 && position.z < -14.5){
+
+	if (position.y >= 3.6 && position.z < -14.5)
+	{
 		std::cerr << "YOU HAVE WON!" << std::endl;
 	}
 }

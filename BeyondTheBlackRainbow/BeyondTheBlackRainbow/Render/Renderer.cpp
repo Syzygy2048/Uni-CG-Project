@@ -289,13 +289,55 @@ void Renderer::preparePostProcessing(int viewPortResX, int viewPortResY)
 	
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTexture, 0);
 
-	glGenRenderbuffers(1, &renderDepthBuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, renderDepthBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, viewPortResX, viewPortResY);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderDepthBuffer);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glGenTextures(1, &dummyDepthTexture);
+	glBindTexture(GL_TEXTURE_2D, dummyDepthTexture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, viewPortResX, viewPortResY, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);//GL_COMPARE_REF_TO_TEXTURE);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_NEVER);
+	const char * label4 = "depth";
+	glObjectLabel(GL_TEXTURE, dummyDepthTexture, 5, label4);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+
+	glGenTextures(1, &renderDepthBuffer);
+	glBindTexture(GL_TEXTURE_2D, renderDepthBuffer);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, viewPortResX, viewPortResY, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);//GL_COMPARE_REF_TO_TEXTURE);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_NEVER);
+	const char * label3 = "dummy depth";
+	glObjectLabel(GL_TEXTURE, renderDepthBuffer, 11, label3);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, renderDepthBuffer, 0);
+
+
+	//glGenRenderbuffers(1, &dummyDepthTexture);
+	//glBindRenderbuffer(GL_RENDERBUFFER, dummyDepthTexture);
+	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, viewPortResX, viewPortResY);
+	//glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, dummyDepthTexture);
+	//const char * label4 = "Dummy Depth";
+	//glObjectLabel(GL_RENDERBUFFER, dummyDepthTexture, 11, label4);
+	//
+	//glGenRenderbuffers(1, &renderDepthBuffer);
+	//glBindRenderbuffer(GL_RENDERBUFFER, renderDepthBuffer);
+	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, viewPortResX, viewPortResY);
+	//glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderDepthBuffer);
+	//const char * label3 = "Depth";
+	//glObjectLabel(GL_RENDERBUFFER, renderDepthBuffer, 5, label3);
+	//
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	
 
@@ -311,12 +353,16 @@ void Renderer::preparePostProcessing(int viewPortResX, int viewPortResY)
 
 	blurShader = (BlurShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLUR_SHADER);
 	blurShader->loadUniformLocations();	
+
+	dofShader = (DepthOfFieldShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::DOF_SHADER);
+	dofShader->loadUniformLocations();
 }
 
 void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewPortResY)
 {
 	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_DRAW_FRAMEBUFFER);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, 0);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, renderDepthBuffer, 0);
 	glClearColor(0.7f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -329,8 +375,11 @@ void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewP
 
 void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
 {
-	applyBloomFilter(viewPortResX, viewPortResY, renderTexture, highPassTexture);
-		
+	//glBindRenderbuffer(GL_RENDERBUFFER, dummyDepthTexture);
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, dummyDepthTexture);
+	//applyBloomFilter(viewPortResX, viewPortResY, renderTexture, highPassTexture);
+	applyDepthOfFieldFilter(viewPortResX, viewPortResY, renderTexture, renderTexture2, renderDepthBuffer);
+
 	//bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
 	bindFramebuffer(0, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
 	glClearColor(0.1f, 0.1f, 0.7f, 1.0f);
@@ -348,6 +397,31 @@ void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
 	bindVertexArray(0);
 }
 
+void Renderer::applyDepthOfFieldFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture, GLuint depthHelper)
+{
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, highPassTexture, 0);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, dummyDepthTexture, 0);
+	
+	glUseProgram(renderSurfaceShader->getShaderId());		//copy sourcetexture into highpass texture
+	renderSurfaceShader->fillUniformLocation(sourceTexture);
+	bindVertexArray(renderSurfaceVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6); 
+	bindVertexArray(0);
+	
+	applyBlurFilter(viewPortResX, viewPortResY, highPassTexture, targetTexture);		//apply blur to highpassTexture
+
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, 0);
+//	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, renderDepthBuffer, 0);
+	
+	glUseProgram(dofShader->getShaderId());
+	dofShader->fillUniformLocation(sourceTexture, highPassTexture, renderDepthBuffer);
+	
+	bindVertexArray(renderSurfaceVAO);
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	bindVertexArray(0);
+}
+
 void Renderer::applyBloomFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture)
 {
 	//glEnable(GL_BLEND);
@@ -356,9 +430,7 @@ void Renderer::applyBloomFilter(int viewPortResX, int viewPortResY, GLuint sourc
 
 	applyHighPassFilter(viewPortResX, viewPortResY, renderTexture, highPassTexture);
 	applyBlurFilter(viewPortResX, viewPortResY, highPassTexture, renderTexture2);
-
 	
-	glBlendEquation(GL_FUNC_ADD);
 	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, sourceTexture, 0);
 

@@ -40,7 +40,7 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 		sceneGraph->attachChild(debugTransform);
 		drawArray->push_back(debugMesh);
 		debugMesh->prepareForRendering();
-		//debugMesh->createCollisionShape(physicsHandler);
+		debugMesh->createCollisionShape(physicsHandler);
 	}
 }
 

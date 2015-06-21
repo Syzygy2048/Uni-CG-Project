@@ -79,6 +79,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Shader\DepthOfFieldShaderProgram.cpp" />
+    <ClCompile Include="Util\DoFHelper.cpp" />
     <ClCompile Include="Shader\BlurShaderProgram.cpp" />
     <ClCompile Include="Shader\HighPassShaderProgram.cpp" />
     <ClCompile Include="Shader\BloomShaderProgram.cpp" />
@@ -111,6 +113,8 @@
     <ClCompile Include="Text\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Shader\DepthOfFieldShaderProgram.h" />
+    <ClInclude Include="Util\DoFHelper.h" />
     <ClInclude Include="Shader\BlurShaderProgram.h" />
     <ClInclude Include="Shader\HighPassShaderProgram.h" />
     <ClInclude Include="Shader\BloomShaderProgram.h" />
@@ -154,8 +158,10 @@
     <None Include="packages.config" />
     <None Include="Shader\Fragment\BloomFragmentShader.glsl" />
     <None Include="Shader\Fragment\BlurFragmentShader.glsl" />
+    <None Include="Shader\Fragment\DepthOfFieldFragmentShader.glsl" />
     <None Include="Shader\Fragment\SimpleFragmentShader.fragmentshader" />
     <None Include="Shader\Vertex\BlurVertexShader.glsl" />
+    <None Include="Shader\Vertex\DepthOfFieldVertexShader.glsl" />
     <None Include="Shader\Vertex\SimpleVertexShader.vertexshader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

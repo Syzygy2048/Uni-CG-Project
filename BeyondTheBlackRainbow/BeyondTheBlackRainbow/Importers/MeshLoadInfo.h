@@ -29,6 +29,7 @@ public:
 	static const ShaderLoadInfo* RENDER_SURFACE;
 	static const ShaderLoadInfo* HIGH_PASS;
 	static const ShaderLoadInfo* BLUR_SHADER;
+	static const ShaderLoadInfo* DOF_SHADER;
 
 	struct LoadInfo {
 		const std::string meshPath;
