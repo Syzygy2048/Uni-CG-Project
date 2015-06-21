@@ -52,7 +52,7 @@ void main(){
 		{
 			vec2 sampleUV;
 			sampleUV = vec2(UV.x + gaussFilter[i].x * pixelSize.x, UV.y);
-			tempColor += texture2D(renderedTexture, sampleUV) * gaussFilter[i].y;
+			tempColor += texture(renderedTexture, sampleUV) * gaussFilter[i].y;
 		}
 	}
 	else
@@ -61,7 +61,7 @@ void main(){
 		{
 			vec2 sampleUV;
 			sampleUV = vec2(UV.x, UV.y + gaussFilter[i].x * pixelSize.y);
-			tempColor += texture2D(renderedTexture, sampleUV) * gaussFilter[i].y;
+			tempColor += texture(renderedTexture, sampleUV) * gaussFilter[i].y;
 		}
 	}
 	
