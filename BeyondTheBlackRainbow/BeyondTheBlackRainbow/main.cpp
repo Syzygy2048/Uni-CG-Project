@@ -24,8 +24,7 @@
 #include "Util\FButtonHandler.h"
 
 void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::vector<MeshNode*>* drawArray)
-{
-	
+{	
 	for (int i = 0; i < 1; i++){
 		float randomX = ((std::rand() % 100) - 50) / 100.f;
 		float randomY = ((std::rand() % 100) - 50) / 100.f;
@@ -200,6 +199,8 @@ int main() {
 	//gameloop
 	double timeOld = 0;
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
+		input->update(renderer->getWindow());
+
 		renderer->configureFramebufferForPostProcessing(viewPortResX, viewPortResY);
 		
 		time = glfwGetTime();
@@ -211,8 +212,7 @@ int main() {
 			sceneGraph->update(timeStep, input);
 		}
 		oldTime = time - deltaTime;
-		
-		input->update(renderer->getWindow());
+				
 			
 		textArray = handleFButtons(input, deltaTime, fpsText, &textArray);
 

@@ -6,6 +6,7 @@ PlayerNode::PlayerNode(UUID uuid) : SceneNode(uuid, NodeType::PLAYER_NODE)
 {
 	up = glm::vec3(0, 1, 0);
 	right = glm::vec3(1, 0, 0);
+	direction = glm::vec3(0, 0, 1);
 	oldMousePosX = 640;
 	oldMousePosY = 360;
 }
@@ -73,6 +74,7 @@ void PlayerNode::update(double deltaTime, InputHandler* input)
 
 	physx::PxControllerFilters filters;
 	unsigned int collisionSide = 0;
+
 	collisionSide = playerController->move(physx::PxVec3(disp.x, yImpulse, disp.z), 0.001f, deltaTime, filters);
 	touchingGround = (collisionSide & physx::PxControllerFlag::eCOLLISION_DOWN) == physx::PxControllerFlag::eCOLLISION_DOWN;
 

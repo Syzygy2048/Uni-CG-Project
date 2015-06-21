@@ -253,6 +253,16 @@ void Renderer::preparePostProcessing(int viewPortResX, int viewPortResY)
 	glGenFramebuffers(1, &renderFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, renderFrameBuffer);
 
+	glGenTextures(1, &renderTexture2);
+	glBindTexture(GL_TEXTURE_2D, renderTexture2);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewPortResX, viewPortResY, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 	glGenTextures(1, &renderTexture);
 	glBindTexture(GL_TEXTURE_2D, renderTexture);
 
@@ -272,8 +282,18 @@ void Renderer::preparePostProcessing(int viewPortResX, int viewPortResY)
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	
+
 	renderSurfaceShader = (RenderSurfaceShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::RENDER_SURFACE);
 	renderSurfaceShader->loadUniformLocations();
+	
+
+	highPassShader = (HighPassShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::HIGH_PASS);
+	highPassShader->loadUniformLocations();
+	
+	postProcessingShader = (BloomShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLOOM_SHADER);
+	postProcessingShader->loadUniformLocations();
+	
 }
 
 void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewPortResY)
@@ -290,7 +310,7 @@ void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewP
 
 void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
 {
-	
+	applyBloomFilter(viewPortResX, viewPortResY, renderTexture, renderTexture2);
 	//bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
 	bindFramebuffer(0, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
 	glClearColor(0.1f, 0.1f, 0.7f, 1.0f);
