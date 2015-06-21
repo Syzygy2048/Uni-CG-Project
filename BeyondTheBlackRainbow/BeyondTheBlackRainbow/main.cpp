@@ -31,7 +31,7 @@ std::map < std::string, Text* > text;
 
 void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::vector<MeshNode*>* drawArray)
 {	
-	for (int i = 0; i < 1; i++){
+	for (int i = 0; i < 20; i++){
 		float randomX = ((std::rand() % 100) - 50) / 100.f;
 		float randomY = ((std::rand() % 100) - 50) / 100.f;
 		float randomZ = ((std::rand() % 100) - 50) / 100.f;
@@ -39,14 +39,14 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		2, 1.5, -3.5, 1));
-		//2 + randomX, 2 + randomY, -3.5 + randomZ, 1));
+		//2, 1.5, -3.5, 1));
+		2 + randomX, 2 + randomY, -3.5 + randomZ, 1));
 		MeshNode* debugMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
 		debugTransform->attachChild(debugMesh);
 		sceneGraph->attachChild(debugTransform);
 		drawArray->push_back(debugMesh);
 		debugMesh->prepareForRendering();
-		//debugMesh->createCollisionShape(physicsHandler);
+		debugMesh->createCollisionShape(physicsHandler);
 	}
 }
 
@@ -173,7 +173,7 @@ int main() {
 	cameraList.insert(std::pair<std::string, CameraNode*>(std::string("player camera"), activeCamera));
 	
 	std::vector<LightNode*> lights;
-	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2.0, 1.5, -4.5), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2.0, 1.5, -4.5), 2.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
 	//LightNode* secondLight = new PointLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 2.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
 	LightNode* secondLight = new SpotLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
 	//LightNode* thirdLight = new DirectionalLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), LightType::DIRECTIONAL_LIGHT);

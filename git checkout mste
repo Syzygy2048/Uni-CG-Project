@@ -1,0 +1,211 @@
+[33mcommit 40f5860d00a0704c18d2a427f751c933e99fafee[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Sat Jun 20 22:14:12 2015 +0200
+
+    spotlight + shadowmap for pointlight
+
+[33mcommit c832550ddacc92bbc542c81213e0226a8ae45dda[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Sat Jun 20 16:50:11 2015 +0200
+
+    Spotlight
+
+[33mcommit 20e68b43adbf9d8f8d48e8ebe8a01c1d34013aca[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Sat Jun 20 01:49:19 2015 +0200
+
+    fps
+
+[33mcommit 42504ceec99b2290224bfef31c5fe069c3f29269[m
+Merge: 779944a 2f6f43c
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Sat Jun 20 01:01:03 2015 +0200
+
+    merge with shadow_map
+
+[33mcommit 2f6f43c781f6c54a680d500d1aa13594fc315358[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Fri Jun 19 23:44:55 2015 +0200
+
+    shadows for one pointlight (maybe for one directional light too)
+
+[33mcommit 779944a438d38d07ec811e45b6ed7fcbf3a9d50f[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Thu Jun 18 23:07:01 2015 +0200
+
+    can i push this?? text output for 2nd submission
+
+[33mcommit 57170416151d06a3d269f4fe18aad65bd9410d24[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Thu Jun 18 13:21:35 2015 +0200
+
+    Shadow map for directional and point light
+
+[33mcommit 958902f95bb4aec6333b537945eb652450815f75[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Tue Jun 16 21:22:12 2015 +0200
+
+    shadowmaps for more pointlights (there is a bug somewhere...)
+
+[33mcommit 4834622b72659d6da00b8cd9d54479d0549e1378[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Mon Jun 15 22:04:00 2015 +0200
+
+    PCF
+
+[33mcommit 5b84533ac5821b8763b9b36f2eb9e50cb5635875[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Mon Jun 15 18:46:16 2015 +0200
+
+    shadow map for one pointlight
+
+[33mcommit 777ffb004c3ed49d564831e6eca9c2a964df66d4[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Sat Jun 13 23:39:17 2015 +0200
+
+    shadow map for directional light
+
+[33mcommit 905a21faeacfb78b69b7d7f91adaf25e20ae17a6[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Sat Jun 13 17:21:54 2015 +0200
+
+    fix framebuffer
+
+[33mcommit 122c280c1f38488f006b4e86498b6790e2763266[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Sat Jun 13 16:58:25 2015 +0200
+
+    shadow map
+
+[33mcommit 582b31c1ef3bf76c5f81edac4ead5006f60fe58c[m
+Author: Peter <pollak.peter89@gmail.com>
+Date:   Fri Jun 5 06:39:40 2015 +0200
+
+    implemented fps counter and wireframe mode
+
+[33mcommit c945bdd7e2931addc87e9c7867b7b2328f3b9ae0[m
+Author: Peter <pollak.peter89@gmail.com>
+Date:   Fri Jun 5 04:49:08 2015 +0200
+
+    actually removed freetype
+
+[33mcommit 1480e1cb5c4f0f3750c97c24abdca7b9d720f0e3[m
+Author: Peter <pollak.peter89@gmail.com>
+Date:   Fri Jun 5 04:47:05 2015 +0200
+
+    removed freetype
+
+[33mcommit e726ee0da3ff86e6fdafc353302b54e6f6ee26db[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Wed Jun 3 22:45:43 2015 +0200
+
+    clean up the mess
+
+[33mcommit 88c08d37c9f9ac792e374b3b1eb00e656119e5c2[m
+Merge: d96f3b9 0515c73
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Wed Jun 3 22:26:21 2015 +0200
+
+    Merge branch 'textShader'
+    
+    Conflicts:
+    	BeyondTheBlackRainbow/BeyondTheBlackRainbow/BeyondTheBlackRainbow.vcxproj.filters
+    	BeyondTheBlackRainbow/BeyondTheBlackRainbow/Render/Renderer.cpp
+    	BeyondTheBlackRainbow/BeyondTheBlackRainbow/Shader/Fragment/SimpleFragmentShader.fragmentshader
+    	BeyondTheBlackRainbow/BeyondTheBlackRainbow/Shader/LightingShaderProgram.h
+    	BeyondTheBlackRainbow/BeyondTheBlackRainbow/Shader/ShaderProgram.h
+    	BeyondTheBlackRainbow/BeyondTheBlackRainbow/Shader/SimpleLightingShaderProgram.cpp
+    	BeyondTheBlackRainbow/BeyondTheBlackRainbow/Shader/SimpleLightingShaderProgram.h
+    	BeyondTheBlackRainbow/BeyondTheBlackRainbow/Shader/TextureShaderProgram.h
+
+[33mcommit 0515c7389d478f6035248b8c4fdcb42fd8ab0771[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Wed Jun 3 21:40:50 2015 +0200
+
+    text shader
+
+[33mcommit e6366fd8ad922b28959d56f5dc6e24a32632405a[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Wed Jun 3 17:10:10 2015 +0200
+
+    still doesnt work
+
+[33mcommit d96f3b9887406ba2520473410964de9d067aff8a[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Tue Jun 2 22:22:08 2015 +0200
+
+    directional lights
+
+[33mcommit bd6f84f903d5b865e7fede4f149c26de7e5b9231[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Mon Jun 1 17:34:20 2015 +0200
+
+    multiple (point) lights
+
+[33mcommit 4fa91e6ccf642b0ff70f4d712bad6cbbf5a9aa24[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Sat May 30 17:55:25 2015 +0200
+
+    TextShader with a bug which should not exist
+
+[33mcommit 19a8b4df82a66683e4206600d6fdfc65f378043b[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Sat May 30 11:09:44 2015 +0200
+
+    text shader, ignore pls
+
+[33mcommit 7f268a3ea6ad90340d4d2627b14fa12828435a51[m
+Author: Peter <pollak.peter89@gmail.com>
+Date:   Tue May 12 09:49:08 2015 +0200
+
+    updated duck and room meshes
+
+[33mcommit 47f83afb65ef1c7ad1dfb2164d8bf7ef6a515541[m
+Merge: 8220378 991b454
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Mon May 11 23:40:10 2015 +0200
+
+    Merge branch 'master' of lva.cg.tuwien.ac.at:Taste_the_Rainbow
+
+[33mcommit 822037872358d0d960bb6481cf5dcf83d1be5a54[m
+Author: Rebeka Koszticsák <rebebaba2@citromail.hu>
+Date:   Mon May 11 23:33:02 2015 +0200
+
+    ighting shader works better
+
+[33mcommit 991b4548058b7a1cd09d648faff3bfe109bc22d7[m
+Author: Peter <pollak.peter89@gmail.com>
+Date:   Mon May 11 23:29:20 2015 +0200
+
+    physics now affect rotation.
+
+[33mcommit f93eba8ce8cb3c19b6d47256420a5913172faa5d[m
+Merge: d0723f0 776b549
+Author: Peter <pollak.peter89@gmail.com>
+Date:   Thu May 7 21:18:40 2015 +0200
+
+    Merge branch 'physics'
+
+[33mcommit 776b54960a1e3ae4458fb947658b7e375017529e[m
+Author: Peter <pollak.peter89@gmail.com>
+Date:   Thu May 7 21:18:09 2015 +0200
+
+    fix for broken submission
+
+[33mcommit f3f8af1a1f4f959f9c3619179984e1083fb9ac2c[m
+Author: Peter <pollak.peter89@gmail.com>
+Date:   Thu May 7 19:42:04 2015 +0200
+
+    correct library settings and dlls for release
+
+[33mcommit 2aa16e2bce95e3b7ce0b0133bf0bcdac1edeee8b[m
+Author: Peter <pollak.peter89@gmail.com>
+Date:   Thu May 7 19:26:05 2015 +0200
+
+    differentiating between release mode and debug mode (mainly for physics debug output)
+
+[33mcommit 4f3159423ab2033a16f34e65d01b31b969204506[m
+Author: Peter <pollak.peter89@gmail.com>
+Date:   Thu May 7 19:17:58 2015 +0200
+
+    event manager fully working

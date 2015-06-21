@@ -53,6 +53,9 @@ int Renderer::init(int viewPortResX, int viewPortResY)
 	glfwMakeContextCurrent(window);
 	glewExperimental = true;
 
+	this->viewPortResX = viewPortResX;
+	this->viewPortResY = viewPortResY;
+
 	glViewport(0, 0, viewPortResX, viewPortResY);
 
 	if (glewInit() != GLEW_OK) 
@@ -121,7 +124,7 @@ void Renderer::bindFrameBuffer(GLenum bufferType, GLuint bufferID)
 void Renderer::unbindFrameBuffer(GLenum bufferType)
 {
 	glBindFramebuffer(bufferType, 0);
-	glViewport(0, 0, 1024, 768);
+	glViewport(0, 0, viewPortResX, viewPortResY);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);

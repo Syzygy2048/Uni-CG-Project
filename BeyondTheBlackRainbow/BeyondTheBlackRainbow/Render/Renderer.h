@@ -48,7 +48,7 @@ public:
 
 	void generateFramebuffer(GLuint* id);
 	void bindFramebuffer(GLuint id, int viewPortResX, int viewPortRexY, GLenum frameBufferTarget);
-	/*
+	
 	void genRenderTexture(GLuint* id);
 	void bindRenderTexture(GLuint id, int viewPortResX, int viewPortResY);
 
@@ -63,7 +63,7 @@ public:
 
 	void preparePostProcessing(int viewPortResX, int viewPortResY);
 	void renderToScreen(int viewPortResX, int viewPortResY);
-	*/
+	
 	void draw(MeshNode* node);
 	void drawText(Text* text, bool enableBlend);
 	void drawShadow(MeshNode* node, Framebuffer* framebuffer);
@@ -107,5 +107,8 @@ private:
 	std::vector<LightNode*> getLights(MeshNode* node);
 	glm::mat4 depthProjectionMatrix;
 	glm::mat4 depthModelMatrix;
+
+	int viewPortResX;
+	int viewPortResY;
 };
 

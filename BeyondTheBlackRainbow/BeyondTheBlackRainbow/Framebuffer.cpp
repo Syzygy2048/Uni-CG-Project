@@ -18,14 +18,13 @@ Framebuffer::~Framebuffer()
 void Framebuffer::prepareFrameBuffer(LightNode* myLight) 
 {
 	this->myLight = myLight;
-	Renderer* renderer = Renderer::getInstance();
+	/*Renderer* renderer = Renderer::getInstance();
 	renderer->generateFrameBuffer(&frameBufferID);
 	texture = new Texture(width, height);
 	if (myLight->getLightType() == DIRECTIONAL_LIGHT) {
 		renderer->fillFrameBuffer(frameBufferID, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getTextureID(), 0);
 	}
 	else if (myLight->getLightType() == POINT_LIGHT) {
-		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID);
 		renderer->fillFrameBuffer(frameBufferID, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getCubeMapID(), 0);
 	}
 	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->shaderInfo);
@@ -34,7 +33,25 @@ void Framebuffer::prepareFrameBuffer(LightNode* myLight)
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		std::cout << "Framebuffer is not complete, repair me pls!" << std::endl;
 	}
-	renderer->bindFrameBuffer(GL_FRAMEBUFFER, 0);
+	renderer->bindFrameBuffer(GL_FRAMEBUFFER, 0);*/
+	//GLuint depthMapFBO;
+	glGenFramebuffers(1, &frameBufferID);
+	// Create depth cubemap texture
+	texture = new Texture(width, height);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID);
+	if (myLight->getLightType() == DIRECTIONAL_LIGHT) {
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getTextureID(), 0);
+	}
+	else if (myLight->getLightType() == POINT_LIGHT) {
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getCubeMapID(), 0);
+	}
+	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->shaderInfo);
+	shaderProgram->loadUniformLocations();
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "Framebuffer not complete!" << std::endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 ShaderProgram* Framebuffer::getShaderProgram()
