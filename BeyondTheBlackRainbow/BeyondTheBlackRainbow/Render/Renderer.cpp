@@ -53,6 +53,8 @@ int Renderer::init(int viewPortResX, int viewPortResY)
 	glfwMakeContextCurrent(window);
 	glewExperimental = true;
 
+	glViewport(0, 0, viewPortResX, viewPortResY);
+
 	if (glewInit() != GLEW_OK) 
 	{
 		std::cerr << "Failed to initialize GLEW" << std::endl;
@@ -202,17 +204,6 @@ void Renderer::generateFramebuffer(GLuint* id)
 void Renderer::bindFramebuffer(GLuint id, int viewPortResX, int viewPortRexY, GLenum frameBufferTarget)
 {
 	glBindFramebuffer(frameBufferTarget, id);
-	glViewport(0, 0, viewPortResX, viewPortRexY);
-
-	
-	//preparePostProcessing(viewPortResX, viewPortRexY);
-
-	GLenum status = glCheckFramebufferStatus(frameBufferTarget);
-
-	if (status != GL_FRAMEBUFFER_COMPLETE){
-		std::cerr << "error binding framebuffer: " << status << std::endl;
-	}
-		//clear previous image after binding to prevent stuff from drawing on itself
 }
 
 void Renderer::genRenderTexture(GLuint* id)
@@ -237,91 +228,52 @@ void Renderer::bindDepthBuffer(GLuint id, int viewPortResX, int viewPortResY)
 
 void Renderer::preparePostProcessing(int viewPortResX, int viewPortResY)
 {
-	generateFramebuffer(&renderFrameBuffer);
-	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
-
-	genRenderTexture(&renderTexture2);
-	bindRenderTexture(renderTexture2, viewPortResX, viewPortResY);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewPortResX, viewPortResY, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	genRenderTexture(&renderTexture);
-	bindRenderTexture(renderTexture, viewPortResX, viewPortResY);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewPortResX, viewPortResY, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	GLfloat renderSurfaceVertices[] = {
-		//-1.0f, -1.0f, 0.0f,
-		//1.0f, -1.0f, 0.0f,
-		//-1.0f, 1.0f, 0.0f,
-		//-1.0f, 1.0f, 0.0f,
-		//1.0f, -1.0f, 0.0f,
-		//1.0f, 1.0f, 0.0f,
-
+	GLfloat quadVertices[] = {   // Vertex attributes for a quad that in Normalized Device Coordinates. NOTE that this plane is now much smaller and at the top of the screen
+		// Positions   // TexCoords
 		-1.f, 1.0f, 0.0f, 1.0f,
-		-1.f, -1.0f, 0.0f, 0.0f,
-		1.f, -1.0f, 1.0f, 0.0f,
+		-1.f, -1.f, 0.0f, 0.0f,
+		1.f, -1.f, 1.0f, 0.0f,
 
 		-1.f, 1.0f, 0.0f, 1.0f,
 		1.f, -1.f, 1.0f, 0.0f,
 		1.f, 1.0f, 1.0f, 1.0f
 	};
-
-	genDepthBuffer(&renderDepthBuffer);
-	bindDepthBuffer(renderDepthBuffer, viewPortResX, viewPortResY);
-	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, viewPortResX, viewPortResY);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, viewPortResX, viewPortResY);
-	bindDepthBuffer(0, viewPortResX, viewPortResY);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderDepthBuffer);
-
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTexture, 0);
 	
-	const int numberOfDrawbuffers = 1;
-	GLenum drawBuffers[numberOfDrawbuffers] = { GL_COLOR_ATTACHMENT0 };
-	glDrawBuffers(numberOfDrawbuffers, drawBuffers);
-
-	generateVertexArray(&renderSurfaceVAO);
-	generateBufferObject(&renderSurfaceVBO);
-
+	glGenVertexArrays(1, &renderSurfaceVAO);
+	glGenBuffers(1, &renderSurfaceVBO);
 	glBindVertexArray(renderSurfaceVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, renderSurfaceVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(renderSurfaceVertices), &renderSurfaceVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
 	glBindVertexArray(0);
 
+	glGenFramebuffers(1, &renderFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, renderFrameBuffer);
 
-	//bindVertexArray(renderSurfaceVAO);
-	//fillBuffer(renderSurfaceVBO, GL_ARRAY_BUFFER, sizeof(renderSurfaceVertices), &renderSurfaceVertices, GL_STATIC_DRAW);
-	//glEnableVertexAttribArray(0);
-	//glVertexAttribPointer(
-	//	0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-	//	3,                  // size
-	//	GL_FLOAT,           // type
-	//	GL_FALSE,           // normalized?
-	//	0,                  // stride
-	//	(void*)0            // array buffer offset
-	//	);
+	glGenTextures(1, &renderTexture);
+	glBindTexture(GL_TEXTURE_2D, renderTexture);
 
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, renderTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewPortResX, viewPortResY, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	
-	highPassShader = (HighPassShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::HIGH_PASS);
-	highPassShader->loadUniformLocations();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTexture, 0);
+
+	glGenRenderbuffers(1, &renderDepthBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, renderDepthBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, viewPortResX, viewPortResY);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderDepthBuffer);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	renderSurfaceShader = (RenderSurfaceShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::RENDER_SURFACE);
 	renderSurfaceShader->loadUniformLocations();
-	postProcessingShader = (BloomShaderProgram*) ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLOOM_SHADER);
-	postProcessingShader->loadUniformLocations();
-	
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewPortResY)
@@ -400,31 +352,4 @@ void Renderer::applyHighPassFilter(int viewPortResX, int viewPortResY, GLuint so
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	bindVertexArray(0);
-}
-
-
-void Renderer::genrateShadowMapTexture(GLuint* id)
-{
-	glGenTextures(1, id);
-}
-
-void Renderer::glBindShadowMapTexture(GLuint id, int viewPortResX, int viewPortResY)
-{
-	glBindTexture(GL_TEXTURE_2D, id);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, viewPortResX, viewPortResY, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	
-	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, id, 0);
-	
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-
-	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-
-	if (status != GL_FRAMEBUFFER_COMPLETE){
-		std::cerr << "error binding framebuffer: " << status << std::endl;
-	}
 }

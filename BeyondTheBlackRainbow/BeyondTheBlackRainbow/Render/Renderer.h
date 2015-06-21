@@ -43,7 +43,6 @@ public:
 	void generateFramebuffer(GLuint* id);
 	void bindFramebuffer(GLuint id, int viewPortResX, int viewPortRexY, GLenum frameBufferTarget);
 
-
 	void genRenderTexture(GLuint* id);
 	void bindRenderTexture(GLuint id, int viewPortResX, int viewPortResY);
 
@@ -51,9 +50,6 @@ public:
 	void bindDepthBuffer(GLuint id, int viewPortResX, int viewPortResY);
 
 	void configureFramebufferForPostProcessing(int viewPortResX, int viewPortResY);
-
-	void genrateShadowMapTexture(GLuint* id);
-	void glBindShadowMapTexture(GLuint id, int viewPortResX, int viewPortRexY);
 
 	void applyHighPassFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
 	void applyBloomFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
