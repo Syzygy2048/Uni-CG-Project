@@ -11,6 +11,7 @@
 #include "..\Shader\BloomShaderProgram.h"
 #include "..\Shader\RenderSurfaceShaderProgram.h"
 #include "..\Shader\HighPassShaderProgram.h"
+#include "..\Shader\BlurShaderProgram.h"
 
 ShaderImporter::ShaderImporter()
 {
@@ -115,6 +116,9 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	}
 	else if (shader == MeshLoadInfo::HIGH_PASS){
 		result = new HighPassShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::BLUR_SHADER){
+		result = new BlurShaderProgram(shaderProgramID);
 	}
 	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;

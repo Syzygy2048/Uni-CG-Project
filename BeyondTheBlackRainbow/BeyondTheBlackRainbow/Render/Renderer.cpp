@@ -253,25 +253,40 @@ void Renderer::preparePostProcessing(int viewPortResX, int viewPortResY)
 	glGenFramebuffers(1, &renderFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, renderFrameBuffer);
 
-	glGenTextures(1, &renderTexture2);
-	glBindTexture(GL_TEXTURE_2D, renderTexture2);
+	glGenTextures(1, &highPassTexture);
+	glBindTexture(GL_TEXTURE_2D, highPassTexture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewPortResX, viewPortResY, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, viewPortResX, viewPortResY, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	const char * label = "High Pass";
+	glObjectLabel(GL_TEXTURE, highPassTexture, 9, label);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
+
+	glGenTextures(1, &renderTexture2);
+	glBindTexture(GL_TEXTURE_2D, renderTexture2);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, viewPortResX, viewPortResY, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	const char * label1 = "Off";
+	glObjectLabel(GL_TEXTURE, renderTexture2, 3, label1);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glGenTextures(1, &renderTexture);
 	glBindTexture(GL_TEXTURE_2D, renderTexture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewPortResX, viewPortResY, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, viewPortResX, viewPortResY, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+	const char * label2 = "Main";
+	glObjectLabel(GL_TEXTURE, renderTexture, 4, label2);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTexture, 0);
 
 	glGenRenderbuffers(1, &renderDepthBuffer);
@@ -291,18 +306,22 @@ void Renderer::preparePostProcessing(int viewPortResX, int viewPortResY)
 	highPassShader = (HighPassShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::HIGH_PASS);
 	highPassShader->loadUniformLocations();
 	
-	postProcessingShader = (BloomShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLOOM_SHADER);
-	postProcessingShader->loadUniformLocations();
-	
+	bloomShader = (BloomShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLOOM_SHADER);
+	bloomShader->loadUniformLocations();
+
+	blurShader = (BlurShaderProgram*)ShaderImporter::getInstance()->loadShaderProgram(MeshLoadInfo::BLUR_SHADER);
+	blurShader->loadUniformLocations();	
 }
 
 void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewPortResY)
 {
 	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_DRAW_FRAMEBUFFER);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, 0);
 	glClearColor(0.7f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_ALPHA)
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, 0);
 	//bindDepthBuffer(renderDepthBuffer, viewPortResX, viewPortResY);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -310,7 +329,8 @@ void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewP
 
 void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
 {
-	applyBloomFilter(viewPortResX, viewPortResY, renderTexture, renderTexture2);
+	applyBloomFilter(viewPortResX, viewPortResY, renderTexture, highPassTexture);
+		
 	//bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
 	bindFramebuffer(0, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
 	glClearColor(0.1f, 0.1f, 0.7f, 1.0f);
@@ -330,6 +350,31 @@ void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
 
 void Renderer::applyBloomFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture)
 {
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glBlendEquation(GL_FUNC_ADD);
+
+	applyHighPassFilter(viewPortResX, viewPortResY, renderTexture, highPassTexture);
+	applyBlurFilter(viewPortResX, viewPortResY, highPassTexture, renderTexture2);
+
+	
+	glBlendEquation(GL_FUNC_ADD);
+	bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, sourceTexture, 0);
+
+	glUseProgram(bloomShader->getShaderId());
+	bloomShader->fillUniformLocation(sourceTexture, targetTexture);
+
+	bindVertexArray(renderSurfaceVAO);
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	bindVertexArray(0);
+
+	//glDisable(GL_BLEND);
+}
+
+void Renderer::applyBlurFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture)
+{
 	for (int i = 0; i < 2; i++)
 	{
 		bool horizontal;
@@ -344,14 +389,14 @@ void Renderer::applyBloomFilter(int viewPortResX, int viewPortResY, GLuint sourc
 		else
 		{
 			bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture, 0);		//render into texture
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, sourceTexture, 0);		//render into texture
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			horizontal = false;
-			textureToRender = renderTexture2;	//render from texture2
+			textureToRender = targetTexture;	//render from texture2
 		}
 
-		glUseProgram(postProcessingShader->getShaderId());
-		postProcessingShader->fillUniformLocation(textureToRender, horizontal, viewPortResX, viewPortResY);
+		glUseProgram(blurShader->getShaderId());
+		blurShader->fillUniformLocation(textureToRender, horizontal, viewPortResX, viewPortResY);
 
 		bindVertexArray(renderSurfaceVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles

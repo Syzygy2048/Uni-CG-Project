@@ -16,6 +16,7 @@
 #include "../Shader/BloomShaderProgram.h"
 #include "../Shader/RenderSurfaceShaderProgram.h"
 #include "../Shader/HighPassShaderProgram.h"
+#include "../Shader/BlurShaderProgram.h"
 
 
 class Renderer
@@ -52,6 +53,7 @@ public:
 	void configureFramebufferForPostProcessing(int viewPortResX, int viewPortResY);
 
 	void applyHighPassFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
+	void applyBlurFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
 	void applyBloomFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
 
 	void preparePostProcessing(int viewPortResX, int viewPortResY);
@@ -80,7 +82,8 @@ private:
 	
 	HighPassShaderProgram* highPassShader;
 	RenderSurfaceShaderProgram* renderSurfaceShader;
-	BloomShaderProgram* postProcessingShader;
+	BloomShaderProgram* bloomShader;
+	BlurShaderProgram* blurShader;
 	
 	GLFWwindow* window;
 	
