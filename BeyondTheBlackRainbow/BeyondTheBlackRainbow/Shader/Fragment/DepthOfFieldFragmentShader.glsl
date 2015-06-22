@@ -13,15 +13,15 @@ float focalLength = focusDistance / 2;
 
 void main(){
 	vec3 basePixel = texture(renderedTexture, UV).rgb;
-	vec3 blurPixel = 1-texture(blurredTexture, UV).rgb;
+	vec3 blurPixel = texture(blurredTexture, UV).rgb;
 	
 	
-	float depth = texture(depthBuffer, UV).r;
+	float depth = texture(depthBuffer, UV).r - 1;
 
 
 	float focus = abs(focusDistance - depth);
 	clamp(focus, 0, 1);
 	//focus = focus / focalLength;
 	color = mix(basePixel, blurPixel, focus);
-	color = vec3(focus);
+	//color = vec3(focus);
 }
