@@ -46,6 +46,8 @@ public:
 		LoadInfo(const std::string& mPath, const std::string& tPath, const ShaderLoadInfo* sInfo, const CollisionType cType, const CollisionShapeType cSType) : meshPath(mPath), texturePath(tPath), shaderInfo(sInfo), collisionType(cType), collisionShapeType(cSType){}
 	};
 	static const LoadInfo* TABLE;
+	static const LoadInfo* TABLE2;
+	static const LoadInfo* SILLA;
 	static const LoadInfo* DUCK;
 	static const LoadInfo* BED;
 	static const LoadInfo* ROOM;
@@ -53,5 +55,11 @@ public:
 	static const LoadInfo* TEXT;
 	static const LoadInfo* DEPTH;
 	static const LoadInfo* DEPTHDIR;
+	static const LoadInfo* BOX_MESH;
+	static const LoadInfo* VASE;
+	static const LoadInfo* TREE;
+	static const LoadInfo* JAR;
+	static const LoadInfo* ANOTHER_BOX_MESH;
+
 
 };

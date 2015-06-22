@@ -113,11 +113,11 @@ void main()
 
 			lighting += 
 				// Ambient : simulates indirect lighting
-				MaterialAmbientColor +
+				(MaterialAmbientColor +
 				// Diffuse : "color" of the object
-				(MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
+				MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
 				// Specular : reflective highlight, like a mirror
-				MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,50) / (distance*distance))
+				MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,100) / (distance*distance))
 				* (1.0 - shadow);
 		}
 		else if (light.type == 3) {
