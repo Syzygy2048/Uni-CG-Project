@@ -64,7 +64,7 @@ public:
 	void applyDepthOfFieldFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture, GLuint depthTexture);
 
 	void preparePostProcessing(int viewPortResX, int viewPortResY);
-	void renderToScreen(int viewPortResX, int viewPortResY);
+	void renderToScreen(int viewPortResX, int viewPortResY, bool enableBloom);
 	
 	void draw(MeshNode* node);
 	void drawText(Text* text, bool enableBlend);

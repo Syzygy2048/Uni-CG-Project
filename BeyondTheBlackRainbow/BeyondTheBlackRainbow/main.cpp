@@ -53,7 +53,7 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 			0, 1, 0, 0,
 			0, 0, 1, 0,
 			//2, 1.5, -3.5, 1));
-			0  , 0.5, 0, 1));
+			0  , 0, -0.15, 1));
 		MeshNode* animMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
 		animTransform->attachChild(animMesh);
 		debugTransform->attachChild(animTransform);
@@ -443,7 +443,8 @@ int main() {
 	physics->createPhysicsFloor();
 	renderer->preparePostProcessing(viewPortResX, viewPortResY);
 	
-	bool enableBloom = false;
+	bool enable2pass = false;
+	bool enableBloom = true; //false -> DoF
 
 	double time = glfwGetTime();
 	double oldTime = glfwGetTime();
@@ -558,6 +559,11 @@ int main() {
 			blendTime = oldTime;
 		}
 
+		//bloom/DoF
+		if (player->getPosition().z < -5.2) {
+			enableBloom = false;
+		}
+
 		//win
 		if (player->getPosition().y > 3.6) {
 			text.find("win")->second->setValid(true);
@@ -608,8 +614,8 @@ int main() {
 				renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find(keyPointLight.str())->second->getFramebufferID());
 				for (MeshNode* node : drawArray) {
 					renderer->drawShadow(node, framebuffers.find(keyPointLight.str())->second);
-					if (enableBloom == false) {
-						enableBloom = node->SUBMISSION1_ANIMATION_HACK;
+					if (enable2pass == false) {
+						enable2pass = node->SUBMISSION1_ANIMATION_HACK;
 					}
 				}
 				renderer->unbindFrameBuffer(GL_FRAMEBUFFER);
@@ -618,7 +624,7 @@ int main() {
 			}
 		}		
 
-		if (enableBloom) {
+		if (enable2pass) {
 			renderer->configureFramebufferForPostProcessing(viewPortResX, viewPortResY);
 		}
 		//draw meshes
@@ -659,8 +665,8 @@ int main() {
 #endif
 		physics->renderCollisionShapes();
 		
-		if (enableBloom) {
-			renderer->renderToScreen(viewPortResX, viewPortResY);
+		if (enable2pass) {
+			renderer->renderToScreen(viewPortResX, viewPortResY, enableBloom);
 		}
 
 		glfwSwapBuffers(renderer->getWindow());

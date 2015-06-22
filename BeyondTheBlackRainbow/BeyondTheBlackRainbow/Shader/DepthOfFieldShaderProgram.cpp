@@ -39,6 +39,6 @@ void DepthOfFieldShaderProgram::fillUniformLocation(GLuint renderTexture, GLuint
 	distance = (distance - 0.1f) / (5.f-0.1f);
 	if (distance > 1)
 		distance = 1;
-	std::cerr << "current focused on: " << distance << std::endl;
+	//std::cerr << "current focused on: " << distance << std::endl;
 	glUniform1f(locationFocusDistance, distance);
 }

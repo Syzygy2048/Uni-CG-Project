@@ -442,12 +442,16 @@ void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewP
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::renderToScreen(int viewPortResX, int viewPortResY)
+void Renderer::renderToScreen(int viewPortResX, int viewPortResY, bool enableBloom)
 {
 	//glBindRenderbuffer(GL_RENDERBUFFER, dummyDepthTexture);
 	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, dummyDepthTexture);
-	//applyBloomFilter(viewPortResX, viewPortResY, renderTexture, highPassTexture);
-	applyDepthOfFieldFilter(viewPortResX, viewPortResY, renderTexture, renderTexture2, renderDepthBuffer);
+	if (enableBloom) {
+		applyBloomFilter(viewPortResX, viewPortResY, renderTexture, highPassTexture);
+	}
+	else {
+		applyDepthOfFieldFilter(viewPortResX, viewPortResY, renderTexture, renderTexture2, renderDepthBuffer);
+	}
 
 	//bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
 	bindFramebuffer(0, viewPortResX, viewPortResY, GL_FRAMEBUFFER);
