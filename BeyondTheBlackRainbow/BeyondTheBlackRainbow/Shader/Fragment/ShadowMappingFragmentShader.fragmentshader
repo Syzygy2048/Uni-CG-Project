@@ -14,7 +14,7 @@ struct ShadowMap {
 	float farPlane;
 };
 
-#define NR_LIGHTS 2
+#define NR_LIGHTS 4
 
 out vec4 FragColor;
 
@@ -80,7 +80,7 @@ float ShadowCalculation(vec3 fragPos, int i)
 
 void main()
 {   // Material properties
-	vec3 MaterialDiffuseColor = texture2D( diffuseTexture, fs_in.TexCoords).rgb;
+	vec3 MaterialDiffuseColor = texture( diffuseTexture, fs_in.TexCoords).rgb;
 	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);
 

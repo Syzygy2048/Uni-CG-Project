@@ -211,7 +211,6 @@ int main() {
 	roomMesh->setEventManager(eventManager);
 	doorMesh->setEventManager(eventManager);
 	
-	
 	SceneNode* transformNodeRoom = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -319,8 +318,10 @@ int main() {
 
 
 	physics->createPhysicsFloor();
-	//renderer->preparePostProcessing(viewPortResX, viewPortResY);
+	renderer->preparePostProcessing(viewPortResX, viewPortResY);
 	
+	bool enableBloom = false;
+
 	double time = glfwGetTime();
 	double oldTime = glfwGetTime();
 	double timeStep = 1.0 / 60.0;
@@ -349,7 +350,6 @@ int main() {
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
 		input->update(renderer->getWindow());
 
-		//renderer->configureFramebufferForPostProcessing(viewPortResX, viewPortResY);
 		
 		time = glfwGetTime();
 		double deltaTime = time - oldTime;
@@ -476,6 +476,10 @@ int main() {
 				keyPointLight.clear();
 			}
 		}		
+
+		if (enableBloom) {
+			renderer->configureFramebufferForPostProcessing(viewPortResX, viewPortResY);
+		}
 		//draw meshes
 		for (MeshNode* node : drawArray){
 			if (input->f4 && !oldF4State)
@@ -494,6 +498,9 @@ int main() {
 				mipmapTime = oldTime;
 			}
 			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix, player->getPosition(), framebuffers);
+			if (enableBloom == false) {
+				enableBloom = node->SUBMISSION1_ANIMATION_HACK;
+			}
 		}
 		for (auto const &it : text) {
 			if (it.second->getValid()) {
@@ -514,8 +521,9 @@ int main() {
 #endif
 		physics->renderCollisionShapes();
 		
-		
-		//renderer->renderToScreen(viewPortResX, viewPortResY);
+		if (enableBloom) {
+			renderer->renderToScreen(viewPortResX, viewPortResY);
+		}
 
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();

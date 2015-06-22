@@ -74,7 +74,7 @@ void ShadowMappingShaderProgram::bindTextures(MeshNode* node)
 		std::stringstream key;
 		key << "pointLight";
 		key << count;
-		glBindTexture(GL_TEXTURE_CUBE_MAP, framebuffers.find(key.str())->second->getTexture()->getCubeMapID());
+		glBindTexture(GL_TEXTURE_CUBE_MAP, framebuffers.find("pointLight0")->second->getTexture()->getCubeMapID());
 		auto loc = glGetUniformLocation(programId, shadowMap.str().c_str());
 		glUniform1i(glGetUniformLocation(programId, shadowMap.str().c_str()), (29 - count));
 		

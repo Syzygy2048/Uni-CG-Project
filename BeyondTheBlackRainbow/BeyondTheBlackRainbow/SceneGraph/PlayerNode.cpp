@@ -135,6 +135,7 @@ void PlayerNode::update(double deltaTime, InputHandler* input)
 	if (position.y >= 3.6 && position.z < -14.5){
 		std::cerr << "YOU HAVE WON!" << std::endl;
 	}
+	//std::cout << position.x << ", " << position.y << ", " << position.z << std::endl;
 }
 
 void PlayerNode::updateDirection(double dT, float rotateX, float rotateY)

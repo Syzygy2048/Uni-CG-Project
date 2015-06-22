@@ -17,7 +17,7 @@ in vec3 Normal_cameraspace;
 in vec3 vertexPosition_cameraspace;
 
 // Ouput data
-out vec3 color;
+out vec4 lighting;
 
 // Values that stay constant for the whole mesh.
 uniform sampler2D myTextureSampler;
@@ -26,7 +26,7 @@ uniform mat4 M;
 uniform LightSource lights[NR_LIGHTS];
 
 void main(){
-
+	vec3 color = vec3(0.0);
 	// Material properties
 	vec3 MaterialDiffuseColor = texture( myTextureSampler, UV ).rgb;
 	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
@@ -124,4 +124,5 @@ void main(){
 
 		}
 		}
+		lighting = vec4(color, 1.0);
 }
