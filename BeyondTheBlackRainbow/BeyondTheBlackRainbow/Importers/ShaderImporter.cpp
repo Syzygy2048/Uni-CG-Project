@@ -16,6 +16,7 @@
 #include "..\Shader\RenderSurfaceShaderProgram.h"
 #include "..\Shader\HighPassShaderProgram.h"
 #include "..\Shader\BlurShaderProgram.h"
+#include "..\Shader\DepthOfFieldShaderProgram.h"
 
 ShaderImporter::ShaderImporter()
 {
@@ -146,6 +147,9 @@ ShaderProgram* ShaderImporter::loadShaderProgram(const MeshLoadInfo::ShaderLoadI
 	}
 	else if (shader == MeshLoadInfo::BLUR_SHADER){
 		result = new BlurShaderProgram(shaderProgramID);
+	}
+	else if (shader == MeshLoadInfo::DOF_SHADER){
+		result = new DepthOfFieldShaderProgram(shaderProgramID);
 	}
 	shaderPrograms.insert(std::pair<const MeshLoadInfo::ShaderLoadInfo*, ShaderProgram*>(shader, result));
 	return result;

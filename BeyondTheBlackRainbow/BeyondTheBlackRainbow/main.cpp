@@ -460,6 +460,7 @@ int main() {
 	while (!input->esc && glfwWindowShouldClose(renderer->getWindow()) == 0) {
 		input->update(renderer->getWindow());
 
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		
 		time = glfwGetTime();
 		double deltaTime = time - oldTime;
@@ -594,6 +595,9 @@ int main() {
 				renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find(keyPointLight.str())->second->getFramebufferID());
 				for (MeshNode* node : drawArray) {
 					renderer->drawShadow(node, framebuffers.find(keyPointLight.str())->second);
+					if (enableBloom == false) {
+						enableBloom = node->SUBMISSION1_ANIMATION_HACK;
+					}
 				}
 				renderer->unbindFrameBuffer(GL_FRAMEBUFFER);
 				keyPointLight.str(std::string());
@@ -622,9 +626,6 @@ int main() {
 				mipmapTime = oldTime;
 			}
 			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix, player->getPosition(), framebuffers);
-			if (enableBloom == false) {
-				enableBloom = node->SUBMISSION1_ANIMATION_HACK;
-			}
 		}
 		for (auto const &it : text) {
 			if (it.second->getValid()) {

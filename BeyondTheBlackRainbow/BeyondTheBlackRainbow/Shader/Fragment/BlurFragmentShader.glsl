@@ -64,6 +64,10 @@ void main(){
 			tempColor += texture(renderedTexture, sampleUV) * gaussFilter[i].y;
 		}
 	}
-	
+	if (pixel.a == 1)
+	{
+		tempColor.a = 1;
+	}
+
 	color = tempColor;
 }

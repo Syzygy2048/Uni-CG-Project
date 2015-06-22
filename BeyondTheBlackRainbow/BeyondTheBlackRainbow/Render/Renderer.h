@@ -18,6 +18,7 @@
 #include "../Shader/RenderSurfaceShaderProgram.h"
 #include "../Shader/HighPassShaderProgram.h"
 #include "../Shader/BlurShaderProgram.h"
+#include "../Shader/DepthOfFieldShaderProgram.h"
 
 
 class Renderer
@@ -60,6 +61,7 @@ public:
 	void applyHighPassFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
 	void applyBlurFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
 	void applyBloomFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
+	void applyDepthOfFieldFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture, GLuint depthTexture);
 
 	void preparePostProcessing(int viewPortResX, int viewPortResY);
 	void renderToScreen(int viewPortResX, int viewPortResY);
@@ -84,6 +86,7 @@ private:
 	
 	GLuint renderFrameBuffer;
 	GLuint renderDepthBuffer;
+	GLuint dummyDepthTexture;
 	GLuint renderSurfaceVAO;
 	GLuint renderSurfaceVBO;
 	GLuint renderTexture;
@@ -94,6 +97,8 @@ private:
 	RenderSurfaceShaderProgram* renderSurfaceShader;
 	BloomShaderProgram* bloomShader;
 	BlurShaderProgram* blurShader;
+	DepthOfFieldShaderProgram* dofShader;
+	
 	
 	GLFWwindow* window;
 	std::map<std::string, Framebuffer*> framebuffers;

@@ -11,6 +11,7 @@ const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::BLOOM_SHADER = new ShaderLoadI
 const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::RENDER_SURFACE = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/RenderSurfaceVertexShader.glsl"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/RenderSurfaceFragmentShader.glsl"));
 const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::HIGH_PASS = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/HighPassVertexShader.glsl"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/HighPassFragmentShader.glsl"));
 const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::BLUR_SHADER = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/BlurVertexShader.glsl"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/BlurFragmentShader.glsl"));
+const MeshLoadInfo::ShaderLoadInfo* MeshLoadInfo::DOF_SHADER = new ShaderLoadInfo(std::string("../BeyondTheBlackRainbow/Shader/Vertex/DepthOfFieldVertexShader.glsl"), std::string("../BeyondTheBlackRainbow/Shader/Fragment/DepthOfFieldFragmentShader.glsl"));
 
 
 const MeshLoadInfo::LoadInfo* MeshLoadInfo::TABLE = new LoadInfo(std::string("../BeyondTheBlackRainbow/Assets/Models/Table.obj"), std::string("../BeyondTheBlackRainbow/Assets/Models/duck_textures/wood _texture.jpg"), SIMPLE_LIGHTING_SHADER, MeshLoadInfo::CollisionType::DYNAMIC, MeshLoadInfo::CollisionShapeType::CONVEX);
