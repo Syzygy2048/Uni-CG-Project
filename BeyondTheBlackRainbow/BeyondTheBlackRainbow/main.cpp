@@ -31,7 +31,7 @@ std::map < std::string, Text* > text;
 
 void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::vector<MeshNode*>* drawArray)
 {	
-	for (int i = 0; i < 20; i++){
+	for (int i = 0; i < 5; i++){
 		float randomX = ((std::rand() % 100) - 50) / 100.f;
 		float randomY = ((std::rand() % 100) - 50) / 100.f;
 		float randomZ = ((std::rand() % 100) - 50) / 100.f;
@@ -47,6 +47,19 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 		drawArray->push_back(debugMesh);
 		debugMesh->prepareForRendering();
 		debugMesh->createCollisionShape(physicsHandler);
+		
+		SceneNode* animTransform = new TransformNode(generateUuid(), glm::mat4(
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			//2, 1.5, -3.5, 1));
+			0  , 0.5, 0, 1));
+		MeshNode* animMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
+		animTransform->attachChild(animMesh);
+		debugTransform->attachChild(animTransform);
+		drawArray->push_back(animMesh);
+		animMesh->prepareForRendering();
+//		debugMesh->createCollisionShape(physicsHandler);
 	}
 }
 
