@@ -234,7 +234,7 @@ int main() {
 		physics->renderCollisionShapes();
 		
 		
-		renderer->renderToScreen(viewPortResX, viewPortResY);
+		renderer->renderToScreen(viewPortResX, viewPortResY, projectionMatrix);
 
 		glfwSwapBuffers(renderer->getWindow());
 		glfwPollEvents();
