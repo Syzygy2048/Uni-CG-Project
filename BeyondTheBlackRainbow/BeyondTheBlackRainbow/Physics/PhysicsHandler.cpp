@@ -223,6 +223,7 @@ physx::PxController* PhysicsHandler::createPlayerActor(glm::mat4 modelMatrix)
 
 	physx::PxController* characterController = manager->createController(characterControllerDescription);
 	characterController->getActor()->setName("player");
+	characterController->setStepOffset(0.01);
 
 	return characterController;
 }

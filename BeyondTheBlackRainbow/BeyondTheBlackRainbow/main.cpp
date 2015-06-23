@@ -646,11 +646,6 @@ int main() {
 			}
 			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix, player->getPosition(), framebuffers);
 		}
-		for (auto const &it : text) {
-			if (it.second->getValid()) {
-				it.second->draw(blendEnable);
-			}
-		}
 
 		oldF1State = input->f1;
 		oldF2State = input->f2;
@@ -667,6 +662,12 @@ int main() {
 		
 		if (enable2pass) {
 			renderer->renderToScreen(viewPortResX, viewPortResY, enableBloom);
+		}
+
+		for (auto const &it : text) {
+			if (it.second->getValid()) {
+				it.second->draw(blendEnable);
+			}
 		}
 
 		glfwSwapBuffers(renderer->getWindow());
