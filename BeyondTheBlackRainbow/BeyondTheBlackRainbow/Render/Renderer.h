@@ -61,10 +61,11 @@ public:
 	void applyHighPassFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
 	void applyBlurFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
 	void applyBloomFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture);
-	void applyDepthOfFieldFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture, GLuint depthTexture);
+	void applyDepthOfFieldFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture, GLuint depthTexture, glm::mat4 projectionMatrix);
 
 	void preparePostProcessing(int viewPortResX, int viewPortResY);
-	void renderToScreen(int viewPortResX, int viewPortResY, bool enableBloom);
+	
+	void renderToScreen(int viewPortResX, int viewPortResY, bool enableBloom, glm::mat4 projectionMatrix);
 	
 	void draw(MeshNode* node);
 	void drawText(Text* text, bool enableBlend);

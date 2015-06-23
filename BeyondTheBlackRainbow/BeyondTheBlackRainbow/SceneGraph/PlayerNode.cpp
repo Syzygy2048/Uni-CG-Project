@@ -95,14 +95,16 @@ void PlayerNode::update(double deltaTime, InputHandler* input)
 
 	TransformNode* node;
 	glm::mat4 parentTransform;
-	glm::vec3 positionViewHack = glm::vec3(position.x, position.y + 0.7, position.z);	//bumps up the camera position by 0.7
+	glm::vec3 positionViewHack = glm::vec3(position.x, position.y + 1, position.z);	//bumps up the camera position by 1
 	if (parent->getType() == NodeType::TRANSFORM_NODE)
 	{
 		node = (TransformNode*)parent;
 		node->setNewTransform(glm::highp_mat4(glm::lookAt(positionViewHack, positionViewHack + direction, up)));
 	}
 	
-	physx::PxVec3 origin = physx::PxVec3(positionViewHack.x, positionViewHack.y, positionViewHack.z);                 // [in] Ray origin
+	glm::vec3 cameraPosition = playerCamera->getPosition();
+	physx::PxVec3 origin = physx::PxVec3(position.x, position.y + cameraPosition.y, position.z);                 // [in] Ray origin
+	//glm::vec3 viewDirection = playerCamera->getDirect
 	glm::vec3 normDir = glm::normalize(direction);
 	physx::PxVec3 unitDir = physx::PxVec3(normDir.x, normDir.y, normDir.z);                // [in] Normalized ray direction
 	physx::PxReal maxDistance = 300;            // [in] Raycast max distance
@@ -161,4 +163,6 @@ glm::vec3 PlayerNode::getPosition()
 	return position;
 }
 
-
+void PlayerNode::setCamera(CameraNode* camera){
+	playerCamera = camera;
+}

@@ -373,6 +373,7 @@ int main() {
 		2, 0, -2.5, 1));
 
 	PlayerNode* player = new PlayerNode(generateUuid());
+	player->setCamera(activeCamera);
 	playerTransform->attachChild(activeCamera);
 	playerTransform->attachChild(player);
 	sceneGraph->attachChild(playerTransform);
@@ -661,7 +662,7 @@ int main() {
 		physics->renderCollisionShapes();
 		
 		if (enable2pass) {
-			renderer->renderToScreen(viewPortResX, viewPortResY, enableBloom);
+			renderer->renderToScreen(viewPortResX, viewPortResY, enableBloom, projectionMatrix);
 		}
 
 		for (auto const &it : text) {

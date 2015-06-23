@@ -442,7 +442,8 @@ void Renderer::configureFramebufferForPostProcessing(int viewPortResX, int viewP
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::renderToScreen(int viewPortResX, int viewPortResY, bool enableBloom)
+
+void Renderer::renderToScreen(int viewPortResX, int viewPortResY, bool enableBloom, glm::mat4 projectionMatrix)
 {
 	//glBindRenderbuffer(GL_RENDERBUFFER, dummyDepthTexture);
 	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, dummyDepthTexture);
@@ -450,7 +451,7 @@ void Renderer::renderToScreen(int viewPortResX, int viewPortResY, bool enableBlo
 		applyBloomFilter(viewPortResX, viewPortResY, renderTexture, highPassTexture);
 	}
 	else {
-		applyDepthOfFieldFilter(viewPortResX, viewPortResY, renderTexture, renderTexture2, renderDepthBuffer);
+		applyDepthOfFieldFilter(viewPortResX, viewPortResY, renderTexture, renderTexture2, renderDepthBuffer, projectionMatrix);
 	}
 
 	//bindFramebuffer(renderFrameBuffer, viewPortResX, viewPortResY, GL_READ_FRAMEBUFFER);
@@ -470,7 +471,7 @@ void Renderer::renderToScreen(int viewPortResX, int viewPortResY, bool enableBlo
 	bindVertexArray(0);
 }
 
-void Renderer::applyDepthOfFieldFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture, GLuint depthHelper)
+void Renderer::applyDepthOfFieldFilter(int viewPortResX, int viewPortResY, GLuint sourceTexture, GLuint targetTexture, GLuint depthHelper, glm::mat4 projectionMatrix)
 {
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, highPassTexture, 0);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, dummyDepthTexture, 0);
@@ -487,7 +488,7 @@ void Renderer::applyDepthOfFieldFilter(int viewPortResX, int viewPortResY, GLuin
 //	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, renderDepthBuffer, 0);
 	
 	glUseProgram(dofShader->getShaderId());
-	dofShader->fillUniformLocation(sourceTexture, highPassTexture, renderDepthBuffer);
+	dofShader->fillUniformLocation(sourceTexture, highPassTexture, renderDepthBuffer, projectionMatrix);
 	
 	bindVertexArray(renderSurfaceVAO);
 
