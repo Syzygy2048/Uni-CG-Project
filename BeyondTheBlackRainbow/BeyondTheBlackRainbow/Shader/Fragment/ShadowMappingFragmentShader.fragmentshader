@@ -9,10 +9,9 @@ struct LightSource {
 	vec2 cutOff;
 };
 
-struct ShadowMap {	
-	samplerCube depthMap;
-	float farPlane;
-};
+
+
+
 
 #define NR_LIGHTS 4
 
@@ -26,7 +25,8 @@ in VS_OUT {
 
 uniform sampler2D diffuseTexture; //myTextureSampler
 uniform	sampler2D dirDepthMap; //shadowMap
-uniform ShadowMap shadows[NR_LIGHTS];
+uniform	samplerCube depthMap;
+uniform	float farPlane;
 
 uniform LightSource lights[NR_LIGHTS];
 uniform vec3 viewPos;
@@ -52,7 +52,7 @@ float ShadowCalculation(vec3 fragPos, int i)
 {
 	//i = 1;
 	LightSource currLight = lights[i];
-	float far_plane = shadows[i].farPlane;
+	float far_plane = farPlane;
     // Get vector between fragment position and light position
     vec3 fragToLight = fragPos - currLight.position;
     // Get current linear depth as the length between the fragment and light position
@@ -65,7 +65,7 @@ float ShadowCalculation(vec3 fragPos, int i)
     float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
     for(int i = 0; i < samples; ++i)
     {
-        float closestDepth = texture(shadows[i].depthMap, fragToLight + gridSamplingDisk[i] * diskRadius).r;
+        float closestDepth = texture(depthMap, fragToLight + gridSamplingDisk[i] * diskRadius).r;
         closestDepth *= far_plane;   // Undo mapping [0;1]
         if(currentDepth - bias > closestDepth)
             shadow += 1.0;
