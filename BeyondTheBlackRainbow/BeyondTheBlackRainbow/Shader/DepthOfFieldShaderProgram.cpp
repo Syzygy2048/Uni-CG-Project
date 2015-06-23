@@ -39,8 +39,10 @@ void DepthOfFieldShaderProgram::fillUniformLocation(GLuint renderTexture, GLuint
 	glUniformMatrix4fv(locationProjectionMatrixInverse, 1, GL_FALSE, &projectionMatrixInverse[0][0]);
 
 	float distance = DoFHelper::getInstance()->getFocusDistance();
-	distance = (distance - 0.1f) / (5.f - 0.1f);
+	std::cerr << distance << " - ";
+	distance = (distance - 0.1f) / (50.f - 0.1f);
 	if (distance > 1)
 		distance = 1;
+	std::cerr << distance << std::endl;
 	glUniform1f(locationFocusDistance, distance);
 }

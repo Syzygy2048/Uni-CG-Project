@@ -5,9 +5,10 @@
 CameraNode::CameraNode(UUID uuid, int viewPortResX, int viewPortResY) : SceneNode(uuid, NodeType::CAMERA_NODE)
 {	
 	position = glm::vec3(0, 1, 0);
-	glm::vec3 up = glm::vec3(0, 1, 0);
-	viewMatrix = glm::lookAt(position, position + glm::vec3(0,0,1), up);
-	projectionMatrix = glm::perspective(75.0f, viewPortResX/(float)viewPortResY, 0.1f, 5.0f);
+	glm::vec3 up = glm::vec3(0, 0.6, 0);
+	direction = glm::vec3(0, 0, 1);
+	viewMatrix = glm::lookAt(position, position + direction, up);
+	projectionMatrix = glm::perspective(75.0f, viewPortResX/(float)viewPortResY, 0.1f, 50.0f);
 }
 
 CameraNode::~CameraNode()
@@ -39,4 +40,9 @@ glm::mat4 CameraNode::getProjectionMatrix()
 glm::highp_mat4 CameraNode::propagateMatrix()
 {
 	return parent->propagateMatrix();
+}
+
+glm::vec3 CameraNode::getPosition()
+{
+	return position;
 }

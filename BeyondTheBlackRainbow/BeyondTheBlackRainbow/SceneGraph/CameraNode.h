@@ -18,6 +18,7 @@ public:
 		
 	glm::mat4 getViewMatrix();
 	glm::mat4 getProjectionMatrix();
+	glm::vec3 getPosition();
 
 private:
 	glm::vec3 position;

@@ -2,6 +2,7 @@
 
 #include "../SceneGraph/SceneNode.h"
 #include "../Physics/PhysicsHandler.h"
+#include "../SceneGraph/CameraNode.h"
 
 class PlayerNode :
 	public SceneNode
@@ -11,14 +12,18 @@ public:
 	~PlayerNode();
 
 	void createCollisionShape(PhysicsHandler* physicsHandler);
+	void setCamera(CameraNode* camera);
 
 	virtual void update(double timeStep, InputHandler* input);
 
 	virtual glm::highp_mat4 propagateMatrix();
 
+	glm::vec3 getPosition();
+
 private:
 	physx::PxController* playerController = nullptr;
 	
+	CameraNode* playerCamera;
 	glm::vec3 position;
 	glm::vec3 direction;
 	glm::vec3 right;

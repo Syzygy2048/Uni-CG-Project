@@ -167,6 +167,7 @@ int main() {
 		2, 0, -2.5, 1));
 
 	PlayerNode* player = new PlayerNode(generateUuid());
+	player->setCamera(activeCamera);
 	playerTransform->attachChild(activeCamera);
 	playerTransform->attachChild(player);
 	sceneGraph->attachChild(playerTransform);

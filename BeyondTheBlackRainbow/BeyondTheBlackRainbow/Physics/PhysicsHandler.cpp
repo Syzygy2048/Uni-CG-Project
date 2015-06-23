@@ -222,6 +222,7 @@ physx::PxController* PhysicsHandler::createPlayerActor(glm::mat4 modelMatrix)
 	characterControllerDescription.nonWalkableMode = physx::PxControllerNonWalkableMode::ePREVENT_CLIMBING_AND_FORCE_SLIDING;
 
 	physx::PxController* characterController = manager->createController(characterControllerDescription);
+	characterController->setStepOffset(0.1);
 	characterController->getActor()->setName("player");
 
 	return characterController;

@@ -414,7 +414,7 @@ void Renderer::applyDepthOfFieldFilter(int viewPortResX, int viewPortResY, GLuin
 //	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, renderDepthBuffer, 0);
 	
 	glUseProgram(dofShader->getShaderId());
-	dofShader->fillUniformLocation(sourceTexture, highPassTexture, renderDepthBuffer, projectionMatrix._inverse());
+	dofShader->fillUniformLocation(sourceTexture, highPassTexture, renderDepthBuffer, projectionMatrix);
 	
 	bindVertexArray(renderSurfaceVAO);
 

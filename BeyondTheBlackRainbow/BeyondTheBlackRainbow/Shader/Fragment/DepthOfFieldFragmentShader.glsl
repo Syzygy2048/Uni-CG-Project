@@ -15,23 +15,33 @@ float focalLength = focusDistance / 2;
 
 void main(){
 	vec3 basePixel = texture(renderedTexture, UV).rgb;
-	vec3 blurPixel = 1-texture(blurredTexture, UV).rgb;
+	vec3 blurPixel = texture(blurredTexture, UV).rgb;
 	
 	vec2 mappedUV = UV * 2 - 1;
-	
+
 	float depth = texture(depthBuffer, UV).r;
-
-	vec4 screenCoordinate = vec4(mappedUV, 1-depth, 1);
-
-	vec4 unprojectedCoordinate = screenCoordinate * projectionMatrixInverse;
+	float focusDepth = texture(depthBuffer, vec2(0.5, 0.5)).r;
 	
+	vec4 screenCoordinate = vec4(mappedUV, depth, 1);
+	vec4 screenFocus = vec4(vec2(0,0), focusDepth, 1);
+	vec4 unprojectedCoordinate = inverse(projectionMatrixInverse) * screenCoordinate;
+	vec4 unprojectedFocus = inverse(projectionMatrixInverse) * screenFocus;
 	
-	float focus = abs(focusDistance - depth);
-	clamp(focus, 0, 1);
-	//focus = focus / focalLength;
-	//color = mix(basePixel, blurPixel, focus);
+	float scaleTest = length((unprojectedCoordinate.xyz/unprojectedCoordinate.w));
+	scaleTest = (scaleTest - 0.1) / (50.0 - 0.1);
 
-	float scaleTest = length((unprojectedCoordinate.xyz/unprojectedCoordinate.w).xyz);
-	scaleTest = (scaleTest - 0.1) / (5.0-0.1);
-	color = vec3(scaleTest);
+	float focusTest = length((unprojectedFocus.xyz/unprojectedFocus.w).xyz);
+	focusTest = (focusTest - 0.1) / (50.0 - 0.1);
+
+	float focus = abs(scaleTest - focusTest);
+	//if(focus <= 0.005)
+	//{
+	//	color = vec3(1);
+	//}
+	//else 
+	//{
+	//	color = vec3(scaleTest);
+	//}
+	//color = vec3(1-scaleTest);
+	color = mix(basePixel, blurPixel, focus*20);	
 }
