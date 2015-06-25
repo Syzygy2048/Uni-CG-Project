@@ -25,7 +25,6 @@
 #include "Texture\SamplerStateEnum.h"
 #include "Texture\MipmapStateEnum.h"
 #include "Framebuffer.h"
-#include "Util\FButtonHandler.h"
 
 std::map < std::string, Text* > text;
 
@@ -98,6 +97,12 @@ void initializeText() {
 	Text* win = new Text("Welcome beyond the black rainbow!", MeshLoadInfo::TEXT);
 	win->prepareText(60, 350, 20);
 	text.insert(std::pair<std::string, Text*>("win", win));
+	Text* keyFound = new Text("You have found the key!", MeshLoadInfo::TEXT);
+	keyFound->prepareText(50, 350, 20);
+	text.insert(std::pair<std::string, Text*>("key", keyFound));
+	Text* rainbowText = new Text("Rainbowpieces: ", MeshLoadInfo::TEXT);
+	rainbowText->prepareText(50, 300, 20);
+	text.insert(std::pair<std::string, Text*>("rainbowText", rainbowText));
 }
 
 void setSamplerText(SamplerState state)
@@ -176,6 +181,8 @@ int main() {
 
 	initializeText();
 
+	Texture* rainbowTexture = new Texture("../BeyondTheBlackRainbow/Assets/Models/duck_textures/rainbow.jpg");
+
 	PhysicsHandler* physics = new PhysicsHandler();
 	physics->initPhysics();	
 
@@ -188,15 +195,13 @@ int main() {
 	//this way we have a list of cameras and can switch between them as we want just by doing activeCamera = cameraList.find("whichever camera we want")->second;
 	cameraList.insert(std::pair<std::string, CameraNode*>(std::string("player camera"), activeCamera));
 	
-	std::vector<LightNode*> lights;
+
 	std::vector<LightNode*> lights1;
 	std::vector<LightNode*> lights2;
 	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2.0, 2, -4.5), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
-	//LightNode* secondLight = new PointLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 2.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
 	LightNode* secondLight = new SpotLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 0.5f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.1, 0.8), LightType::SPOT_LIGHT);
 	LightNode* secondLight2 = new SpotLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 0.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
-	//LightNode* thirdLight = new DirectionalLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), LightType::DIRECTIONAL_LIGHT);
-	LightNode* thirdLight = new PointLightNode(generateUuid(), glm::vec3(6.0, 1.5, -1), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* thirdLight = new PointLightNode(generateUuid(), glm::vec3(8.0, 1.5, -1), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
 	LightNode* fourthLight = new SpotLightNode(generateUuid(), glm::vec3(6.0, 1.0, -4.5), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
 	LightNode* fourthLight2 = new SpotLightNode(generateUuid(), glm::vec3(4.0, 1.0, -4), 1.0f, glm::vec3(0, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
 	lights1.push_back(firstLight);
@@ -205,7 +210,13 @@ int main() {
 	lights2.push_back(thirdLight);
 	lights2.push_back(fourthLight);
 	lights2.push_back(fourthLight2);
-	renderer->setLights(lights);
+
+	std::map<int, std::vector<LightNode*>> lightMap;
+	lightMap.insert(std::pair<int, std::vector<LightNode*>>(1, lights1));
+	lightMap.insert(std::pair<int, std::vector<LightNode*>>(2, lights2));
+
+	renderer->setLights(lightMap.find(1)->second);
+	std::vector<LightNode*> lights = lights1;
 
 	MeshNode* tableMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TABLE);
 	MeshNode* duckMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
@@ -220,6 +231,7 @@ int main() {
 	MeshNode* jarMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::JAR);
 	MeshNode* treeMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TREE);
 	MeshNode* boxMesh2 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::ANOTHER_BOX_MESH);
+	MeshNode* lightMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TREE);
 
 	tableMesh->prepareForRendering();
 	tableMesh2->prepareForRendering();
@@ -234,6 +246,11 @@ int main() {
 	jarMesh->prepareForRendering();
 	treeMesh->prepareForRendering();
 	boxMesh2->prepareForRendering();
+	
+	//light triggers
+	lightMesh->prepareForRendering();
+	lightMesh->setLightSet(2);
+	treeMesh->setLightSet(1);
 
 	std::vector<MeshNode*> drawArray;
 	drawArray.push_back(tableMesh);
@@ -249,6 +266,7 @@ int main() {
 	drawArray.push_back(jarMesh);
 	drawArray.push_back(treeMesh);
 	drawArray.push_back(boxMesh2);
+	drawArray.push_back(lightMesh);
 
 	SceneNode* sceneGraph = new SceneNode(generateUuid(), NodeType::ROOT_NODE);
 	sceneGraph->setParent(nullptr);
@@ -265,6 +283,7 @@ int main() {
 	sillaMesh1->setEventManager(eventManager);
 	sillaMesh2->setEventManager(eventManager);
 	vaseMesh->setEventManager(eventManager);
+	lightMesh->setEventManager(eventManager);
 	
 	SceneNode* transformNodeRoom = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
@@ -332,6 +351,11 @@ int main() {
 		0, 1, 0, 0,
 		0, 0, 1, 0,
 		3.5 , 0, 0, 1));
+	SceneNode* transformNodeLight = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0.6, 1, -0.5, 1));
 	transformNodeRoom->attachChild(roomMesh);
 	transformNodeRoom->attachChild(transformNodeDuck);
 	transformNodeRoom->attachChild(transformNodeBed);
@@ -344,6 +368,7 @@ int main() {
 	transformNodeRoom->attachChild(transformNodeJar);
 	transformNodeRoom->attachChild(transformNodeTree);
 	transformNodeRoom->attachChild(transformNodeBox2);
+	transformNodeRoom->attachChild(transformNodeLight);
 	transformNodeRoom->attachChild(firstLight);
 	transformNodeRoom->attachChild(secondLight);
 	transformNodeRoom->attachChild(secondLight2);
@@ -362,6 +387,7 @@ int main() {
 	transformNodeBox2->attachChild(boxMesh2);
 	transformNodeJar->attachChild(jarMesh);
 	transformNodeTree->attachChild(treeMesh);
+	transformNodeLight->attachChild(lightMesh);
 	
 	sceneGraph->attachChild(transformNodeRoom);
 	sceneGraph->attachChild(transformNodeDoor);
@@ -394,9 +420,16 @@ int main() {
 	treeMesh->createCollisionShape(physics);
 	jarMesh->createCollisionShape(physics);
 	boxMesh2->createCollisionShape(physics);
+	lightMesh->createCollisionShape(physics);
 
 	bedMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER));
 	doorMesh->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR));
+	lightMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
+	treeMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
+	boxMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::OBJECT_FOUND));
+	boxMesh->setActiveTexture(rainbowTexture);
+	jarMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::OBJECT_FOUND));
+	jarMesh->setActiveTexture(rainbowTexture);
 
 	spawn20Ducks(sceneGraph, physics, &drawArray);
 
@@ -412,19 +445,11 @@ int main() {
 	float framebufferNear = 0.1f;
 	float framebufferFar = 100.0f;
 	Framebuffer* frameBufferPointFirst = new Framebuffer(MeshLoadInfo::DEPTH, framebufferWidth, framebufferHeight);
-	//Framebuffer* frameBufferPointSecond = new Framebuffer(MeshLoadInfo::DEPTH, framebufferWidth, framebufferHeight);
-	//Framebuffer* frameBufferDir = new Framebuffer(MeshLoadInfo::DEPTHDIR, framebufferWidth, framebufferHeight);
 	frameBufferPointFirst->prepareFrameBuffer(firstLight);
-	//frameBufferPointSecond->prepareFrameBuffer(secondLight);
-	//frameBufferDir->prepareFrameBuffer(DIRECTIONAL_LIGHT);
 	frameBufferPointFirst->setNearPlane(framebufferNear);
-	//->setNearPlane(framebufferNear);
 	frameBufferPointFirst->setFarPlane(framebufferFar);
-	//frameBufferPointSecond->setFarPlane(framebufferFar);
 
 	framebuffers.insert(std::pair<std::string, Framebuffer*>("pointLight0", frameBufferPointFirst));
-	//framebuffers.insert(std::pair<std::string, Framebuffer*>("pointLight1", frameBufferPointSecond));
-	//framebuffers.insert(std::pair<std::string, Framebuffer*>("dirLight", frameBufferDir));
 	
 	//pointlight
 	GLfloat aspect = (GLfloat)framebufferWidth / (GLfloat)framebufferHeight;
@@ -453,10 +478,17 @@ int main() {
 	double mipmapTime = 0.1;
 	double samplerTime = 0.1;
 	double blendTime = 0.1;
+	double keyTime = 0.1;
+	double rainbowTime = 0.1;
 	int frame = 0;
 	double fpsTime = glfwGetTime();
 	double fpsTimebase = 0;
 	int fps = 0;
+	int countRainbow = 0;
+
+	bool keyFound = false;
+	bool keyText = false;
+	bool showRainbow = false;
 
 	bool helpEnable = true;
 	bool blendEnable = true;
@@ -502,6 +534,16 @@ int main() {
 		{
 			blendTransparencyText();
 			blendTime = 0.0;
+		}
+		if (keyTime != 0.0 && (oldTime - keyTime) > 5)
+		{
+			text.find("key")->second->setValid(false);
+			keyTime = 0.0;
+		}
+		if (rainbowTime != 0.0 && (oldTime - rainbowTime) > 5)
+		{
+			text.find("rainbowText")->second->setValid(false);
+			rainbowTime = 0.0;
 		}
 		
 		//help
@@ -565,19 +607,23 @@ int main() {
 			enableBloom = false;
 		}
 
+		//key text
+		if (keyText) {
+			text.find("key")->second->setValid(true);
+			keyText = !keyText;
+		}
+
+		//rainbow text
+		if (showRainbow) {
+			text.find("rainbowText")->second->setValid(true);
+			showRainbow = !showRainbow;
+		}
+
 		//win
 		if (player->getPosition().y > 3.6) {
 			text.find("win")->second->setValid(true);
 			text.find("helpText")->second->setValid(false);
 		}
-
-		if (player->getPosition().x > 4.5) {
-			lights = lights2;
-		}
-		else {
-			lights = lights1;
-		}
-		renderer->setLights(lights);
 
 		glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 		glm::mat4 viewMatrix = activeCamera->getViewMatrix();
@@ -645,7 +691,31 @@ int main() {
 				setMipmapText(node->getTexture()->getMipmapState());
 				mipmapTime = oldTime;
 			}
+			//-------------draw-------------------
 			node->draw(viewMatrix, projectionMatrix, viewProjectionMatrix, player->getPosition(), framebuffers);
+			//set Lights
+			if (node->LIGHT_FOUND) {
+				lights = lightMap.find(node->getLightSet())->second;
+				renderer->setLights(lights);
+				node->LIGHT_FOUND = false;
+			}
+			//set key text
+			if (!keyFound && node->HAVE_KEY) {
+				keyFound = true;
+				keyText = true;
+				keyTime = oldTime;
+			}
+			//set rainbow text
+			if (countRainbow != node->getFoundObject()) {
+				countRainbow = node->getFoundObject();
+				showRainbow = true;
+				char str[10];
+				char rainbowString[20] = "Rainbowpieces: ";
+				_itoa_s(countRainbow, str, 10);
+				strcat_s(rainbowString, 20, str);
+				text.find("rainbowText")->second->setText(rainbowString);
+				rainbowTime = oldTime;
+			}
 		}
 
 		oldF1State = input->f1;

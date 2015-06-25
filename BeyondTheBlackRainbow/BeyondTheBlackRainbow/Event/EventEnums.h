@@ -10,4 +10,6 @@ static enum EventTrigger {
 static enum EventIdentifier {
 	DOOR_TRIGGER,
 	OPEN_DOOR,
+	LIGHT_FOUND,
+	OBJECT_FOUND
 };

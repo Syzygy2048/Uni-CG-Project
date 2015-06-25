@@ -50,6 +50,7 @@ public:
 	glm::mat4 getDepthBiasMatrix();
 
 	Texture* getTexture();
+	void setActiveTexture(Texture* texture); //if nullptr->myTeyture
 	void setShadowMap(Texture* shadowMap);
 	Texture* getShadowMap();
 	glm::vec3 getPlayerPosition();
@@ -66,8 +67,17 @@ public:
 
 	std::map<std::string, Framebuffer*> getFramebuffers();
 
+	static bool HAVE_KEY;
+
 	bool SUBMISSION1_ANIMATION_HACK = false;
 	glm::highp_float SUBMISSION1_ANIMATION_HACK_DOOR_ROTATION_AMOUNT = 90;
+
+	void objectFound();
+	int getFoundObject();
+	
+	void setLightSet(int i);
+	int getLightSet();
+	bool LIGHT_FOUND = false;
 
 private:
 	aiMesh* triangleMesh;
@@ -89,6 +99,7 @@ private:
 	glm::mat4 viewProjectionMatrix;
 	
 	GLuint myShaderID;
+	Texture* activeTexture;
 	Texture* myTexture;
 	Texture* shadowMap;
 	bool textureInit;
@@ -109,5 +120,9 @@ private:
 	glm::mat4 depthBiasMatrix;
 
 	std::map<std::string, Framebuffer*> framebuffers;
+
+	int lightSet;
+	static int FOUND_OBJECTS;
+	bool found = false;
 };
 

@@ -24,7 +24,13 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 		specificEvent->executeEvent = [specificEvent](SceneNode* node)
 		{
 			SceneNode* target = specificEvent->getEventTarget();
-			target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR, target);
+			if (target->getType() == NodeType::MESH_NODE) {
+				MeshNode* node = (MeshNode*)target;
+				node->HAVE_KEY = true;
+				if (node->getFoundObject() == 2 && node->HAVE_KEY) {
+					target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR, target);
+				}
+			}
 		};
 		return specificEvent;
 		break;
@@ -39,6 +45,37 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				MeshNode* node = (MeshNode*)target;
 				node->removeCollisionShape();
 				node->SUBMISSION1_ANIMATION_HACK = true;
+			}
+		};
+		return specificEvent;
+		break;
+	case EventIdentifier::LIGHT_FOUND:
+		specificEvent->executeEvent = [specificEvent](SceneNode* node)
+		{
+			SceneNode* target = specificEvent->getEventTarget();
+			if (target->getType() == NodeType::MESH_NODE)
+			{
+				std::cout << "light found" << std::endl;
+				MeshNode* node = (MeshNode*)target;
+				node->LIGHT_FOUND = true;
+			}
+		};
+		return specificEvent;
+		break;
+	case EventIdentifier::OBJECT_FOUND:
+		specificEvent->executeEvent = [specificEvent](SceneNode* node)
+		{
+			SceneNode* target = specificEvent->getEventTarget();
+			if (target->getType() == NodeType::MESH_NODE)
+			{
+				std::cout << "object found" << std::endl;
+				MeshNode* node = (MeshNode*)target;
+				node->objectFound();
+				node->setActiveTexture(nullptr);
+				std::cout << node->getFoundObject() << std::endl;
+				if (node->getFoundObject() == 2 && node->HAVE_KEY) {
+					target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR, target);
+				}
 			}
 		};
 		return specificEvent;

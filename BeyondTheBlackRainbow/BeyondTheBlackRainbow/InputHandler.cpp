@@ -14,7 +14,6 @@ InputHandler::~InputHandler()
 void InputHandler::update(GLFWwindow* window)
 {
 	glfwGetCursorPos(window, &xPos, &yPos);
-	//glfwSetCursorPos(window, 1280 / 2, 720 / 2);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	w = glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS;

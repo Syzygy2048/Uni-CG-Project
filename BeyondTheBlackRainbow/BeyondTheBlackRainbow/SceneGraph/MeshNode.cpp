@@ -8,13 +8,13 @@
 #include "../Importers/ShaderImporter.h"
 #include "TransformNode.h"
 
-
+int MeshNode::FOUND_OBJECTS = 0;
+bool MeshNode::HAVE_KEY = false;
 
 MeshNode::MeshNode(UUID uuid, aiMesh* triangleMesh, const MeshLoadInfo::LoadInfo* meshLoadInfo) : SceneNode(uuid, NodeType::MESH_NODE)
 {
 	this->triangleMesh = triangleMesh;
 	loadInfo = meshLoadInfo;
-	//shaderID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
 	textureInit = false;
 }
 
@@ -82,6 +82,7 @@ void MeshNode::prepareForRendering()
 	shaderProgram = ShaderImporter::getInstance()->loadShaderProgram(loadInfo->shaderInfo);
 	shaderProgram->loadUniformLocations();
 	myTexture = new Texture((loadInfo->texturePath).c_str());
+	activeTexture = myTexture;
 	/**/
 
 	renderer->bindVertexArray(0);
@@ -220,7 +221,7 @@ int MeshNode::getDrawSize()
 
 Texture* MeshNode::getTexture()
 {
-	return  myTexture;
+	return  activeTexture;
 }
 
 glm::mat4 MeshNode::getModelViewProjectionMatrix()
@@ -285,4 +286,39 @@ glm::vec3 MeshNode::getPlayerPosition()
 std::map<std::string, Framebuffer*> MeshNode::getFramebuffers()
 {
 	return framebuffers;
+}
+
+void MeshNode::setLightSet(int i)
+{
+	lightSet = i;
+}
+
+int MeshNode::getLightSet()
+{
+	return lightSet;
+}
+
+void MeshNode::objectFound()
+{
+	if (!found)
+	{
+		FOUND_OBJECTS++;
+		found = true;
+	}
+}
+
+int MeshNode::getFoundObject()
+{
+	return FOUND_OBJECTS;
+}
+
+void MeshNode::setActiveTexture(Texture* texture)
+{
+	if (texture == nullptr)
+	{
+		activeTexture = myTexture;
+	}
+	else {
+		activeTexture = texture;
+	}
 }
