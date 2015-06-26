@@ -30,7 +30,7 @@ std::map < std::string, Text* > text;
 
 void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::vector<MeshNode*>* drawArray)
 {	
-	for (int i = 0; i < 5; i++){
+	for (int i = 0; i < 1; i++){
 		float randomX = ((std::rand() % 100) - 50) / 100.f;
 		float randomY = ((std::rand() % 100) - 50) / 100.f;
 		float randomZ = ((std::rand() % 100) - 50) / 100.f;
@@ -38,7 +38,7 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		//2, 1.5, -3.5, 1));
+		//0.5, 1.5, -0.5, 1));
 		2 + randomX, 2 + randomY, -3.5 + randomZ, 1));
 		MeshNode* debugMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
 		debugTransform->attachChild(debugMesh);
@@ -60,6 +60,7 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 		animMesh->prepareForRendering();
 //		debugMesh->createCollisionShape(physicsHandler);
 	}
+	
 }
 
 void initializeText() {
@@ -205,7 +206,7 @@ int main() {
 	LightNode* secondLight2 = new SpotLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 0.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
 	//room2
 	LightNode* thirdLight = new PointLightNode(generateUuid(), glm::vec3(8.0, 1.5, -1), 2.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
-	LightNode* fourthLight = new SpotLightNode(generateUuid(), glm::vec3(6.0, 1.0, -4.5), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
+	LightNode* fourthLight = new SpotLightNode(generateUuid(), glm::vec3(6.0, 1.0, -1), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
 	LightNode* fourthLight2 = new SpotLightNode(generateUuid(), glm::vec3(4.0, 1.0, -4), 1.0f, glm::vec3(0, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
 	//room 3
 	LightNode* point_room3 = new PointLightNode(generateUuid(), glm::vec3(8.0, 1.5, -1), 2.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
@@ -246,7 +247,7 @@ int main() {
 	
 	MeshNode* lightMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TREE);
 	MeshNode* lightMesh2to1 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TREE);
-	MeshNode* lightMesh2to3 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TREE);
+	MeshNode* lightMesh2to3 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::VASE);
 	MeshNode* lightMesh3to2 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TREE);
 
 	tableMesh->prepareForRendering();
@@ -360,7 +361,7 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		8, 0, -0.2, 1)); 
+		8, 0, 2, 1)); 
 	SceneNode* transformNodeJar = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -385,12 +386,12 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		6, 0.5, -0.5, 1)); 
+		6, 0.5, -1.5, 1)); 
 	SceneNode* transformNodeLight2to3 = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		6, 0.5, 0, 1));
+		6, 0.5, -0.5, 1));
 	SceneNode* transformNodeLight3to2 = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -757,9 +758,9 @@ int main() {
 			if (node->LIGHT_FOUND) {
 				lights = lightMap.find(node->getLightSet())->second;
 				renderer->setLights(lights);
-				frameBufferPointFirst->prepareFrameBuffer(lights.at(0));
+				frameBufferPointFirst->setLight(lights.at(0));
 				node->LIGHT_FOUND = false;
-				std::cout << "im here" << std::endl;
+				std::cout << node->getLightSet() << std::endl;
 			}
 			//set key text
 			if (!keyFound && node->HAVE_KEY) {
