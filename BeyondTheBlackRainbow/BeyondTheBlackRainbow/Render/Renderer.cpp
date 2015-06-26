@@ -111,10 +111,10 @@ void Renderer::bindBuffer(GLenum bufferType, GLuint bufferID)
 	glBindBuffer(bufferType, bufferID);
 }
 
-void Renderer::bindFrameBuffer(GLenum bufferType, GLuint bufferID)
+void Renderer::bindFrameBuffer(GLenum bufferType, GLuint bufferID, int viewPortResX, int viewPortResY)
 {
 	glBindFramebuffer(bufferType, bufferID);
-	glViewport(0, 0, 2048, 2048);
+	glViewport(0, 0, viewPortResX, viewPortResY);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -137,9 +137,9 @@ void Renderer::fillBuffer(GLuint bufferID, GLenum bufferType, int bufferSize, GL
 	glBufferData(bufferType, bufferSize, bufferData, bufferUsage);
 }
 
-void Renderer::fillFrameBuffer(GLuint bufferID, GLenum bufferType, GLenum attachment, GLuint texture, GLuint level)
+void Renderer::fillFrameBuffer(GLuint bufferID, GLenum bufferType, GLenum attachment, GLuint texture, GLuint level, int viewPortResX, int viewPortResY)
 {
-	bindFrameBuffer(bufferType, bufferID);
+	bindFrameBuffer(bufferType, bufferID, viewPortResX, viewPortResY);
 	glFramebufferTexture(bufferType, attachment, texture, level);
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);

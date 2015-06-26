@@ -500,8 +500,8 @@ int main() {
 
 	//Framebuffer stuff (for one pointlight)
 	std::map<std::string, Framebuffer*> framebuffers;
-	int framebufferWidth = 2048;
-	int framebufferHeight = 2048;
+	int framebufferWidth = 1024;
+	int framebufferHeight = 1024;
 	float framebufferNear = 0.1f;
 	float framebufferFar = 100.0f;
 	Framebuffer* frameBufferPointFirst = new Framebuffer(MeshLoadInfo::DEPTH, framebufferWidth, framebufferHeight);
@@ -698,7 +698,7 @@ int main() {
 				glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir + playerPosition, glm::vec3(0, 0, 0) + playerPosition, glm::vec3(0, 1, 0));
 				framebuffers.find("dirLight")->second->setDepthMVP(depthProjectionMatrixDIR*depthViewMatrix*depthModelMatrix);
 				//shadow of meshes
-				renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find("dirLight")->second->getFramebufferID());
+				renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find("dirLight")->second->getFramebufferID(), framebufferWidth, framebufferHeight);
 				for (MeshNode* node : drawArray) {
 					renderer->drawShadow(node, framebuffers.find("dirLight")->second);
 				}
@@ -718,7 +718,7 @@ int main() {
 				//std::cout << keyPointLight.str() << std::endl;
 				framebuffers.find(keyPointLight.str())->second->setDepthTransforms(depthTransforms);
 				//shadow of meshes
-				renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find(keyPointLight.str())->second->getFramebufferID());
+				renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find(keyPointLight.str())->second->getFramebufferID(), framebufferWidth, framebufferHeight);
 				for (MeshNode* node : drawArray) {
 					renderer->drawShadow(node, framebuffers.find(keyPointLight.str())->second);
 					if (enable2pass == false) {

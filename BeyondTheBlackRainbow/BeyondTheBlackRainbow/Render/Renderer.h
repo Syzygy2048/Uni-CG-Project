@@ -33,9 +33,9 @@ public:
 	void generateFrameBuffer(GLuint* bufferID);
 	
 	void fillBuffer(GLuint bufferID, GLenum bufferType, int bufferSize, GLvoid* bufferData, GLenum bufferUsage);
-	void fillFrameBuffer(GLuint bufferID, GLenum bufferType, GLenum attachment, GLuint texture, GLuint level);
+	void fillFrameBuffer(GLuint bufferID, GLenum bufferType, GLenum attachment, GLuint texture, GLuint level, int viewPortSizeX, int viewPortSizeY);
 	void bindBuffer(GLenum bufferType, GLuint bufferID);
-	void bindFrameBuffer(GLenum bufferType, GLuint bufferID);
+	void bindFrameBuffer(GLenum bufferType, GLuint bufferID, int viewPortResX, int viewPortResY);
 	void unbindFrameBuffer(GLenum bufferType);
 
 	void generateVertexArray(GLuint* vertexBufferID);
