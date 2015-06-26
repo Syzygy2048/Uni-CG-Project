@@ -56,11 +56,12 @@ public:
 	static const LoadInfo* TEXT;
 	static const LoadInfo* DEPTH;
 	static const LoadInfo* DEPTHDIR;
-	static const LoadInfo* BOX_MESH;
 	static const LoadInfo* VASE;
 	static const LoadInfo* TREE;
 	static const LoadInfo* JAR;
+	static const LoadInfo* BOX_MESH;
 	static const LoadInfo* ANOTHER_BOX_MESH;
+	static const LoadInfo* LIGHTBULB;
 
 
 };

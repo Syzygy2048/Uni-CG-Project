@@ -13,6 +13,8 @@ Framebuffer::Framebuffer(const MeshLoadInfo::LoadInfo* meshLoadInfo, int width, 
 
 Framebuffer::~Framebuffer()
 {
+	delete texture;
+
 }
 
 void Framebuffer::prepareFrameBuffer(LightNode* myLight) 
@@ -111,5 +113,10 @@ float Framebuffer::getNearPlane()
 LightNode* Framebuffer::getMyLight()
 {
 	return myLight;
+}
+
+void Framebuffer::setLight(LightNode* light)
+{
+	myLight = light;
 }
 

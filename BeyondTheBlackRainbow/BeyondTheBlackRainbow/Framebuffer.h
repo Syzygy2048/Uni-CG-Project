@@ -31,6 +31,7 @@ public:
 	glm::mat4 getDepthMVP();
 	std::vector<glm::mat4> getDepthTransfomrs();
 	LightNode* getMyLight();
+	void setLight(LightNode* light);
 
 	void setFarPlane(float farPlane);
 	float getFarPlane();
