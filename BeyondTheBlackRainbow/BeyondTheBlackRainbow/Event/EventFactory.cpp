@@ -38,10 +38,31 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
 		{
 			SceneNode* target = specificEvent->getEventTarget();
-
-			if (target->getType() == NodeType::MESH_NODE)
-			{
-				std::cerr << "open door" << std::endl;
+			if (target->getType() == NodeType::MESH_NODE) {
+				MeshNode* node = (MeshNode*)target;
+				node->removeCollisionShape();
+				if (behavior) behavior->setTriggered();
+			}
+		};
+		return specificEvent;
+		break;
+	case EventIdentifier::DOOR_TRIGGER1:
+		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
+		{
+			SceneNode* target = specificEvent->getEventTarget();
+			if (target->getType() == NodeType::MESH_NODE) {
+				MeshNode* node = (MeshNode*)target;
+				std::cout << "duck found" << std::endl;
+				target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM1, target);
+			}
+		};
+		return specificEvent;
+		break;
+	case EventIdentifier::OPEN_DOOR_ROOM1:
+		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
+		{
+			SceneNode* target = specificEvent->getEventTarget();
+			if (target->getType() == NodeType::MESH_NODE) {
 				MeshNode* node = (MeshNode*)target;
 				node->removeCollisionShape();
 				if (behavior) behavior->setTriggered();

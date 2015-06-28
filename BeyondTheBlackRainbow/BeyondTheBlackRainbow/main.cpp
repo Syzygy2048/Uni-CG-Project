@@ -475,6 +475,10 @@ int main() {
 	doorMesh->setBehavior(new OpenDoorBehavior());
 	doorMesh->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR));
 
+	duckMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER1));
+	doorMesh1to2->setBehavior(new OpenDoorBehavior());
+	doorMesh1to2->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR));
+
 	lightMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
 	lightMesh2to3->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
 
