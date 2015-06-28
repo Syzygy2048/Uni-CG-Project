@@ -2,6 +2,7 @@
 
 #include "TransformNode.h"
 #include "../Util/DoFHelper.h"
+#include "../GameStateManager.h"
 
 PlayerNode::PlayerNode(UUID uuid) : SceneNode(uuid, NodeType::PLAYER_NODE)
 {
@@ -54,6 +55,8 @@ void PlayerNode::update(double deltaTime, InputHandler* input)
 	position.x = playerController->getPosition().x;
 	position.y = playerController->getPosition().y;
 	position.z = playerController->getPosition().z;
+
+	GameStateManager::getInstance()->updatePlayerPosition(position);
 	if (!touchingGround)
 		yImpulse -= 0.098f * deltaTime;
 	if (input->shift || !touchingGround)
