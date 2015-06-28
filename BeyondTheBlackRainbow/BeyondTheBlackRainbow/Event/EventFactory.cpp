@@ -64,6 +64,20 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 			SceneNode* target = specificEvent->getEventTarget();
 			if (target->getType() == NodeType::MESH_NODE) {
 				MeshNode* node = (MeshNode*)target;
+				std::cout << "open door 1" << std::endl;
+				node->removeCollisionShape();
+				if (behavior) behavior->setTriggered();
+			}
+		};
+		return specificEvent;
+		break;
+	case EventIdentifier::OPEN_DOOR_ROOM2:
+		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
+		{
+			SceneNode* target = specificEvent->getEventTarget();
+			if (target->getType() == NodeType::MESH_NODE) {
+				MeshNode* node = (MeshNode*)target;
+				std::cout << "open door 2" << std::endl;
 				node->removeCollisionShape();
 				if (behavior) behavior->setTriggered();
 			}
@@ -94,8 +108,8 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				node->objectFound();
 				node->setActiveTexture(nullptr);
 				std::cout << node->getFoundObject() << std::endl;
-				if (node->getFoundObject() == 2 && node->HAVE_KEY) {
-					target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR, target);
+				if (node->getFoundObject() == 2) {
+					target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM2, target);
 				}
 			}
 		};

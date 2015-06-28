@@ -240,6 +240,7 @@ int main() {
 	MeshNode* roomMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::ROOM);
 	MeshNode* doorMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR);
 	MeshNode* doorMesh1to2 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR2);
+	MeshNode* doorMesh2to3 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR3);
 	MeshNode* tableMesh2 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TABLE2);
 	MeshNode* boxMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::BOX_MESH);
 	MeshNode* sillaMesh1 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::SILLA);
@@ -250,7 +251,7 @@ int main() {
 	MeshNode* boxMesh2 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::ANOTHER_BOX_MESH);
 	
 	MeshNode* lightMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::LIGHT);
-	MeshNode* lightMesh2to3 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::LIGHT);
+	MeshNode* lightMesh2to3 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::LIGHT2);
 
 	tableMesh->prepareForRendering();
 	tableMesh2->prepareForRendering();
@@ -258,6 +259,7 @@ int main() {
 	bedMesh->prepareForRendering();
 	roomMesh->prepareForRendering();
 	doorMesh1to2->prepareForRendering();
+	doorMesh2to3->prepareForRendering();
 	doorMesh->prepareForRendering();
 	boxMesh->prepareForRendering();
 	sillaMesh1->prepareForRendering();
@@ -280,6 +282,7 @@ int main() {
 	drawArray.push_back(bedMesh);
 	drawArray.push_back(roomMesh);
 	drawArray.push_back(doorMesh1to2);
+	drawArray.push_back(doorMesh2to3);
 	drawArray.push_back(doorMesh);
 	drawArray.push_back(boxMesh);
 	drawArray.push_back(sillaMesh1);
@@ -302,6 +305,7 @@ int main() {
 	duckMesh->setEventManager(eventManager);
 	bedMesh->setEventManager(eventManager);
 	doorMesh1to2->setEventManager(eventManager);
+	doorMesh2to3->setEventManager(eventManager);
 	roomMesh->setEventManager(eventManager);
 	doorMesh->setEventManager(eventManager);
 	boxMesh->setEventManager(eventManager);
@@ -309,6 +313,7 @@ int main() {
 	sillaMesh2->setEventManager(eventManager);
 	vaseMesh->setEventManager(eventManager);
 	lightMesh->setEventManager(eventManager);
+	jarMesh->setEventManager(eventManager);
 	
 	SceneNode* transformNodeRoom = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
@@ -336,6 +341,11 @@ int main() {
 		0, 1, 0, 0,
 		0, 0, 1, 0,
 		4, 0, -3.9, 1));
+	SceneNode* transformNodeDoor2to3 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		6, 0, 0, 1));
 	SceneNode* transformNodeDoor = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -391,7 +401,7 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		6, 0.5, -0.5, 1));
+		8, 1.5, 1.5, 1));
 	transformNodeRoom->attachChild(roomMesh);
 	transformNodeRoom->attachChild(transformNodeDuck);
 	transformNodeRoom->attachChild(transformNodeBed);
@@ -424,6 +434,7 @@ int main() {
 	transformNodeTable2->attachChild(tableMesh2);
 	transformNodeDoor->attachChild(doorMesh);
 	transformNodeDoor1to2->attachChild(doorMesh1to2);
+	transformNodeDoor2to3->attachChild(doorMesh2to3);
 	transformNodeBox->attachChild(boxMesh);
 	transformNodeSilla1->attachChild(sillaMesh1);
 	transformNodeSilla2->attachChild(sillaMesh2);
@@ -438,6 +449,7 @@ int main() {
 	sceneGraph->attachChild(transformNodeRoom);
 	sceneGraph->attachChild(transformNodeDoor);
 	sceneGraph->attachChild(transformNodeDoor1to2);
+	sceneGraph->attachChild(transformNodeDoor2to3);
 	
 	SceneNode* playerTransform = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
@@ -461,6 +473,7 @@ int main() {
 	bedMesh->createCollisionShape(physics);
 	doorMesh->createCollisionShape(physics);
 	doorMesh1to2->createCollisionShape(physics);
+	doorMesh2to3->createCollisionShape(physics);
 	boxMesh->createCollisionShape(physics);
 	sillaMesh1->createCollisionShape(physics);
 	sillaMesh2->createCollisionShape(physics);
@@ -477,7 +490,7 @@ int main() {
 
 	duckMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER1));
 	doorMesh1to2->setBehavior(new OpenDoorBehavior());
-	doorMesh1to2->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR));
+	doorMesh1to2->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM1));
 
 	lightMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
 	lightMesh2to3->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
@@ -486,6 +499,8 @@ int main() {
 	boxMesh->setActiveTexture(rainbowTexture);
 	jarMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::OBJECT_FOUND));
 	jarMesh->setActiveTexture(rainbowTexture);
+	doorMesh2to3->setBehavior(new OpenDoorBehavior());
+	doorMesh2to3->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM2));
 
 	spawn20Ducks(sceneGraph, physics, &drawArray);
 
