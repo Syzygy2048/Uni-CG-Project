@@ -13,6 +13,8 @@ class EventManager;
 #include "../Event/EventManager.h"
 class Event;
 #include "../Event/Event.h"
+class Behavior;
+#include "../Behavior/Behavior.h"
 
 class SceneNode
 {
@@ -41,6 +43,7 @@ public:
 
 	std::vector<SceneNode*> getChildren();
 	
+	void setBehavior(Behavior* behavior);
 	
 	EventManager* getEventManager();
 	SceneNode* parent;
@@ -50,6 +53,7 @@ public:
 protected:
 	EventManager* eventManager;
 	std::vector<Event*> eventList;
+	Behavior* behavior;
 
 private:
 	std::vector<SceneNode*> childList;	

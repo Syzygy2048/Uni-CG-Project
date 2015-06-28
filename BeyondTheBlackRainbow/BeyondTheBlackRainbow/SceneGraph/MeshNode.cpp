@@ -114,27 +114,12 @@ void MeshNode::removeCollisionShape()
 void MeshNode::update(double timeStep, InputHandler* input)
 {
 	//TODO update render->physics, simulate physics, update physics->render
-	
-	if (parent->getType() == NodeType::TRANSFORM_NODE)
+	if (behavior != nullptr)
 	{
-		if (SUBMISSION1_ANIMATION_HACK)
-		{
-			if (SUBMISSION1_ANIMATION_HACK_DOOR_ROTATION_AMOUNT < 0)
-			{
-				//createCollisionShape();
-				SUBMISSION1_ANIMATION_HACK = false;
-			}
-			TransformNode* node = (TransformNode *)parent;
-			
-			glm::highp_mat4 trans = node->getTransform();
-			
-			SUBMISSION1_ANIMATION_HACK_DOOR_ROTATION_AMOUNT -= 1.;
-			trans = glm::translate(trans, glm::highp_vec3(0.5, 0,0));
-			trans = glm::rotate(trans, -1., glm::highp_vec3(0, 1, 0));
-			trans = glm::translate(trans, glm::highp_vec3(-0.5, 0, 0));
-			node->setNewTransform(trans);
-			
-		}
+		behavior->update(this, input, timeStep);
+	}
+	if (parent->getType() == NodeType::TRANSFORM_NODE)
+	{		
 		if (!physicsActor) return;
 
 		physx::PxTransform trans = physicsActor->getGlobalPose();

@@ -5,13 +5,12 @@
 #include <functional>
 
 class SceneNode;
+class Behavior;
 
 class Event
 {
 public:
 	Event(EventTrigger trigger, EventIdentifier eventIdentifier);
-
-
 	~Event();
 
 	const EventTrigger trigger;
@@ -19,7 +18,7 @@ public:
 
 
 	//function pointer. works like java observer/listener pattern
-	std::function<void(SceneNode* caller)> executeEvent;
+	std::function<void(SceneNode* caller, Behavior* behavior)> executeEvent;
 
 	void setEventTarget(SceneNode* node);
 

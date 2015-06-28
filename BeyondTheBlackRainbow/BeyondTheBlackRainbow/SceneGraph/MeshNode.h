@@ -69,9 +69,6 @@ public:
 
 	static bool HAVE_KEY;
 
-	bool SUBMISSION1_ANIMATION_HACK = false;
-	glm::highp_float SUBMISSION1_ANIMATION_HACK_DOOR_ROTATION_AMOUNT = 90;
-
 	void objectFound();
 	int getFoundObject();
 	

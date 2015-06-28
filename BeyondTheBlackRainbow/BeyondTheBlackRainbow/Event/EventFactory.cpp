@@ -21,7 +21,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 	switch (identifier)
 	{
 	case EventIdentifier::DOOR_TRIGGER:
-		specificEvent->executeEvent = [specificEvent](SceneNode* node)
+		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
 		{
 			SceneNode* target = specificEvent->getEventTarget();
 			if (target->getType() == NodeType::MESH_NODE) {
@@ -35,7 +35,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 		return specificEvent;
 		break;
 	case EventIdentifier::OPEN_DOOR:
-		specificEvent->executeEvent = [specificEvent](SceneNode* node)
+		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
 		{
 			SceneNode* target = specificEvent->getEventTarget();
 
@@ -44,13 +44,13 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				std::cerr << "open door" << std::endl;
 				MeshNode* node = (MeshNode*)target;
 				node->removeCollisionShape();
-				node->SUBMISSION1_ANIMATION_HACK = true;
+				if (behavior) behavior->setTriggered();
 			}
 		};
 		return specificEvent;
 		break;
 	case EventIdentifier::LIGHT_FOUND:
-		specificEvent->executeEvent = [specificEvent](SceneNode* node)
+		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
 		{
 			SceneNode* target = specificEvent->getEventTarget();
 			if (target->getType() == NodeType::MESH_NODE)
@@ -63,7 +63,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 		return specificEvent;
 		break;
 	case EventIdentifier::OBJECT_FOUND:
-		specificEvent->executeEvent = [specificEvent](SceneNode* node)
+		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
 		{
 			SceneNode* target = specificEvent->getEventTarget();
 			if (target->getType() == NodeType::MESH_NODE)
@@ -83,3 +83,6 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 	}
 	return nullptr;
 }
+
+
+

@@ -76,7 +76,7 @@ public:
 
 	void setFrameBuffers(std::map<std::string, Framebuffer*> framebuffers);
 	void setDepthProjectionMatrix(glm::mat4 depthProjectionMatrix);
-	void setDepthModelMatrix(glm::mat4 depthModelMatrix);
+	void setDepthModelMatrix(glm::mat4 &depthModelMatrix);
 
 private:
 	//singleton

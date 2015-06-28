@@ -79,7 +79,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Behavior\Behavior.cpp" />
+    <ClCompile Include="Behavior\OpenDoorBehavior.cpp" />
     <ClCompile Include="Framebuffer.cpp" />
+    <ClCompile Include="Behavior\RotateBehavior.cpp" />
     <ClCompile Include="Shader\DepthDirShaderProgram.cpp" />
     <ClCompile Include="Shader\DepthShaderProgram.cpp" />
     <ClCompile Include="SceneGraph\LightNode\DirectionalLightNode.cpp" />
@@ -119,7 +122,10 @@
     <ClCompile Include="Text\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Behavior\Behavior.h" />
+    <ClInclude Include="Behavior\OpenDoorBehavior.h" />
     <ClInclude Include="Framebuffer.h" />
+    <ClInclude Include="Behavior\RotateBehavior.h" />
     <ClInclude Include="Shader\DepthDirShaderProgram.h" />
     <ClInclude Include="Shader\DepthShaderProgram.h" />
     <ClInclude Include="SceneGraph\LightNode\DirectionalLightNode.h" />

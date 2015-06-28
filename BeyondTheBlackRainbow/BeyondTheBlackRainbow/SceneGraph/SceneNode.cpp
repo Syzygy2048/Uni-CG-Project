@@ -95,7 +95,7 @@ bool SceneNode::receiveSpecificEvent(EventTrigger eventTrigger, EventIdentifier 
 		for (Event* event : eventList)
 		{
 			if (event->trigger == eventTrigger && event->eventIdentifier == eventIdentifier){
-				event->executeEvent(caller);
+				event->executeEvent(caller, behavior);
 				return true;
 			}
 		}
@@ -122,7 +122,7 @@ void SceneNode::triggerEvent(EventTrigger eventTrigger, SceneNode* caller)
 	for (Event* event : eventList)
 	{
 		if (event->trigger == eventTrigger){
-			event->executeEvent(caller);
+			event->executeEvent(caller, behavior);
 		}
 	}
 }
@@ -146,4 +146,9 @@ std::vector<SceneNode*> SceneNode::getChildren()
 SceneNode* SceneNode::getParent()
 {
 	return parent;
+}
+
+void SceneNode::setBehavior(Behavior* behavior)
+{
+	this->behavior = behavior;
 }

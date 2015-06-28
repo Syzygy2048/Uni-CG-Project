@@ -25,6 +25,8 @@
 #include "Texture\SamplerStateEnum.h"
 #include "Texture\MipmapStateEnum.h"
 #include "Framebuffer.h"
+#include "Behavior\RotateBehavior.h"
+#include "Behavior\OpenDoorBehavior.h"
 
 std::map < std::string, Text* > text;
 
@@ -52,13 +54,14 @@ void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::ve
 			0, 1, 0, 0,
 			0, 0, 1, 0,
 			//2, 1.5, -3.5, 1));
-			0  , 0, -0.15, 1));
+			0  , 0, -0.30, 1));
 		MeshNode* animMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DUCK);
 		animTransform->attachChild(animMesh);
 		debugTransform->attachChild(animTransform);
 		drawArray->push_back(animMesh);
 		animMesh->prepareForRendering();
-//		debugMesh->createCollisionShape(physicsHandler);
+		animMesh->setBehavior(new RotateBehavior());
+		//animMesh->createCollisionShape(physicsHandler);
 	}
 	
 }
@@ -480,6 +483,7 @@ int main() {
 	lightMesh3to2->createCollisionShape(physics);
 
 	bedMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER));
+	doorMesh->setBehavior(new OpenDoorBehavior());
 	doorMesh->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR));
 
 	lightMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
@@ -693,45 +697,46 @@ int main() {
 		
 		std::stringstream keyPointLight;
 		//draw shadows
-		for (int i = 0; i < lights.size(); i++) {
-			if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) {
-				glm::vec3 lightInvDir = (lights.at(i)->getDirection());
-				glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir + playerPosition, glm::vec3(0, 0, 0) + playerPosition, glm::vec3(0, 1, 0));
-				framebuffers.find("dirLight")->second->setDepthMVP(depthProjectionMatrixDIR*depthViewMatrix*depthModelMatrix);
-				//shadow of meshes
-				renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find("dirLight")->second->getFramebufferID(), framebufferWidth, framebufferHeight);
-				for (MeshNode* node : drawArray) {
-					renderer->drawShadow(node, framebuffers.find("dirLight")->second);
-				}
-				renderer->unbindFrameBuffer(GL_FRAMEBUFFER);
-			}
-			else if (lights.at(i)->getLightType() == POINT_LIGHT) {
-				glm::vec3 lightPos = lights.at(i)->getPosition();
-				depthTransforms.clear();
-				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
-				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
-				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
-				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
-				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
-				depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
-				keyPointLight << "pointLight";
-				keyPointLight << i;
-				//std::cout << keyPointLight.str() << std::endl;
-				framebuffers.find(keyPointLight.str())->second->setDepthTransforms(depthTransforms);
-				//shadow of meshes
-				renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find(keyPointLight.str())->second->getFramebufferID(), framebufferWidth, framebufferHeight);
-				for (MeshNode* node : drawArray) {
-					renderer->drawShadow(node, framebuffers.find(keyPointLight.str())->second);
-					if (enable2pass == false) {
-						enable2pass = node->SUBMISSION1_ANIMATION_HACK;
+		if (!enable2pass) {
+			for (int i = 0; i < lights.size(); i++) {
+				if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) {
+					glm::vec3 lightInvDir = (lights.at(i)->getDirection());
+					glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir + playerPosition, glm::vec3(0, 0, 0) + playerPosition, glm::vec3(0, 1, 0));
+					framebuffers.find("dirLight")->second->setDepthMVP(depthProjectionMatrixDIR*depthViewMatrix*depthModelMatrix);
+					//shadow of meshes
+					renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find("dirLight")->second->getFramebufferID(), framebufferWidth, framebufferHeight);
+					for (MeshNode* node : drawArray) {
+						renderer->drawShadow(node, framebuffers.find("dirLight")->second);
 					}
+					renderer->unbindFrameBuffer(GL_FRAMEBUFFER);
 				}
-				renderer->unbindFrameBuffer(GL_FRAMEBUFFER);
-				keyPointLight.str(std::string());
-				keyPointLight.clear();
+				else if (lights.at(i)->getLightType() == POINT_LIGHT) {
+					glm::vec3 lightPos = lights.at(i)->getPosition();
+					depthTransforms.clear();
+					depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+					depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+					depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+					depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
+					depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
+					depthTransforms.push_back(depthProjectionMatrixPOINT * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
+					keyPointLight << "pointLight";
+					keyPointLight << i;
+					//std::cout << keyPointLight.str() << std::endl;
+					framebuffers.find(keyPointLight.str())->second->setDepthTransforms(depthTransforms);
+					//shadow of meshes
+					renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find(keyPointLight.str())->second->getFramebufferID(), framebufferWidth, framebufferHeight);
+					for (MeshNode* node : drawArray) {
+						renderer->drawShadow(node, framebuffers.find(keyPointLight.str())->second);
+						if (enable2pass == false) {
+						//	enable2pass = node->SUBMISSION1_ANIMATION_HACK;
+						}
+					}
+					renderer->unbindFrameBuffer(GL_FRAMEBUFFER);
+					keyPointLight.str(std::string());
+					keyPointLight.clear();
+				}
 			}
-		}		
-
+		}
 		if (enable2pass) {
 			renderer->configureFramebufferForPostProcessing(viewPortResX, viewPortResY);
 		}
