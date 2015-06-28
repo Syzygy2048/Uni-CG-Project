@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Behavior\OpenDoor2Behavior.cpp" />
     <ClCompile Include="Behavior\Behavior.cpp" />
     <ClCompile Include="Behavior\OpenDoorBehavior.cpp" />
     <ClCompile Include="Framebuffer.cpp" />
@@ -122,6 +123,7 @@
     <ClCompile Include="Text\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Behavior\OpenDoor2Behavior.h" />
     <ClInclude Include="Behavior\Behavior.h" />
     <ClInclude Include="Behavior\OpenDoorBehavior.h" />
     <ClInclude Include="Framebuffer.h" />

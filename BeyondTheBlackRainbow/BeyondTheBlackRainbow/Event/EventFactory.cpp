@@ -58,6 +58,18 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 		};
 		return specificEvent;
 		break;
+	case EventIdentifier::DOOR_TRIGGER3:
+		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
+		{
+			SceneNode* target = specificEvent->getEventTarget();
+			if (target->getType() == NodeType::MESH_NODE) {
+				MeshNode* node = (MeshNode*)target;
+				std::cout << "door 3 found" << std::endl;
+				target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM3, target);
+			}
+		};
+		return specificEvent;
+		break;
 	case EventIdentifier::OPEN_DOOR_ROOM1:
 		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
 		{
@@ -78,6 +90,19 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 			if (target->getType() == NodeType::MESH_NODE) {
 				MeshNode* node = (MeshNode*)target;
 				std::cout << "open door 2" << std::endl;
+				node->removeCollisionShape();
+				if (behavior) behavior->setTriggered();
+			}
+		};
+		return specificEvent;
+		break;
+	case EventIdentifier::OPEN_DOOR_ROOM3:
+		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
+		{
+			SceneNode* target = specificEvent->getEventTarget();
+			if (target->getType() == NodeType::MESH_NODE) {
+				MeshNode* node = (MeshNode*)target;
+				std::cout << "open door 3" << std::endl;
 				node->removeCollisionShape();
 				if (behavior) behavior->setTriggered();
 			}
