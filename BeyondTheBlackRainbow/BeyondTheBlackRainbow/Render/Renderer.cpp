@@ -259,7 +259,7 @@ void Renderer::setDepthProjectionMatrix(glm::mat4 depthProjectionMatrix)
 	this->depthProjectionMatrix = depthProjectionMatrix;
 }
 
-void Renderer::setDepthModelMatrix(glm::mat4 depthModelMatrix)
+void Renderer::setDepthModelMatrix(glm::mat4 &depthModelMatrix)
 {
 	this->depthModelMatrix = depthModelMatrix;
 }

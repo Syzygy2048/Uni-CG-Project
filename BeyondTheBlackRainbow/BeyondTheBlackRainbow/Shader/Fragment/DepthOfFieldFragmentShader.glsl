@@ -43,5 +43,5 @@ void main(){
 	//	color = vec3(scaleTest);
 	//}
 	//color = vec3(1-scaleTest);
-	color = mix(basePixel, blurPixel, focus*20);	
+	color = mix(basePixel, blurPixel, focus*5);	
 }
