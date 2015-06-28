@@ -27,12 +27,13 @@
 #include "Framebuffer.h"
 #include "Behavior\RotateBehavior.h"
 #include "Behavior\OpenDoorBehavior.h"
+#include "Behavior\OpenDoor2Behavior.h"
 
 std::map < std::string, Text* > text;
 
 void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::vector<MeshNode*>* drawArray)
 {	
-	for (int i = 0; i < 20; i++){
+	for (int i = 0; i < 1; i++){
 		float randomX = ((std::rand() % 100) - 50) / 100.f;
 		float randomY = ((std::rand() % 100) - 50) / 100.f;
 		float randomZ = ((std::rand() % 100) - 50) / 100.f;
@@ -320,7 +321,7 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		1, -0.1, -3.5, 1));
+		1, 0.1, -3.5, 1));
 	SceneNode* transformNodeBed = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -476,8 +477,8 @@ int main() {
 	doorMesh->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR));
 
 	duckMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER1));
-	doorMesh1to2->setBehavior(new OpenDoorBehavior());
-	doorMesh1to2->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR));
+	doorMesh1to2->setBehavior(new OpenDoor2Behavior());
+	doorMesh1to2->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM1));
 
 	lightMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
 	lightMesh2to3->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));

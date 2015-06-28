@@ -204,7 +204,7 @@ void PhysicsHandler::addActorToScene(physx::PxRigidActor* actor)
 
 void PhysicsHandler::createPhysicsFloor()
 {
-	physx::PxRigidStatic* plane = physx::PxCreatePlane(*physicsSDK, physx::PxPlane(physx::PxVec3(0, 1, 0), 0), *createPhysicsMaterial(90, 90, 0.1f));
+	physx::PxRigidStatic* plane = physx::PxCreatePlane(*physicsSDK, physx::PxPlane(physx::PxVec3(0, 1, 0), 30), *createPhysicsMaterial(90, 90, 0.1f));
 	plane->setName("floor");
 	addActorToScene(plane);
 }
