@@ -34,7 +34,7 @@ std::map < std::string, Text* > text;
 
 void spawn20Ducks(SceneNode* sceneGraph, PhysicsHandler* physicsHandler, std::vector<MeshNode*>* drawArray)
 {	
-	for (int i = 0; i < 1; i++){
+	for (int i = 0; i < 2; i++){
 		float randomX = ((std::rand() % 100) - 50) / 100.f;
 		float randomY = ((std::rand() % 100) - 50) / 100.f;
 		float randomZ = ((std::rand() % 100) - 50) / 100.f;
@@ -609,7 +609,38 @@ int main() {
 		if (input->f1 && !oldF1State)
 		{
 			helpEnable = !helpEnable;
+
+			Text* helpText = text.find("helpText")->second;
+			switch (GameStateManager::getInstance()->getPlayerPosition())
+			{
+			case GameStateManager::ROOM_1:
+				helpText->setText("Find the lonely duck.");
+				break;
+			case GameStateManager::ROOM_2:
+				helpText->setText("Taste the Rainbow");
+				break;
+			case GameStateManager::ROOM_3:
+				helpText->setText("Follow the light");
+				break;
+			case GameStateManager::ROOM_4:
+				helpText->setText("Take the key");
+				break;
+			case GameStateManager::ROOM_5:
+				helpText->setText("Escape");
+				break;
+			case GameStateManager::ROOM_6:
+				helpText->setText("There is no exit");
+				break;
+			case GameStateManager::HALLWAY:
+				helpText->setText("You have escaped!");
+				break;
+			case GameStateManager::OUT_OF_BOUNDS:
+			default:
+				helpText->setText("You shouldn't be here");
+			}
+
 			text.find("helpText")->second->setValid(helpEnable);
+
 		}
 
 		//FPS
