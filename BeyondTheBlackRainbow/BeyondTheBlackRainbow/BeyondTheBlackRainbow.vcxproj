@@ -82,6 +82,7 @@
     <ClCompile Include="Behavior\OpenDoor2Behavior.cpp" />
     <ClCompile Include="Behavior\Behavior.cpp" />
     <ClCompile Include="Behavior\OpenDoorBehavior.cpp" />
+    <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="Behavior\RotateBehavior.cpp" />
     <ClCompile Include="Shader\DepthDirShaderProgram.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="Behavior\OpenDoor2Behavior.h" />
     <ClInclude Include="Behavior\Behavior.h" />
     <ClInclude Include="Behavior\OpenDoorBehavior.h" />
+    <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="Framebuffer.h" />
     <ClInclude Include="Behavior\RotateBehavior.h" />
     <ClInclude Include="Shader\DepthDirShaderProgram.h" />
