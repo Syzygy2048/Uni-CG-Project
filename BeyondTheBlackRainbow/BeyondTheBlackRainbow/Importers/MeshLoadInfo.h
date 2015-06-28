@@ -53,6 +53,7 @@ public:
 	static const LoadInfo* BED;
 	static const LoadInfo* ROOM;
 	static const LoadInfo* DOOR;
+	static const LoadInfo* DOOR2;
 	static const LoadInfo* TEXT;
 	static const LoadInfo* DEPTH;
 	static const LoadInfo* DEPTHDIR;
@@ -61,7 +62,7 @@ public:
 	static const LoadInfo* JAR;
 	static const LoadInfo* BOX_MESH;
 	static const LoadInfo* ANOTHER_BOX_MESH;
-	static const LoadInfo* LIGHTBULB;
+	static const LoadInfo* LIGHT;
 
 
 };
