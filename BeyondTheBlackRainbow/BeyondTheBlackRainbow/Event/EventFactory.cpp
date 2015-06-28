@@ -30,10 +30,8 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				MeshNode* node = (MeshNode*)target;
 				node->HAVE_KEY = true;
 				GameStateManager::getInstance()->setPostProcessingEnabled(true);
-
-				if (node->getFoundObject() == 2 && node->HAVE_KEY) {
-					target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR, target);
-				}
+				target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR, target);
+				target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM3, target);
 			}
 		};
 		return specificEvent;
@@ -62,13 +60,38 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 		};
 		return specificEvent;
 		break;
+	case EventIdentifier::DOOR_TRIGGER6:
+		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
+		{
+			SceneNode* target = specificEvent->getEventTarget();
+			if (target->getType() == NodeType::MESH_NODE) {
+				MeshNode* node = (MeshNode*)target;
+				std::cout << "duck found" << std::endl;
+				target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM6, target);
+			}
+		};
+		return specificEvent;
+		break;
+	case EventIdentifier::OPEN_DOOR_ROOM6:
+		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
+		{
+			SceneNode* target = specificEvent->getEventTarget();
+			if (target->getType() == NodeType::MESH_NODE) {
+				MeshNode* node = (MeshNode*)target;
+				std::cout << "open door 6" << std::endl;
+				node->removeCollisionShape();
+				if (behavior) behavior->setTriggered();
+			}
+		};
+		return specificEvent;
+		break;
 	case EventIdentifier::DOOR_TRIGGER3:
 		specificEvent->executeEvent = [specificEvent](SceneNode* node, Behavior* behavior)
 		{
 			SceneNode* target = specificEvent->getEventTarget();
 			if (target->getType() == NodeType::MESH_NODE) {
 				MeshNode* node = (MeshNode*)target;
-				std::cout << "door 3 found" << std::endl;
+				std::cout << "door 3/4 found" << std::endl;
 				target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM3, target);
 			}
 		};
