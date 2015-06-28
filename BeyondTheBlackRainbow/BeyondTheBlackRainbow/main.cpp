@@ -328,7 +328,7 @@ int main() {
 	drawArray.push_back(doorMesh1to2);
 	drawArray.push_back(doorMesh2to3);
 	drawArray.push_back(doorMesh3to4);
-	drawArray.push_back(doorMesh4to5);
+	//drawArray.push_back(doorMesh4to5);
 	drawArray.push_back(doorMesh6toDie);
 	drawArray.push_back(doorMesh6to1);
 	drawArray.push_back(doorMesh);
@@ -598,7 +598,7 @@ int main() {
 	doorMesh1to2->createCollisionShape(physics);
 	doorMesh2to3->createCollisionShape(physics);
 	doorMesh3to4->createCollisionShape(physics);
-	doorMesh4to5->createCollisionShape(physics);
+	//doorMesh4to5->createCollisionShape(physics);
 	doorMesh6toDie->createCollisionShape(physics);
 	doorMesh6to1->createCollisionShape(physics);
 	boxMesh->createCollisionShape(physics);
@@ -631,8 +631,9 @@ int main() {
 	doorMesh3to4->setBehavior(new OpenDoorBehavior());
 	doorMesh3to4->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM3));
 
+	/*doorMesh4to5->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER3));
 	doorMesh4to5->setBehavior(new OpenDoorBehavior());
-	doorMesh4to5->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM3));
+	doorMesh4to5->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM3));*/
 
 	doorMesh6toDie->setBehavior(new OpenDoorBehavior());
 	doorMesh6toDie->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM3));
