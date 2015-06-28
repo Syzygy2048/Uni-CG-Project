@@ -310,6 +310,7 @@ int main() {
 	sillaMesh2->setEventManager(eventManager);
 	vaseMesh->setEventManager(eventManager);
 	lightMesh->setEventManager(eventManager);
+	jarMesh->setEventManager(eventManager);
 	
 	SceneNode* transformNodeRoom = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
