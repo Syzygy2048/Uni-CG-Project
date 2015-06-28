@@ -4,6 +4,8 @@
 #include "../SceneGraph/MeshNode.h"
 #include "../SceneGraph/SceneNode.h"
 
+#include "../GameStateManager.h"
+
 
 EventFactory::EventFactory()
 {
@@ -27,6 +29,8 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 			if (target->getType() == NodeType::MESH_NODE) {
 				MeshNode* node = (MeshNode*)target;
 				node->HAVE_KEY = true;
+				GameStateManager::getInstance()->setPostProcessingEnabled(true);
+
 				if (node->getFoundObject() == 2 && node->HAVE_KEY) {
 					target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR, target);
 				}

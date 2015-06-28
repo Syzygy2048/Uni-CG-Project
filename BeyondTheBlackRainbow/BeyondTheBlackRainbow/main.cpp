@@ -28,6 +28,7 @@
 #include "Behavior\RotateBehavior.h"
 #include "Behavior\OpenDoorBehavior.h"
 #include "Behavior\OpenDoor2Behavior.h"
+#include "GameStateManager.h"
 
 std::map < std::string, Text* > text;
 
@@ -690,6 +691,7 @@ int main() {
 		
 		std::stringstream keyPointLight;
 		//draw shadows
+		enable2pass = GameStateManager::getInstance()->getPostProcessingEnabled();
 		if (!enable2pass) {
 			for (int i = 0; i < lights.size(); i++) {
 				if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) {
@@ -720,9 +722,6 @@ int main() {
 					renderer->bindFrameBuffer(GL_FRAMEBUFFER, framebuffers.find(keyPointLight.str())->second->getFramebufferID(), framebufferWidth, framebufferHeight);
 					for (MeshNode* node : drawArray) {
 						renderer->drawShadow(node, framebuffers.find(keyPointLight.str())->second);
-						if (enable2pass == false) {
-						//	enable2pass = node->SUBMISSION1_ANIMATION_HACK;
-						}
 					}
 					renderer->unbindFrameBuffer(GL_FRAMEBUFFER);
 					keyPointLight.str(std::string());
