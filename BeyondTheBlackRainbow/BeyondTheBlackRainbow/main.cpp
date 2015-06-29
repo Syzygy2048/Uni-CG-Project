@@ -1106,7 +1106,7 @@ int main() {
 		std::stringstream keyPointLight;
 		//draw shadows
 		enable2pass = GameStateManager::getInstance()->getPostProcessingEnabled();
-		if (!enable2pass) {
+		//if (!enable2pass) {
 			for (int i = 0; i < lights.size(); i++) {
 				if (lights.at(i)->getLightType() == DIRECTIONAL_LIGHT) {
 					glm::vec3 lightInvDir = (lights.at(i)->getDirection());
@@ -1142,7 +1142,7 @@ int main() {
 					keyPointLight.clear();
 				}
 			}
-		}
+		//}
 		if (enable2pass) {
 			renderer->configureFramebufferForPostProcessing(viewPortResX, viewPortResY);
 		}
