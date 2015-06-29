@@ -9,6 +9,7 @@
 #include "TransformNode.h"
 
 int MeshNode::FOUND_OBJECTS = 0;
+int MeshNode::VASE_FOUND = 0;
 bool MeshNode::HAVE_KEY = false;
 
 MeshNode::MeshNode(UUID uuid, aiMesh* triangleMesh, const MeshLoadInfo::LoadInfo* meshLoadInfo) : SceneNode(uuid, NodeType::MESH_NODE)
@@ -295,6 +296,19 @@ void MeshNode::objectFound()
 int MeshNode::getFoundObject()
 {
 	return FOUND_OBJECTS;
+}
+
+void MeshNode::vaseFound()
+{
+	if (!foundVase)
+	{
+		VASE_FOUND++;
+		foundVase = true;
+	}
+}
+int MeshNode::getFoundVase()
+{
+	return VASE_FOUND;
 }
 
 void MeshNode::setActiveTexture(Texture* texture)

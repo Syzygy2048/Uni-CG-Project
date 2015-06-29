@@ -64,8 +64,10 @@ public:
 	static const LoadInfo* JAR;
 	static const LoadInfo* BOX_MESH;
 	static const LoadInfo* ANOTHER_BOX_MESH;
+	static const LoadInfo* ANOTHER_BOX_MESH_GREEN;
 	static const LoadInfo* KEY;
 	static const LoadInfo* LIGHT;
 	static const LoadInfo* LIGHT2;
 	static const LoadInfo* LIGHT3;
+	static const LoadInfo* LIGHT4;
 };

@@ -207,43 +207,73 @@ int main() {
 	std::vector<LightNode*> lights3;
 	std::vector<LightNode*> lights4;
 	std::vector<LightNode*> lights5;
+	std::vector<LightNode*> lights6;
+	std::vector<LightNode*> lights7;
 	//room 1
-	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2.0, 2, -3), 2.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
-	LightNode* secondLight = new SpotLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.1, 0.8), LightType::SPOT_LIGHT);
+	LightNode* firstLight = new PointLightNode(generateUuid(), glm::vec3(2.0, 2, -3), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* secondLight = new SpotLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
 	LightNode* secondLight2 = new SpotLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 0.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
+	LightNode* secondLight3 = new SpotLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 0.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
 	//room2
 	LightNode* thirdLight = new PointLightNode(generateUuid(), glm::vec3(7.0, 1.5, -1), 2.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
 	LightNode* fourthLight = new SpotLightNode(generateUuid(), glm::vec3(6.0, 1.0, -1), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
 	LightNode* fourthLight2 = new SpotLightNode(generateUuid(), glm::vec3(4.0, 1.0, -4), 1.0f, glm::vec3(0, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
+	LightNode* fourthLight3 = new SpotLightNode(generateUuid(), glm::vec3(4.0, 1.0, -4), 0.0f, glm::vec3(0, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
 	//room 3
-	LightNode* point_room3 = new PointLightNode(generateUuid(), glm::vec3(7.0, 1.5, 1), 2.0f, glm::vec3(1, 0, 0), LightType::POINT_LIGHT);
-	LightNode* spot_room3 = new SpotLightNode(generateUuid(), glm::vec3(7.0, 1.0, 4.5), 1.0f, glm::vec3(1, 0, 0), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
-	LightNode* spot2_room3 = new SpotLightNode(generateUuid(), glm::vec3(5.0, 1.0, 4), 1.0f, glm::vec3(1, 0, 0), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
+	LightNode* point_room3 = new PointLightNode(generateUuid(), glm::vec3(7.0, 1.5, 1), 1.0f, glm::vec3(1, 0.5, 0.5), LightType::POINT_LIGHT);
+	LightNode* spot_room3 = new SpotLightNode(generateUuid(), glm::vec3(7.0, 1.0, 4.5), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
+	LightNode* spot2_room3 = new SpotLightNode(generateUuid(), glm::vec3(5.0, 1.0, 4), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
+	LightNode* spot3_room3 = new SpotLightNode(generateUuid(), glm::vec3(5.0, 1.0, 4), 0.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
 	//room 4
 	LightNode* point_room4 = new PointLightNode(generateUuid(), glm::vec3(7.0, 1.5, 1), 0.0f, glm::vec3(1, 0, 0), LightType::POINT_LIGHT);
-	LightNode* spot_room4 = new SpotLightNode(generateUuid(), glm::vec3(7.0, 1.0, 4.5), 0.0f, glm::vec3(1, 0, 0), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
-	LightNode* spot2_room4 = new SpotLightNode(generateUuid(), glm::vec3(2.0, 2.4, 3), 3.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
+	LightNode* spot_room4 = new SpotLightNode(generateUuid(), glm::vec3(0, 2.4, 4), 2.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.9, 1), LightType::SPOT_LIGHT);
+	LightNode* spot2_room4 = new SpotLightNode(generateUuid(), glm::vec3(1.0, 2.4, 1), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.9, 1), LightType::SPOT_LIGHT);
+	LightNode* spot3_room4 = new SpotLightNode(generateUuid(), glm::vec3(-1.0, 2.4, 5), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.9, 1), LightType::SPOT_LIGHT);
 	//room 5
-	LightNode* point_room5 = new PointLightNode(generateUuid(), glm::vec3(-3.0, 1.5, -2), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
-	LightNode* spot_room5 = new SpotLightNode(generateUuid(), glm::vec3(-2.0, 1.0, 4.5), 1.0f, glm::vec3(0, 1, 0), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
-	LightNode* spot2_room5 = new SpotLightNode(generateUuid(), glm::vec3(-3.0, 2.4, 4), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
+	LightNode* point_room5 = new PointLightNode(generateUuid(), glm::vec3(-3.0, 1.5, 2), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* spot_room5 = new SpotLightNode(generateUuid(), glm::vec3(-1.3, 2.4, 0.5), 2.0f, glm::vec3(0, 1, 0), glm::vec3(0, -1, 0), glm::vec2(0.95, 1), LightType::SPOT_LIGHT);
+	LightNode* spot2_room5 = new SpotLightNode(generateUuid(), glm::vec3(-0.5, 2.4, 1.9), 2.0f, glm::vec3(1, 0, 0), glm::vec3(0, -1, 0), glm::vec2(0.95, 1), LightType::SPOT_LIGHT);
+	LightNode* spot3_room5 = new SpotLightNode(generateUuid(), glm::vec3(-3.3, 2.4, 2.9), 2.0f, glm::vec3(0, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.95, 1), LightType::SPOT_LIGHT);
+	//room 6
+	LightNode* point_room6 = new PointLightNode(generateUuid(), glm::vec3(-1.5, 1.5, -2), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* spot_room6 = new SpotLightNode(generateUuid(), glm::vec3(-4.2, 2.4, -4), 2.0f, glm::vec3(0, 1, 0), glm::vec3(0, -1, 0), glm::vec2(0.9, 1), LightType::SPOT_LIGHT);
+	LightNode* spot2_room6 = new SpotLightNode(generateUuid(), glm::vec3(-1.0, 2.4, 2.0), 0.0f, glm::vec3(1, 0, 0), glm::vec3(0, -1, 0), glm::vec2(0.9, 1), LightType::SPOT_LIGHT);
+	LightNode* spot3_room6 = new SpotLightNode(generateUuid(), glm::vec3(-3.2, 2.4, 3.0), 0.0f, glm::vec3(0, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.9, 1), LightType::SPOT_LIGHT);
+	//floor
+	LightNode* point_room7 = new PointLightNode(generateUuid(), glm::vec3(2, 4, -15), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* spot_room7 = new SpotLightNode(generateUuid(), glm::vec3(2, 4.4, -10), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
+	LightNode* spot2_room7 = new SpotLightNode(generateUuid(), glm::vec3(2, 2.4, -10), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
+	LightNode* spot3_room7 = new SpotLightNode(generateUuid(), glm::vec3(-2.0, 2.4, -5), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
 
 
 	lights1.push_back(firstLight);
 	lights1.push_back(secondLight);
 	lights1.push_back(secondLight2);
+	lights1.push_back(secondLight3);
 	lights2.push_back(thirdLight);
 	lights2.push_back(fourthLight);
 	lights2.push_back(fourthLight2);
+	lights2.push_back(fourthLight3);
 	lights3.push_back(point_room3);
 	lights3.push_back(spot_room3);
 	lights3.push_back(spot2_room3);
+	lights3.push_back(spot3_room3);
 	lights4.push_back(point_room4);
 	lights4.push_back(spot_room4);
 	lights4.push_back(spot2_room4);
+	lights4.push_back(spot3_room4);
 	lights5.push_back(point_room5);
 	lights5.push_back(spot_room5);
 	lights5.push_back(spot2_room5);
+	lights5.push_back(spot3_room5);
+	lights6.push_back(point_room6);
+	lights6.push_back(spot_room6);
+	lights6.push_back(spot2_room6);
+	lights6.push_back(spot3_room6);
+	lights7.push_back(point_room7);
+	lights7.push_back(spot_room7);
+	lights7.push_back(spot2_room7);
+	lights7.push_back(spot3_room7);
 
 	std::map<int, std::vector<LightNode*>> lightMap;
 	lightMap.insert(std::pair<int, std::vector<LightNode*>>(1, lights1));
@@ -251,6 +281,8 @@ int main() {
 	lightMap.insert(std::pair<int, std::vector<LightNode*>>(3, lights3));
 	lightMap.insert(std::pair<int, std::vector<LightNode*>>(4, lights4));
 	lightMap.insert(std::pair<int, std::vector<LightNode*>>(5, lights5));
+	lightMap.insert(std::pair<int, std::vector<LightNode*>>(6, lights6));
+	lightMap.insert(std::pair<int, std::vector<LightNode*>>(7, lights7));
 
 	renderer->setLights(lightMap.find(1)->second);
 	std::vector<LightNode*> lights = lights1;
@@ -265,6 +297,7 @@ int main() {
 	MeshNode* doorMesh2to3 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR3);
 	MeshNode* doorMesh3to4 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR4);
 	MeshNode* doorMesh4to5 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR4);
+	MeshNode* doorMesh5to6 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR);
 	MeshNode* doorMesh6toDie = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR4);
 	MeshNode* doorMesh6to1 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::DOOR2);
 
@@ -272,16 +305,31 @@ int main() {
 	MeshNode* boxMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::BOX_MESH);
 	MeshNode* sillaMesh1 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::SILLA);
 	MeshNode* sillaMesh2 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::SILLA);
-	MeshNode* vaseMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::VASE);
 	MeshNode* jarMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::JAR);
 	MeshNode* treeMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TREE);
+	MeshNode* treeMesh2 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TREE);
+	MeshNode* treeMesh3 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::TREE);
 	MeshNode* boxMesh2 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::ANOTHER_BOX_MESH);
+	MeshNode* boxMesh3 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::ANOTHER_BOX_MESH);
+	MeshNode* boxMesh4 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::ANOTHER_BOX_MESH);
+	MeshNode* boxMeshGreen = MeshImporter::getInstance()->getMesh(MeshLoadInfo::ANOTHER_BOX_MESH_GREEN);
 	MeshNode* keyMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::KEY);
+	MeshNode* vaseMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::VASE);
+	MeshNode* vaseMesh2 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::VASE);
+	MeshNode* vaseMesh3 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::VASE);
+	MeshNode* vaseMesh4 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::VASE);
+	MeshNode* vaseMesh5 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::VASE);
+	MeshNode* vaseMesh6 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::VASE);
+	MeshNode* vaseMesh7 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::VASE);
+	MeshNode* vaseMesh8 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::VASE);
+	MeshNode* vaseMesh9 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::VASE);
+
 	
 	MeshNode* lightMesh = MeshImporter::getInstance()->getMesh(MeshLoadInfo::LIGHT);
 	MeshNode* lightMesh2to3 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::LIGHT2);
 	MeshNode* lightMesh3to4 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::LIGHT3);
 	MeshNode* lightMesh4to5 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::LIGHT3);
+	MeshNode* lightMesh5to6 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::LIGHT4);
 	MeshNode* lightMesh6to1 = MeshImporter::getInstance()->getMesh(MeshLoadInfo::LIGHT);
 
 	tableMesh->prepareForRendering();
@@ -294,6 +342,7 @@ int main() {
 	doorMesh2to3->prepareForRendering();
 	doorMesh3to4->prepareForRendering();
 	doorMesh4to5->prepareForRendering();
+	doorMesh5to6->prepareForRendering();
 	doorMesh6toDie->prepareForRendering();
 	doorMesh6to1->prepareForRendering();
 
@@ -302,9 +351,22 @@ int main() {
 	sillaMesh1->prepareForRendering();
 	sillaMesh2->prepareForRendering();
 	vaseMesh->prepareForRendering();
+	vaseMesh2->prepareForRendering();
+	vaseMesh3->prepareForRendering();
+	vaseMesh4->prepareForRendering();
+	vaseMesh5->prepareForRendering();
+	vaseMesh6->prepareForRendering();
+	vaseMesh7->prepareForRendering();
+	vaseMesh8->prepareForRendering();
+	vaseMesh9->prepareForRendering();
 	jarMesh->prepareForRendering();
 	treeMesh->prepareForRendering();
+	treeMesh2->prepareForRendering();
+	treeMesh3->prepareForRendering();
 	boxMesh2->prepareForRendering();
+	boxMesh3->prepareForRendering();
+	boxMesh4->prepareForRendering();
+	boxMeshGreen->prepareForRendering();
 	keyMesh->prepareForRendering();
 	
 	//light triggers
@@ -316,8 +378,10 @@ int main() {
 	lightMesh3to4->setLightSet(4);
 	lightMesh4to5->prepareForRendering();
 	lightMesh4to5->setLightSet(5);
+	lightMesh5to6->prepareForRendering();
+	lightMesh5to6->setLightSet(6);
 	lightMesh6to1->prepareForRendering();
-	lightMesh6to1->setLightSet(1);
+	lightMesh6to1->setLightSet(7);
 	
 	std::vector<MeshNode*> drawArray;
 	drawArray.push_back(tableMesh);
@@ -328,7 +392,8 @@ int main() {
 	drawArray.push_back(doorMesh1to2);
 	drawArray.push_back(doorMesh2to3);
 	drawArray.push_back(doorMesh3to4);
-	//drawArray.push_back(doorMesh4to5);
+	drawArray.push_back(doorMesh4to5);
+	drawArray.push_back(doorMesh5to6);
 	drawArray.push_back(doorMesh6toDie);
 	drawArray.push_back(doorMesh6to1);
 	drawArray.push_back(doorMesh);
@@ -336,15 +401,29 @@ int main() {
 	drawArray.push_back(sillaMesh1);
 	drawArray.push_back(sillaMesh2);
 	drawArray.push_back(vaseMesh);
+	drawArray.push_back(vaseMesh2);
+	drawArray.push_back(vaseMesh3);
+	drawArray.push_back(vaseMesh4);
+	drawArray.push_back(vaseMesh5);
+	drawArray.push_back(vaseMesh6);
+	drawArray.push_back(vaseMesh7);
+	drawArray.push_back(vaseMesh8);
+	drawArray.push_back(vaseMesh9);
 	drawArray.push_back(jarMesh);
 	drawArray.push_back(treeMesh);
+	drawArray.push_back(treeMesh2);
+	drawArray.push_back(treeMesh3);
 	drawArray.push_back(boxMesh2);
+	drawArray.push_back(boxMesh3);
+	drawArray.push_back(boxMesh4);
+	drawArray.push_back(boxMeshGreen);
 	drawArray.push_back(keyMesh);
 	//light triggers
 	drawArray.push_back(lightMesh);
 	drawArray.push_back(lightMesh2to3);
 	drawArray.push_back(lightMesh3to4);
 	drawArray.push_back(lightMesh4to5);
+	drawArray.push_back(lightMesh5to6);
 	drawArray.push_back(lightMesh6to1);
 
 	SceneNode* sceneGraph = new SceneNode(generateUuid(), NodeType::ROOT_NODE);
@@ -360,18 +439,32 @@ int main() {
 	doorMesh2to3->setEventManager(eventManager);
 	doorMesh3to4->setEventManager(eventManager);
 	doorMesh4to5->setEventManager(eventManager);
+	doorMesh5to6->setEventManager(eventManager);
 	doorMesh6toDie->setEventManager(eventManager);
 	doorMesh6to1->setEventManager(eventManager);
 	roomMesh->setEventManager(eventManager);
 	doorMesh->setEventManager(eventManager);
 	boxMesh->setEventManager(eventManager);
+	boxMesh2->setEventManager(eventManager);
+	boxMesh3->setEventManager(eventManager);
+	boxMesh4->setEventManager(eventManager);
+	boxMeshGreen->setEventManager(eventManager);
 	sillaMesh1->setEventManager(eventManager);
 	sillaMesh2->setEventManager(eventManager);
 	vaseMesh->setEventManager(eventManager);
+	vaseMesh2->setEventManager(eventManager);
+	vaseMesh3->setEventManager(eventManager);
+	vaseMesh4->setEventManager(eventManager);
+	vaseMesh5->setEventManager(eventManager);
+	vaseMesh6->setEventManager(eventManager);
+	vaseMesh7->setEventManager(eventManager);
+	vaseMesh8->setEventManager(eventManager);
+	vaseMesh9->setEventManager(eventManager);
 	lightMesh->setEventManager(eventManager);
 	lightMesh2to3->setEventManager(eventManager);
 	lightMesh3to4->setEventManager(eventManager);
 	lightMesh4to5->setEventManager(eventManager);
+	lightMesh5to6->setEventManager(eventManager);
 	lightMesh6to1->setEventManager(eventManager);
 	jarMesh->setEventManager(eventManager);
 	keyMesh->setEventManager(eventManager);
@@ -417,6 +510,11 @@ int main() {
 		0, 1, 0, 0,
 		0, 0, 1, 0,
 		-0.5, 0, 3.5, 1));
+	SceneNode* transformNodeDoor5to6 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		-3, 0, 0, 1));
 	SceneNode* transformNodeDoor6toDie = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -456,27 +554,92 @@ int main() {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		8, 0, 2, 1)); 
+		8, 0, 4.8, 1)); 
+	SceneNode* transformNodeVase9 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		-2, 0, 4, 1)); 
+	SceneNode* transformNodeVase2 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 3, 1));
+	SceneNode* transformNodeVase3 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 2, 1)); 
+	SceneNode* transformNodeVase4 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		-1, 0, 0.5, 1)); 
+	SceneNode* transformNodeVase5 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		-3, 0, 2, 1));
+	SceneNode* transformNodeVase6 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		-3, 0, 3, 1)); 
+	SceneNode* transformNodeVase7 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		-1.5, 0, 3, 1)); 
+	SceneNode* transformNodeVase8 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		-1.5, 0, 2, 1));
 	SceneNode* transformNodeJar = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		5, 0.9, -1, 1));
+		6, 0, -1, 1));
 	SceneNode* transformNodeTree = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		5.6, 0.2, -3, 1));
+		4.6, 0.6, 2.5, 1));
+	SceneNode* transformNodeTree3 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		-4, 0, -3, 1));
+	SceneNode* transformNodeTree2 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		-4, 0, -4.5, 1));
 	SceneNode* transformNodeKey = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		2, 1, 3, 1));
+		1.2, 1, 0.5, 1));
 	SceneNode* transformNodeBox2 = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		3.5 , 0, 0, 1));
+		5.5 , 0, 4, 1));
+	SceneNode* transformNodeBox3 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		7, 0, 2.5, 1));
+	SceneNode* transformNodeBox4 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		7, 0, 5.5, 1));
+	SceneNode* transformNodeBoxGreen = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		6.5, 0, 3.5, 1));
 	glm::mat4 transform = glm::mat4(1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
@@ -498,6 +661,11 @@ int main() {
 		0, 1, 0, 0,
 		0, 0, 1, 0,
 		-1, 1.5, 5, 1));
+	SceneNode* transformNodeLight5to6 = new TransformNode(generateUuid(), glm::mat4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		-4, 1.5, -1, 1));
 	SceneNode* transformNodeLight6to1 = new TransformNode(generateUuid(), glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -512,15 +680,29 @@ int main() {
 	transformNodeRoom->attachChild(transformNodeSilla2);
 	transformNodeRoom->attachChild(transformNodeBox);
 	transformNodeRoom->attachChild(transformNodeVase);
+	transformNodeRoom->attachChild(transformNodeVase2);
+	transformNodeRoom->attachChild(transformNodeVase3);
+	transformNodeRoom->attachChild(transformNodeVase4);
+	transformNodeRoom->attachChild(transformNodeVase5);
+	transformNodeRoom->attachChild(transformNodeVase6);
+	transformNodeRoom->attachChild(transformNodeVase7);
+	transformNodeRoom->attachChild(transformNodeVase8);
+	transformNodeRoom->attachChild(transformNodeVase9);
 	transformNodeRoom->attachChild(transformNodeJar);
 	transformNodeRoom->attachChild(transformNodeTree);
+	transformNodeRoom->attachChild(transformNodeTree2);
+	transformNodeRoom->attachChild(transformNodeTree3);
 	transformNodeRoom->attachChild(transformNodeBox2);
+	transformNodeRoom->attachChild(transformNodeBox3);
+	transformNodeRoom->attachChild(transformNodeBox4);
+	transformNodeRoom->attachChild(transformNodeBoxGreen);
 	transformNodeRoom->attachChild(transformNodeKey);
 
 	transformNodeRoom->attachChild(transformNodeLight);
 	transformNodeRoom->attachChild(transformNodeLight2to3);
 	transformNodeRoom->attachChild(transformNodeLight3to4);
 	transformNodeRoom->attachChild(transformNodeLight4to5);
+	transformNodeRoom->attachChild(transformNodeLight5to6);
 	transformNodeRoom->attachChild(transformNodeLight6to1);
 
 	transformNodeRoom->attachChild(firstLight);
@@ -547,22 +729,37 @@ int main() {
 	transformNodeDoor1to2->attachChild(doorMesh1to2);
 	transformNodeDoor2to3->attachChild(doorMesh2to3);
 	transformNodeDoor3to4->attachChild(doorMesh3to4);
+	transformNodeDoor5to6->attachChild(doorMesh5to6);
 	transformNodeDoor4to5->attachChild(doorMesh4to5);
 	transformNodeDoor6toDie->attachChild(doorMesh6toDie);
 	transformNodeDoor6to1->attachChild(doorMesh6to1);
 	transformNodeBox->attachChild(boxMesh);
 	transformNodeSilla1->attachChild(sillaMesh1);
 	transformNodeSilla2->attachChild(sillaMesh2);
+	transformNodeVase2->attachChild(vaseMesh2);
+	transformNodeVase3->attachChild(vaseMesh3);
+	transformNodeVase4->attachChild(vaseMesh4);
+	transformNodeVase5->attachChild(vaseMesh5);
+	transformNodeVase6->attachChild(vaseMesh6);
+	transformNodeVase7->attachChild(vaseMesh7);
+	transformNodeVase8->attachChild(vaseMesh8);
+	transformNodeVase9->attachChild(vaseMesh9);
 	transformNodeVase->attachChild(vaseMesh);
 	transformNodeBox2->attachChild(boxMesh2);
+	transformNodeBox3->attachChild(boxMesh3);
+	transformNodeBox4->attachChild(boxMesh4);
+	transformNodeBoxGreen->attachChild(boxMeshGreen);
 	transformNodeJar->attachChild(jarMesh);
 	transformNodeTree->attachChild(treeMesh);
+	transformNodeTree2->attachChild(treeMesh2);
+	transformNodeTree3->attachChild(treeMesh3);
 	transformNodeKey->attachChild(keyMesh);
 
 	transformNodeLight->attachChild(lightMesh);
 	transformNodeLight2to3->attachChild(lightMesh2to3);
 	transformNodeLight3to4->attachChild(lightMesh3to4);
 	transformNodeLight4to5->attachChild(lightMesh4to5);
+	transformNodeLight5to6->attachChild(lightMesh5to6);
 	transformNodeLight6to1->attachChild(lightMesh6to1);
 	
 	sceneGraph->attachChild(transformNodeRoom);
@@ -571,6 +768,7 @@ int main() {
 	sceneGraph->attachChild(transformNodeDoor2to3);
 	sceneGraph->attachChild(transformNodeDoor3to4);
 	sceneGraph->attachChild(transformNodeDoor4to5);
+	sceneGraph->attachChild(transformNodeDoor5to6);
 	sceneGraph->attachChild(transformNodeDoor6toDie);
 	sceneGraph->attachChild(transformNodeDoor6to1);
 	
@@ -598,21 +796,36 @@ int main() {
 	doorMesh1to2->createCollisionShape(physics);
 	doorMesh2to3->createCollisionShape(physics);
 	doorMesh3to4->createCollisionShape(physics);
-	//doorMesh4to5->createCollisionShape(physics);
+	doorMesh4to5->createCollisionShape(physics);
+	doorMesh5to6->createCollisionShape(physics);
 	doorMesh6toDie->createCollisionShape(physics);
 	doorMesh6to1->createCollisionShape(physics);
 	boxMesh->createCollisionShape(physics);
 	sillaMesh1->createCollisionShape(physics);
 	sillaMesh2->createCollisionShape(physics);
 	vaseMesh->createCollisionShape(physics);
+	vaseMesh2->createCollisionShape(physics);
+	vaseMesh3->createCollisionShape(physics);
+	vaseMesh4->createCollisionShape(physics);
+	vaseMesh5->createCollisionShape(physics);
+	vaseMesh6->createCollisionShape(physics);
+	vaseMesh7->createCollisionShape(physics);
+	vaseMesh8->createCollisionShape(physics);
+	vaseMesh9->createCollisionShape(physics);
 	treeMesh->createCollisionShape(physics);
+	treeMesh2->createCollisionShape(physics);
+	treeMesh3->createCollisionShape(physics);
 	jarMesh->createCollisionShape(physics);
 	boxMesh2->createCollisionShape(physics);
+	boxMesh3->createCollisionShape(physics);
+	boxMesh4->createCollisionShape(physics);
+	boxMeshGreen->createCollisionShape(physics);
 	keyMesh->createCollisionShape(physics);
 	lightMesh->createCollisionShape(physics);
 	lightMesh2to3->createCollisionShape(physics);
 	lightMesh3to4->createCollisionShape(physics);
 	lightMesh4to5->createCollisionShape(physics);
+	lightMesh5to6->createCollisionShape(physics);
 	lightMesh6to1->createCollisionShape(physics);
 
 	keyMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER));
@@ -627,21 +840,28 @@ int main() {
 	doorMesh6to1->setBehavior(new OpenDoor2Behavior());
 	doorMesh6to1->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM6));
 
-	doorMesh3to4->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER3));
+	boxMeshGreen->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER3));
 	doorMesh3to4->setBehavior(new OpenDoorBehavior());
 	doorMesh3to4->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM3));
 
-	/*doorMesh4to5->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::DOOR_TRIGGER3));
 	doorMesh4to5->setBehavior(new OpenDoorBehavior());
-	doorMesh4to5->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM3));*/
+	doorMesh4to5->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM4));
 
+	vaseMesh3->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::VASE_FOUND));
+	vaseMesh4->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::VASE_FOUND));
+	vaseMesh6->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::VASE_FOUND));
+	doorMesh5to6->setBehavior(new OpenDoorBehavior());
+	doorMesh5to6->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM5));
+
+	doorMesh6toDie->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::_DOOR_TRIGGER6));
 	doorMesh6toDie->setBehavior(new OpenDoorBehavior());
-	doorMesh6toDie->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM3));
+	doorMesh6toDie->registerEvent(EventFactory::createEvent(EventTrigger::EVENT, EventIdentifier::_OPEN_DOOR_ROOM6));
 
 	lightMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
 	lightMesh2to3->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
 	lightMesh3to4->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
 	lightMesh4to5->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
+	lightMesh5to6->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
 	lightMesh6to1->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::LIGHT_FOUND));
 
 	boxMesh->registerEvent(EventFactory::createEvent(EventTrigger::RAYTRACE_HIT, EventIdentifier::OBJECT_FOUND));
@@ -771,6 +991,7 @@ int main() {
 		if (input->f1 && !oldF1State)
 		{
 			helpEnable = !helpEnable;
+			text.find("helpText")->second->setValid(helpEnable);
 		}
 
 		if (helpEnable &&  GameStateManager::getInstance()->getPlayerPosition() != oldPosition) {
@@ -779,19 +1000,19 @@ int main() {
 			switch (oldPosition)
 			{
 			case GameStateManager::ROOM_1:
-				helpText->setText("Find the lonely duck.");
+				helpText->setText("Well done!");
 				break;
 			case GameStateManager::ROOM_2:
 				helpText->setText("Taste the Rainbow");
 				break;
 			case GameStateManager::ROOM_3:
-				helpText->setText("Follow the light");
+				helpText->setText("Which is the right one?");
 				break;
 			case GameStateManager::ROOM_4:
-				helpText->setText("Take the key");
+				helpText->setText("Follow the light");
 				break;
 			case GameStateManager::ROOM_5:
-				helpText->setText("Escape");
+				helpText->setText("Skittles");
 				break;
 			case GameStateManager::ROOM_6:
 				helpText->setText("There is no exit");
@@ -803,8 +1024,6 @@ int main() {
 			default:
 				helpText->setText("You shouldn't be here");
 			}
-
-			text.find("helpText")->second->setValid(helpEnable);
 		}
 
 		//FPS
@@ -961,8 +1180,8 @@ int main() {
 				keyTime = oldTime;
 			}
 			//set rainbow text
-			if (countRainbow != node->getFoundObject()) {
-				countRainbow = node->getFoundObject();
+			if (countRainbow != (node->getFoundObject() + node->getFoundVase())) {
+				countRainbow = node->getFoundObject() + node->getFoundVase();
 				showRainbow = true;
 				char str[10];
 				char rainbowString[20] = "Rainbowpieces: ";

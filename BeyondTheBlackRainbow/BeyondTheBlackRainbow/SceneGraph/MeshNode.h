@@ -71,6 +71,8 @@ public:
 
 	void objectFound();
 	int getFoundObject();
+	void vaseFound();
+	int getFoundVase();
 	
 	void setLightSet(int i);
 	int getLightSet();
@@ -121,5 +123,7 @@ private:
 	int lightSet;
 	static int FOUND_OBJECTS;
 	bool found = false;
+	static int VASE_FOUND;
+	bool foundVase = false;
 };
 
