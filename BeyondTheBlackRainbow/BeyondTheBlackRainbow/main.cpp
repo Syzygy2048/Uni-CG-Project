@@ -216,8 +216,8 @@ int main() {
 	LightNode* secondLight3 = new SpotLightNode(generateUuid(), glm::vec3(2.0, 1.0, -1), 0.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
 	//room2
 	LightNode* thirdLight = new PointLightNode(generateUuid(), glm::vec3(7.0, 1.5, -1), 2.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
-	LightNode* fourthLight = new SpotLightNode(generateUuid(), glm::vec3(6.0, 1.0, -1), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
-	LightNode* fourthLight2 = new SpotLightNode(generateUuid(), glm::vec3(4.0, 1.0, -4), 1.0f, glm::vec3(0, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
+	LightNode* fourthLight = new SpotLightNode(generateUuid(), glm::vec3(6.0, 2.4, -2), 1.0f, glm::vec3(1, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
+	LightNode* fourthLight2 = new SpotLightNode(generateUuid(), glm::vec3(4.0, 1.0, -4), 0.0f, glm::vec3(0, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
 	LightNode* fourthLight3 = new SpotLightNode(generateUuid(), glm::vec3(4.0, 1.0, -4), 0.0f, glm::vec3(0, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.4, 0.8), LightType::SPOT_LIGHT);
 	//room 3
 	LightNode* point_room3 = new PointLightNode(generateUuid(), glm::vec3(7.0, 1.5, 1), 1.0f, glm::vec3(1, 0.5, 0.5), LightType::POINT_LIGHT);
@@ -241,8 +241,8 @@ int main() {
 	LightNode* spot3_room6 = new SpotLightNode(generateUuid(), glm::vec3(-3.2, 2.4, 3.0), 0.0f, glm::vec3(0, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.9, 1), LightType::SPOT_LIGHT);
 	//floor
 	LightNode* point_room7 = new PointLightNode(generateUuid(), glm::vec3(2, 4, -15), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
-	LightNode* spot_room7 = new SpotLightNode(generateUuid(), glm::vec3(2, 4.4, -10), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
-	LightNode* spot2_room7 = new SpotLightNode(generateUuid(), glm::vec3(2, 2.4, -10), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
+	LightNode* spot_room7 = new SpotLightNode(generateUuid(), glm::vec3(2, 5.4, -10), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
+	LightNode* spot2_room7 = new SpotLightNode(generateUuid(), glm::vec3(2, 3.4, -10), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
 	LightNode* spot3_room7 = new SpotLightNode(generateUuid(), glm::vec3(-2.0, 2.4, -5), 1.0f, glm::vec3(1, 1, 1), glm::vec3(0, -1, 0), glm::vec2(0.5, 0.8), LightType::SPOT_LIGHT);
 
 
