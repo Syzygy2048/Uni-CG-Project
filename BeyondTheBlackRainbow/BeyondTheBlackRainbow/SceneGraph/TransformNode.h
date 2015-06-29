@@ -8,7 +8,7 @@ class TransformNode : public SceneNode
 {
 public:
 	
-	TransformNode(UUID uuid, glm::mat4 transform);
+	TransformNode(int uuid, glm::mat4 transform);
 	~TransformNode();
 
 	virtual glm::highp_mat4 propagateMatrix();

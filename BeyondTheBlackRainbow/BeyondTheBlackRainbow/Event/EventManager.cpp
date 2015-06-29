@@ -7,7 +7,7 @@ EventManager::EventManager(SceneNode* sceneGraph)
 }
 
 
-void EventManager::eventTriggered(UUID target, EventTrigger event, SceneNode* caller)
+void EventManager::eventTriggered(int target, EventTrigger event, SceneNode* caller)
 {
 	sceneGraph->receiveEvent(target, event, caller);
 }

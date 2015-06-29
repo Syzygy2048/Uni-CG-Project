@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-CameraNode::CameraNode(UUID uuid, int viewPortResX, int viewPortResY) : SceneNode(uuid, NodeType::CAMERA_NODE)
+CameraNode::CameraNode(int uuid, int viewPortResX, int viewPortResY) : SceneNode(uuid, NodeType::CAMERA_NODE)
 {	
 	position = glm::vec3(0, 1, 0);
 	glm::vec3 up = glm::vec3(0, 0.6, 0);

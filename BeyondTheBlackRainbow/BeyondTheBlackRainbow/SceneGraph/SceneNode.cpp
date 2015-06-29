@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-SceneNode::SceneNode(UUID uuid, NodeType type) : uuid(uuid), nodeType(type)
+SceneNode::SceneNode(int uuid, NodeType type) : uuid(uuid), nodeType(type)
 {
 	parent = nullptr;
 }
@@ -62,18 +62,16 @@ NodeType SceneNode::getType()
 	return nodeType;
 }
 
-UUID* SceneNode::getUuid()
+int* SceneNode::getUuid()
 {
 	return &uuid;
 }
 
-bool SceneNode::receiveEvent(UUID target, EventTrigger eventTrigger, SceneNode* caller)
+bool SceneNode::receiveEvent(int target, EventTrigger eventTrigger, SceneNode* caller)
 {
-	bool* status = new bool;
-	if (UuidEqual(&target, &uuid, (RPC_STATUS*)&status))
+	if (target == uuid)
 	{
 		triggerEvent(eventTrigger, caller);
-		delete status;
 		return true;
 	}
 	for (SceneNode* child : childList)
@@ -83,15 +81,12 @@ bool SceneNode::receiveEvent(UUID target, EventTrigger eventTrigger, SceneNode* 
 			return true;
 		}
 	}
-	
-	//delete status;
 	return false;
 }
 
 bool SceneNode::receiveSpecificEvent(EventTrigger eventTrigger, EventIdentifier eventIdentifier, SceneNode* caller)
 {
 	{
-		bool* status = new bool;
 		for (Event* event : eventList)
 		{
 			if (event->trigger == eventTrigger && event->eventIdentifier == eventIdentifier){
@@ -106,8 +101,6 @@ bool SceneNode::receiveSpecificEvent(EventTrigger eventTrigger, EventIdentifier 
 				return true;
 			}
 		}
-
-		//delete status;
 		return false;
 	}
 }

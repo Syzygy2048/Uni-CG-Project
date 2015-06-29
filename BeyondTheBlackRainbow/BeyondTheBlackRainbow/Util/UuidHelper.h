@@ -1,9 +1,7 @@
 #pragma once
 
-#include <rpc.h>
+static int  i = 0;
 
-static UUID generateUuid(){
-	UUID uuid;
-	UuidCreate(&uuid);
-	return uuid;
+inline int generateUuid(){
+	return i++;
 }

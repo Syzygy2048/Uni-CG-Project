@@ -9,7 +9,7 @@ class CameraNode :
 	public SceneNode
 {
 public:
-	CameraNode(UUID uuid, int viewPortResX, int viewPortResY);
+	CameraNode(int uuid, int viewPortResX, int viewPortResY);
 	~CameraNode();
 
 	glm::highp_mat4 propagateMatrix();

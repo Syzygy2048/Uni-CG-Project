@@ -33,6 +33,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR, target);
 				target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM4, target);
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -45,6 +46,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				node->removeCollisionShape();
 				if (behavior) behavior->setTriggered();
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -57,6 +59,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				std::cout << "duck found" << std::endl;
 				target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM1, target);
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -70,6 +73,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 					std::cout << "door 6 found" << std::endl;
 					target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM6, target);
 				}
+				delete specificEvent;
 			}
 		};
 		return specificEvent;
@@ -83,6 +87,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 					std::cout << "door _6 found" << std::endl;
 					target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::_OPEN_DOOR_ROOM6, target);
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -96,6 +101,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				node->removeCollisionShape();
 				if (behavior) behavior->setTriggered();
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -109,6 +115,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				node->removeCollisionShape();
 				if (behavior) behavior->setTriggered();
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -122,6 +129,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				node->removeCollisionShape();
 				if (behavior) behavior->setTriggered();
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -134,6 +142,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				std::cout << "door 3 found" << std::endl;
 				target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM3, target);
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -147,6 +156,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				node->removeCollisionShape();
 				if (behavior) behavior->setTriggered();
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -160,6 +170,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				node->removeCollisionShape();
 				if (behavior) behavior->setTriggered();
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -173,6 +184,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				node->removeCollisionShape();
 				if (behavior) behavior->setTriggered();
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -186,6 +198,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				node->removeCollisionShape();
 				if (behavior) behavior->setTriggered();
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -199,6 +212,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 				MeshNode* node = (MeshNode*)target;
 				node->LIGHT_FOUND = true;
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -217,6 +231,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 					target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM2, target);
 				}
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;
@@ -234,6 +249,7 @@ Event* EventFactory::createEvent(EventTrigger trigger, EventIdentifier identifie
 					target->getEventManager()->eventTriggered(EventTrigger::EVENT, EventIdentifier::OPEN_DOOR_ROOM5, target);
 				}
 			}
+			delete specificEvent;
 		};
 		return specificEvent;
 		break;

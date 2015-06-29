@@ -19,7 +19,7 @@ class MeshNode :
 	public SceneNode
 {
 public:
-	MeshNode(UUID uuid, aiMesh* triangleMesh, const MeshLoadInfo::LoadInfo* meshLoadInfo);
+	MeshNode(int uuid, aiMesh* triangleMesh, const MeshLoadInfo::LoadInfo* meshLoadInfo);
 	~MeshNode();
 
 	//TODO: should probably be moved into Renderer class (renderer->initMeshNodeForRendering(this))

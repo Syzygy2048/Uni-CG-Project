@@ -19,7 +19,7 @@ class Behavior;
 class SceneNode
 {
 public:
-	SceneNode(UUID id, NodeType nodeType);
+	SceneNode(int id, NodeType nodeType);
 	~SceneNode();
 
 	void setParent(SceneNode* parent);
@@ -32,9 +32,9 @@ public:
 
 	NodeType getType();
 
-	UUID* getUuid();
+	int* getUuid();
 
-	bool receiveEvent(UUID target, EventTrigger eventTrigger, SceneNode* caller);
+	bool receiveEvent(int target, EventTrigger eventTrigger, SceneNode* caller);
 	bool receiveSpecificEvent(EventTrigger eventTrigger, EventIdentifier eventIdentifier, SceneNode* caller);
 	
 	void setEventManager(EventManager* eventManager);
@@ -58,7 +58,7 @@ protected:
 private:
 	std::vector<SceneNode*> childList;	
 
-	UUID uuid;
+	int uuid;
 	const NodeType nodeType;
 
 	virtual void triggerEvent(EventTrigger eventTrigger, SceneNode* caller);
