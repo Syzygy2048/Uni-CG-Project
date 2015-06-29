@@ -72,7 +72,7 @@ void initializeText() {
 	Text* fpsText = new Text("FPS: 999", MeshLoadInfo::TEXT);
 	fpsText->prepareText(50, 100, 25);
 	text.insert(std::pair<std::string, Text*>("fpsText", fpsText));
-	Text* someText = new Text("Escape the room!", MeshLoadInfo::TEXT);
+	Text* someText = new Text("Find the lonely duck", MeshLoadInfo::TEXT);
 	someText->prepareText(50, 50, 30);
 	someText->setValid(true);
 	text.insert(std::pair<std::string, Text*>("helpText", someText));
@@ -710,6 +710,7 @@ int main() {
 	bool keyText = false;
 	bool showRainbow = false;
 
+	GameStateManager::RoomPosition oldPosition = GameStateManager::getInstance()->getPlayerPosition();
 	bool helpEnable = true;
 	bool blendEnable = true;
 	bool wireframeEnabled = false;
@@ -770,9 +771,12 @@ int main() {
 		if (input->f1 && !oldF1State)
 		{
 			helpEnable = !helpEnable;
+		}
 
+		if (helpEnable &&  GameStateManager::getInstance()->getPlayerPosition() != oldPosition) {
+			oldPosition = GameStateManager::getInstance()->getPlayerPosition();
 			Text* helpText = text.find("helpText")->second;
-			switch (GameStateManager::getInstance()->getPlayerPosition())
+			switch (oldPosition)
 			{
 			case GameStateManager::ROOM_1:
 				helpText->setText("Find the lonely duck.");
@@ -801,7 +805,6 @@ int main() {
 			}
 
 			text.find("helpText")->second->setValid(helpEnable);
-
 		}
 
 		//FPS
