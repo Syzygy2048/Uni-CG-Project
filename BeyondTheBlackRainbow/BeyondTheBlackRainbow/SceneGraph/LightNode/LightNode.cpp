@@ -1,7 +1,7 @@
 #include "LightNode.h"
 
 
-LightNode::LightNode(UUID uuid, glm::vec3 position, GLfloat intensity, glm::vec3 color, LightType type) : SceneNode(uuid, NodeType::LIGHT_NODE)
+LightNode::LightNode(int uuid, glm::vec3 position, GLfloat intensity, glm::vec3 color, LightType type) : SceneNode(uuid, NodeType::LIGHT_NODE)
 {
 	this->position = position;
 	this->intensity = intensity;

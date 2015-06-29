@@ -12,7 +12,7 @@ int MeshNode::FOUND_OBJECTS = 0;
 int MeshNode::VASE_FOUND = 0;
 bool MeshNode::HAVE_KEY = false;
 
-MeshNode::MeshNode(UUID uuid, aiMesh* triangleMesh, const MeshLoadInfo::LoadInfo* meshLoadInfo) : SceneNode(uuid, NodeType::MESH_NODE)
+MeshNode::MeshNode(int uuid, aiMesh* triangleMesh, const MeshLoadInfo::LoadInfo* meshLoadInfo) : SceneNode(uuid, NodeType::MESH_NODE)
 {
 	this->triangleMesh = triangleMesh;
 	loadInfo = meshLoadInfo;
@@ -97,10 +97,7 @@ void MeshNode::createCollisionShape(PhysicsHandler* physicsHandler)
 {
 	glm::highp_mat4 modelMatrix = propagateMatrix();
 	physicsActor = physicsHandler->createRigidActor(glm::mat4(propagateMatrix()), triangleMesh, loadInfo);
-	char* uuidString;
-	UuidToString(getUuid(), (RPC_CSTR*)&uuidString);
-	
-	physicsActor->setName(uuidString);
+	physicsActor->userData = getUuid();
 	physicsHandler->addActorToScene(physicsActor);
 }
 

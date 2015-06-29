@@ -8,7 +8,7 @@ class PlayerNode :
 	public SceneNode
 {
 public:
-	PlayerNode(UUID uuid);
+	PlayerNode(int uuid);
 	~PlayerNode();
 
 	void createCollisionShape(PhysicsHandler* physicsHandler);

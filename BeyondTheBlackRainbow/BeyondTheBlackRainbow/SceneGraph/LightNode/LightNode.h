@@ -6,7 +6,7 @@
 class LightNode : public SceneNode
 {
 public:
-	LightNode(UUID uuid, glm::vec3 position, GLfloat intensity, glm::vec3 color, LightType type);
+	LightNode(int uuid, glm::vec3 position, GLfloat intensity, glm::vec3 color, LightType type);
 	~LightNode();
 
 	glm::highp_mat4 propagateMatrix();

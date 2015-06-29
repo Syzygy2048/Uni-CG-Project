@@ -15,7 +15,7 @@ public:
 	void registerEvent();
 
 	//intended for first event call
-	void eventTriggered(UUID target, EventTrigger event, SceneNode* caller);
+	void eventTriggered(int target, EventTrigger event, SceneNode* caller);
 	//intended for chained events
 	void eventTriggered(EventTrigger event, EventIdentifier eventIdentifier, SceneNode* caller);
 

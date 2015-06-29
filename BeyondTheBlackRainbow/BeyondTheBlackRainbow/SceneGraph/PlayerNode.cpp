@@ -4,7 +4,7 @@
 #include "../Util/DoFHelper.h"
 #include "../GameStateManager.h"
 
-PlayerNode::PlayerNode(UUID uuid) : SceneNode(uuid, NodeType::PLAYER_NODE)
+PlayerNode::PlayerNode(int uuid) : SceneNode(uuid, NodeType::PLAYER_NODE)
 {
 	up = glm::vec3(0, 1, 0);
 	right = glm::vec3(1, 0, 0);
@@ -122,19 +122,17 @@ void PlayerNode::update(double deltaTime, InputHandler* input)
 		DoFHelper::getInstance()->update();
 		if (input->e && hit.block.distance < 3)
 		{
-			if (!hit.block.actor->getName()){
+			if (!hit.block.actor->userData){
 				std::cerr << "object name wasn't set" << std::endl;
 				//std::cerr << "userdata " << hit.block.actor->userData << std::endl;
 			}
 			else
 			{
-				UUID id;
 				/*if (std::string("player").compare(std::string(hit.block.actor->getName())))
 				{
 				std::cerr << "raytrace hit the player, this is a bug, please aim more up or down to hit the actual object" << std::endl;
 				} */
-				UuidFromString((RPC_CSTR)hit.block.actor->getName(), &id);
-				eventManager->eventTriggered(id, EventTrigger::RAYTRACE_HIT, this);
+				eventManager->eventTriggered(*((int*)hit.block.actor->userData), EventTrigger::RAYTRACE_HIT, this);
 			}
 		}
 	}
