@@ -174,8 +174,8 @@ void blendTransparencyText()
 
 int main() {
 
-	int viewPortResX = 1280;
-	int viewPortResY = 720;
+	int viewPortResX = 1024;
+	int viewPortResY = 756;
 	Renderer* renderer = Renderer::getInstance();
 	if (renderer->init(viewPortResX, viewPortResY) == -1){
 		return -1;
@@ -235,7 +235,7 @@ int main() {
 	LightNode* spot2_room5 = new SpotLightNode(generateUuid(), glm::vec3(-0.5, 2.4, 1.9), 2.0f, glm::vec3(1, 0, 0), glm::vec3(0, -1, 0), glm::vec2(0.95, 1), LightType::SPOT_LIGHT);
 	LightNode* spot3_room5 = new SpotLightNode(generateUuid(), glm::vec3(-3.3, 2.4, 2.9), 2.0f, glm::vec3(0, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.95, 1), LightType::SPOT_LIGHT);
 	//room 6
-	LightNode* point_room6 = new PointLightNode(generateUuid(), glm::vec3(-1.5, 1.5, -2), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
+	LightNode* point_room6 = new PointLightNode(generateUuid(), glm::vec3(-1, 1.5, -3.7), 1.0f, glm::vec3(1, 1, 1), LightType::POINT_LIGHT);
 	LightNode* spot_room6 = new SpotLightNode(generateUuid(), glm::vec3(-4.2, 2.4, -4), 2.0f, glm::vec3(0, 1, 0), glm::vec3(0, -1, 0), glm::vec2(0.9, 1), LightType::SPOT_LIGHT);
 	LightNode* spot2_room6 = new SpotLightNode(generateUuid(), glm::vec3(-1.0, 2.4, 2.0), 0.0f, glm::vec3(1, 0, 0), glm::vec3(0, -1, 0), glm::vec2(0.9, 1), LightType::SPOT_LIGHT);
 	LightNode* spot3_room6 = new SpotLightNode(generateUuid(), glm::vec3(-3.2, 2.4, 3.0), 0.0f, glm::vec3(0, 0, 1), glm::vec3(0, -1, 0), glm::vec2(0.9, 1), LightType::SPOT_LIGHT);
